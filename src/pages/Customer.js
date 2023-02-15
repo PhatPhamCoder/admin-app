@@ -4,30 +4,28 @@ import { Table } from 'antd';
 const columns = [
     {
         title: 'Số thứ tự',
-        dataIndex: 'number',
+        dataIndex: 'key',
     },
     {
-        title: 'Name',
+        title: 'Họ và tên',
         dataIndex: 'name',
     },
     {
-        title: 'Product',
-        dataIndex: 'address',
+        title: 'Email',
+        dataIndex: 'email',
     },
     {
-        title: 'Status',
-        dataIndex: 'status',
+        title: 'Mobile',
+        dataIndex: 'mobile',
     },
 ];
 const data1 = [];
 for (let i = 0; i < 46; i++) {
     data1.push({
-        key: i,
-        number: `${i}`,
+        key: i + 1,
         name: `Matta Nguyễn ${i}`,
-        age: 32,
-        address: `HCMC, Tô Hiến Thành. ${i}`,
-        status: `Pending`,
+        email: "matta@gmail.com",
+        mobile: "0777077293",
     });
 };
 const Customer = () => {

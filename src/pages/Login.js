@@ -6,16 +6,16 @@ import { object, string } from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../features/auth/authSlice';
 
+let userSchema = object().shape({
+    email: string()
+        .email("Email nên đúng cú pháp")
+        .required("Nhập đúng định dạng email"),
+    password: string().required("Vui lòng nhập mật khẩu")
+});
+
 const Login = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    let userSchema = object({
-        email: string()
-            .email("Email nên đúng cú pháp")
-            .required("Nhập đúng định dạng email"),
-        password: string().required("Vui lòng nhập mật khẩu")
-    });
-
     const formik = useFormik({
         initialValues: {
             email: "",
@@ -23,53 +23,53 @@ const Login = () => {
         },
         validationSchema: userSchema,
         onSubmit: (values) => {
-            dispatch(login(values))
-            // alert(JSON.stringify(values, null, 2));
+            dispatch(login(values));
         },
     });
-    const { user, isLoading, isError, isSuccess, message } = useSelector(
-        (state) => state.auth
-    );
+    const authState = useSelector((state) => state);
+
+    const { user, isLoading, isError, isSuccess, message } = authState.auth;
 
     useEffect(() => {
-        if (!user || isSuccess) {
+        if (isSuccess) {
             navigate("admin")
         } else {
-            alert("Vui Lòng đăng nhập")
+            navigate("");
         }
-    }, [user, isLoading, isError, isSuccess, message]);
+    }, [user, isLoading, isError, isSuccess]);
 
     return (
         <div className='login-container py-5'>
             <div className='login-body my-5 bg-white mx-auto p-4'>
+                <h3 className='text-center fw-bold'>Đăng nhập hệ thống</h3>
+                <p className='text-center'>Dùng tài khoản quản trị để đăng nhập</p>
+                <div className='error text-center'>
+                    {message.message === "Rejected" ? "You are not an Admin" : ""}
+                </div>
                 <form action="" onSubmit={formik.handleSubmit}>
-                    <h3 className='text-center fw-bold'>Đăng nhập hệ thống</h3>
-                    <p className='text-center'>Dùng tài khoản quản trị để đăng nhập</p>
                     <CustomInput
                         type="text"
                         name='email'
                         label="Email Address"
                         id="email"
+                        onChng={formik.handleChange('email')}
+                        onBlr={formik.handleBlur('email')}
                         val={formik.values.email}
-                        onCh={formik.handleChange('email')}
                     />
-                    <div className='error'>
-                        {formik.touched.email && formik.errors.email ? (
-                            <div>{formik.errors.email}</div>
-                        ) : null}
+                    <div className='error mt-2'>
+                        {formik.touched.email && formik.errors.email}
                     </div>
                     <CustomInput
                         type="password"
                         name='password'
                         label="Password"
                         id="pass"
+                        onChng={formik.handleChange('password')}
+                        onBlr={formik.handleBlur('password')}
                         val={formik.values.password}
-                        onCh={formik.handleChange('password')}
                     />
-                    <div className="error">
-                        {formik.touched.password && formik.errors.password ? (
-                            <div>{formik.errors.password}</div>
-                        ) : null}
+                    <div className="error mt-2">
+                        {formik.touched.password && formik.errors.password}
                     </div>
                     <div className='mb-3 text-end'>
                         <Link
