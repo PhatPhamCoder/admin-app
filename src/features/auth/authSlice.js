@@ -21,7 +21,8 @@ export const login = createAsyncThunk(
         } catch (error) {
             return thunkAPI.rejectWithValue(error)
         }
-    });
+    }
+);
 
 export const authSlice = createSlice({
     name: "auth",
