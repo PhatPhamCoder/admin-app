@@ -28,13 +28,14 @@ body {
 }
 
 .login-body {
-  box-shadow: 0 50px 30px rgb(80 87 99 / 5%), 0 0 50px rgb(80 87 99 / 10%);
+  box-shadow: 10px 100px 30px rgb(80 87 99 / 5%), 0 0 50px rgb(80 87 99 / 10%);
   border-radius: 20px;
-  background-color: #FFF;
+  background-color: #ffffff;
+  width: 375px;
 }
 
 .login-container .button {
-  background-color: #0073BC;
+  background-color: rgb(24 144 255);
   border-radius: 6px;
   cursor: pointer;
   margin: 0 auto;
@@ -102,4 +103,9 @@ main {
 .ant-layout-header div .badge {
   top: 16px;
   right: -6px;
+}
+
+.error {
+  color: red;
+  font-size: 12px;
 }

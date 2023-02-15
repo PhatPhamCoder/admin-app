@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table } from 'antd';
-import { BiEdit } from 'react-icons/bi';
-import { AiFillDelete } from "react-icons/ai";
+// import { BiEdit } from 'react-icons/bi';
+// import { AiFillDelete } from "react-icons/ai";
 
 const columns = [
     {
