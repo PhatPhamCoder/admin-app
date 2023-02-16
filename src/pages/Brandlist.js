@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react';
 import { Table } from 'antd';
+import { BiEdit } from "react-icons/bi";
+import { AiFillDelete } from "react-icons/ai";
 import { useDispatch, useSelector } from 'react-redux';
 import { getBrands } from '../features/brand/brandSlice';
-
+import { Link } from 'react-router-dom';
 const columns = [
     {
         title: 'Số thứ tự',
@@ -17,8 +19,8 @@ const columns = [
         dataIndex: 'date',
     },
     {
-        title: 'Status',
-        dataIndex: 'status',
+        title: 'Chức năng',
+        dataIndex: 'action',
     },
 ];
 // const data1 = [];
@@ -41,10 +43,18 @@ const Brandlist = () => {
 
     const data = [];
     for (let i = 0; i < brandState.length; i++) {
+        const date = brandState[i].createdAt;
+        const name = brandState[i].title;
         data.push({
             key: i + 1,
-            name: brandState[i].title,
-            date: brandState[i].createdAt,
+            name: name,
+            date: date,
+            action: (
+                <>
+                    <Link to="/" className='fs-5'><BiEdit /></Link>
+                    <Link to='/' className='fs-5 ms-3'><AiFillDelete /></Link>
+                </>
+            )
         });
     };
     return (
