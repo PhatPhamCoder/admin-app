@@ -5,6 +5,7 @@ import { AiFillDelete } from "react-icons/ai";
 import { useDispatch, useSelector } from 'react-redux';
 import { getCategories } from '../features/pcategory/pcategorySlice';
 import { Link } from 'react-router-dom';
+import { format } from 'date-fns';
 const columns = [
     {
         title: 'Số thứ tự',
@@ -33,7 +34,7 @@ const Categorylist = () => {
 
     const data = [];
     for (let i = 0; i < pCategoryState.length; i++) {
-        const date = pCategoryState[i].createdAt;
+        const date = format(new Date(pCategoryState[i].createdAt), 'dd-MM-yyy');
         const name = pCategoryState[i].title;
         data.push({
             key: i + 1,

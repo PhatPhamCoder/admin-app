@@ -4,7 +4,7 @@ import { AiFillDelete } from "react-icons/ai";
 import { useDispatch, useSelector } from 'react-redux';
 import { getEnquiries } from '../features/enquiry/enquirySlice';
 import { Link } from 'react-router-dom';
-
+import { format } from 'date-fns';
 const columns = [
     {
         title: 'Số thứ tự',
@@ -54,7 +54,7 @@ const Enquiries = () => {
         const email = enquiryState[i].email;
         const mobile = enquiryState[i].mobile;
         const comment = enquiryState[i].comment;
-        const date = enquiryState[i].createdAt;
+        const date = format(new Date(enquiryState[i].createdAt), 'dd-MM-yyy');
 
         data.push({
             key: i + 1,

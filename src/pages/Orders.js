@@ -1,41 +1,78 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Table } from 'antd';
+import { BiEdit } from "react-icons/bi";
+import { AiFillDelete } from "react-icons/ai";
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { getOrders } from '../features/auth/authSlice';
+import { format } from 'date-fns';
 
 const columns = [
     {
         title: 'Số thứ tự',
-        dataIndex: 'number',
+        dataIndex: 'key',
     },
     {
-        title: 'Name',
+        title: 'Họ và tên',
         dataIndex: 'name',
     },
     {
-        title: 'Product',
-        dataIndex: 'address',
+        title: 'Sản phẩm',
+        dataIndex: 'product',
     },
     {
-        title: 'Status',
+        title: 'Trạng thái',
         dataIndex: 'status',
     },
+    {
+        title: 'Ngày đặt hàng',
+        dataIndex: 'date',
+    },
+    {
+        title: 'Chức năng',
+        dataIndex: 'action',
+    },
 ];
-const data1 = [];
-for (let i = 0; i < 46; i++) {
-    data1.push({
-        key: i,
-        number: `${i}`,
-        name: `Matta Nguyễn ${i}`,
-        age: 32,
-        address: `HCMC, Tô Hiến Thành. ${i}`,
-        status: `Pending`,
-    });
-};
+
 const Orders = () => {
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(getOrders());
+    }, []);
+    const orderState = useSelector((state) => state.auth.orders);
+
+    const data = [];
+    for (let i = 0; i < orderState.length; i++) {
+
+        const name = orderState[i].orderby.firstname;
+        const products = orderState[i].products.map((item, index) => {
+            return (
+                <ul key={index}>
+                    <li>{item.product.title}</li>
+                </ul>
+            )
+        });
+        const statuspayment = orderState[i].paymentIntent.status;
+        const date = format(new Date(orderState[i].createdAt), 'dd-MM-yyy');
+        data.push({
+            key: i + 1,
+            name: name,
+            product: products,
+            status: statuspayment,
+            date: date,
+            action: (
+                <>
+                    <Link to="/" className='fs-5'><BiEdit /></Link>
+                    <Link to='/' className='fs-5 ms-3'><AiFillDelete /></Link>
+                </>
+            )
+        });
+    };
     return (
         <div>
             <h3 className="mb-4 title">Danh sách đơn hàng</h3>
             <div>
-                <Table columns={columns} dataSource={data1} />
+                <Table columns={columns} dataSource={data} />
             </div>
         </div>
     )

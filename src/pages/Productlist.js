@@ -4,7 +4,8 @@ import { BiEdit } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
 import { useDispatch, useSelector } from 'react-redux';
 import { getProducts } from '../features/product/productSlice';
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
+import Currency from 'react-currency-formatter';
 const columns = [
     {
         title: 'Số thứ tự',
@@ -59,14 +60,24 @@ const Productlist = () => {
         dispatch(getProducts());
     }, []);
     const productState = useSelector((state) => state.product.products);
-
     const data = [];
     for (let i = 0; i < productState.length; i++) {
         data.push({
             key: i + 1,
             title: productState[i].title,
             category: productState[i].category,
-            price: `${productState[i].price}`,
+            price: (
+                <>
+                    <Currency
+                        quantity={productState[i].price}         // Required
+                        currency="VND"            // Optional (USD by default)
+                        locale="vi_VN"            // Optional
+                        pattern="##,### !"        // Optional
+                        decimal=","               // Optional
+                        group="."                 // Optional
+                    />
+                </>
+            ),
             quantity: productState[i].quantity,
             sold: productState[i].sold,
             action: (
