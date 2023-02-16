@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Table } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUsers } from '../features/cutomers/customerSlice';
+import { getUsers } from '../features/customers/customerSlice';
 
 const columns = [
     {
@@ -44,7 +44,7 @@ const Customers = () => {
     for (let i = 0; i < customerState.length; i++) {
         data.push({
             key: i + 1,
-            name: customerState[i].firstname + customerState[i].lastname,
+            name: customerState[i].firstname,
             email: customerState[i].email,
             mobile: customerState[i].mobile,
         });

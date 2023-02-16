@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import { Table } from 'antd';
-// import { BiEdit } from 'react-icons/bi';
-// import { AiFillDelete } from "react-icons/ai";
+import { BiEdit } from "react-icons/bi";
+import { AiFillDelete } from "react-icons/ai";
 import { useDispatch, useSelector } from 'react-redux';
 import { getProducts } from '../features/product/productSlice';
+import { Link } from "react-router-dom"
 const columns = [
     {
         title: 'Số thứ tự',
@@ -12,14 +13,21 @@ const columns = [
     {
         title: 'Tên sản phẩm',
         dataIndex: 'title',
+        sorter: (a, b) => a.title.length - b.title.length,
     },
     {
-        title: 'Thông tin sản phẩm',
-        dataIndex: 'desciption',
+        title: 'Danh mục sản phẩm',
+        dataIndex: 'category',
+        sorter: (a, b) => a.category.length - b.category.length,
+    },
+    {
+        title: 'Hình ảnh',
+        dataIndex: 'images',
     },
     {
         title: 'Giá Bán',
         dataIndex: 'price',
+        sorter: (a, b) => a.price - b.price,
     },
     {
         title: 'Số lượng',
@@ -28,6 +36,10 @@ const columns = [
     {
         title: 'Đã bán',
         dataIndex: 'sold',
+    },
+    {
+        title: 'Chức năng',
+        dataIndex: 'action',
     },
 ];
 // const data = [];
@@ -53,10 +65,16 @@ const Productlist = () => {
         data.push({
             key: i + 1,
             title: productState[i].title,
-            desciption: productState[i].description,
-            price: productState[i].price,
+            category: productState[i].category,
+            price: `${productState[i].price}`,
             quantity: productState[i].quantity,
             sold: productState[i].sold,
+            action: (
+                <>
+                    <Link to="/" className='fs-5'><BiEdit /></Link>
+                    <Link to='/' className='fs-5 ms-3'><AiFillDelete /></Link>
+                </>
+            )
         });
     };
     return (
@@ -69,4 +87,4 @@ const Productlist = () => {
     )
 }
 
-export default Productlist
+export default Productlist;

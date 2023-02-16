@@ -74,12 +74,12 @@ const MainLayout = () => {
                                     label: 'Product List',
                                 },
                                 {
-                                    key: 'branch',
+                                    key: 'brand',
                                     icon: <SiBrandfolder className='fs-4' />,
                                     label: 'Brand',
                                 },
                                 {
-                                    key: 'list-branch',
+                                    key: 'list-brand',
                                     icon: <SiBrandfolder className='fs-4' />,
                                     label: 'Brand List',
                                 },

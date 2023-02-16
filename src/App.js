@@ -12,7 +12,7 @@ import Orders from './pages/Orders';
 import Customer from './pages/Customer';
 import Colorlist from './pages/Colorlist';
 import Categorylist from './pages/Categorylist';
-import Branchlist from './pages/Branchlist';
+import Brandlist from './pages/Brandlist';
 import Productlist from './pages/Productlist';
 import Addblog from './pages/Addblog';
 import Addblogcat from './pages/Addblogcat';
@@ -40,7 +40,7 @@ function App() {
           <Route path='list-color' element={<Colorlist />} />
           <Route path='color' element={<Addcolor />} />
           <Route path='list-category' element={<Categorylist />} />
-          <Route path='list-branch' element={<Branchlist />} />
+          <Route path='list-brand' element={<Brandlist />} />
           <Route path='branch' element={<Addbranch />} />
           <Route path='list-product' element={<Productlist />} />
           <Route path='product' element={<Addproduct />} />
