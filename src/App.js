@@ -13,6 +13,7 @@ import Customer from './pages/Customer';
 import Colorlist from './pages/Colorlist';
 import Categorylist from './pages/Categorylist';
 import Brandlist from './pages/Brandlist';
+import Brand from './pages/Brand';
 import Productlist from './pages/Productlist';
 import Addblog from './pages/Addblog';
 import Addblogcat from './pages/Addblogcat';
@@ -41,6 +42,7 @@ function App() {
           <Route path='color' element={<Addcolor />} />
           <Route path='list-category' element={<Categorylist />} />
           <Route path='list-brand' element={<Brandlist />} />
+          <Route path='brand' element={<Brand />} />
           <Route path='branch' element={<Addbranch />} />
           <Route path='list-product' element={<Productlist />} />
           <Route path='product' element={<Addproduct />} />

@@ -3,7 +3,7 @@ import { Table } from 'antd';
 import { BiEdit } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
 import { useDispatch, useSelector } from 'react-redux';
-import { getCategories } from '../features/pcategory/pcategorySlice';
+import { getBrands } from '../features/brand/brandSlice';
 import { Link } from 'react-router-dom';
 const columns = [
     {
@@ -11,7 +11,7 @@ const columns = [
         dataIndex: 'key',
     },
     {
-        title: 'Tên Danh mục',
+        title: 'Tên đối tác',
         dataIndex: 'name',
     },
     {
@@ -23,18 +23,28 @@ const columns = [
         dataIndex: 'action',
     },
 ];
-
-const Categorylist = () => {
+// const data1 = [];
+// for (let i = 0; i < 46; i++) {
+//     data1.push({
+//         key: i,
+//         number: `${i}`,
+//         name: `Matta Nguyễn ${i}`,
+//         age: 32,
+//         address: `HCMC, Tô Hiến Thành. ${i}`,
+//         status: `Pending`,
+//     });
+// };
+const Brand = () => {
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(getCategories());
+        dispatch(getBrands());
     }, []);
-    const pCategoryState = useSelector((state) => state.pCategory.pCategories);
+    const brandState = useSelector((state) => state.brand.brands);
 
     const data = [];
-    for (let i = 0; i < pCategoryState.length; i++) {
-        const date = pCategoryState[i].createdAt;
-        const name = pCategoryState[i].title;
+    for (let i = 0; i < brandState.length; i++) {
+        const date = brandState[i].createdAt;
+        const name = brandState[i].title;
         data.push({
             key: i + 1,
             name: name,
@@ -49,7 +59,7 @@ const Categorylist = () => {
     };
     return (
         <div>
-            <h3 className="mb-4 title">Danh mục sản phẩm</h3>
+            <h3 className="mb-4 title">Danh sách thương hiệu</h3>
             <div>
                 <Table columns={columns} dataSource={data} />
             </div>
@@ -57,4 +67,4 @@ const Categorylist = () => {
     )
 }
 
-export default Categorylist;
+export default Brand;
