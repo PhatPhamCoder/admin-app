@@ -23,6 +23,6 @@ const Resetpassword = () => {
             </div>
         </div>
     )
-}
+};
 
-export default Resetpassword
+export default Resetpassword;

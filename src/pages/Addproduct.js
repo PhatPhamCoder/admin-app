@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import { React, useEffect, useState } from 'react';
 import CustomInput from '../components/CustomInput';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useFormik } from 'formik';
-import { array, object, string } from 'yup';
+import { array, number, object, string } from 'yup';
 import { getBrands } from '../features/brand/brandSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCategories } from '../features/pcategory/pcategorySlice';
-import Multiselect from "react-widgets/Multiselect";
 import { getColors } from '../features/color/colorSlice';
+// import Multiselect
+import Multiselect from "react-widgets/Multiselect";
 import "react-widgets/styles.css";
+
 let userSchema = object().shape({
     title: string().required("Tiêu đề không được để trống"),
     desciption: string().required("Mô tả không được để trống"),
@@ -17,18 +19,22 @@ let userSchema = object().shape({
     brand: string().required("Thương hiệu không được để trống"),
     category: string().required("Danh mục không được để trống"),
     color: array().required("Màu sắc không được để trống"),
+    quantity: number().required("Số lượng không được để trống"),
 });
 
 const Addproduct = () => {
     const dispatch = useDispatch();
     const [color, setColor] = useState([]);
+
     useEffect(() => {
         dispatch(getBrands());
         dispatch(getCategories());
         dispatch(getColors());
     }, []);
+
     const brandState = useSelector((state) => state.brand.brands);
     const pCategoryState = useSelector((state) => state.pCategory.pCategories);
+
     const colorState = useSelector((state) => state.color.colors);
     const colors = [];
     colorState.forEach((i) => {
@@ -36,7 +42,8 @@ const Addproduct = () => {
             _id: i._id,
             color: i.title
         })
-    })
+    });
+
     const formik = useFormik({
         initialValues: {
             title: "",
@@ -44,7 +51,8 @@ const Addproduct = () => {
             price: "",
             brand: "",
             category: "",
-            color: ""
+            color: "",
+            quantity: "",
         },
         validationSchema: userSchema,
         onSubmit: (values) => {
@@ -52,11 +60,12 @@ const Addproduct = () => {
         },
     });
 
+    //ReactQuill
     const { desc, setDesc } = useState();
     const handleDesc = (e) => {
         setDesc(e);
     }
-
+    //ReactQuill End
     return (
         <div>
             <h3 className='mb-4 title'>Thêm sản phẩm</h3>
@@ -152,8 +161,20 @@ const Addproduct = () => {
                     <div className='error'>
                         {formik.touched.color && formik.errors.color}
                     </div>
+                    <CustomInput
+                        className='py-3 mb-3'
+                        type='number'
+                        label='Nhập số lượng sản phẩm'
+                        name="quantity"
+                        onChng={formik.handleChange("quantity")}
+                        onBlr={formik.handleBlur("quantity")}
+                        val={formik.values.quantity}
+                    />
+                    <div className='error'>
+                        {formik.touched.quantity && formik.errors.quantity}
+                    </div>
                     <button
-                        className='btn btn-success border-0 rounded-3 mb-5'
+                        className='btn btn-success border-0 rounded-3 my-3 d-flex mx-auto'
                         type='submit'
                     >
                         Thêm sản phẩm
@@ -162,6 +183,6 @@ const Addproduct = () => {
             </div>
         </div>
     )
-}
+};
 
 export default Addproduct;

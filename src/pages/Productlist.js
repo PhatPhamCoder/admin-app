@@ -43,17 +43,7 @@ const columns = [
         dataIndex: 'action',
     },
 ];
-// const data = [];
-// for (let i = 0; i < 46; i++) {
-//     data.push({
-//         key: i,
-//         number: `${i}`,
-//         name: `Matta Nguyễn ${i}`,
-//         age: 32,
-//         address: `HCMC, Tô Hiến Thành. ${i}`,
-//         status: `Pending`,
-//     });
-// };
+
 const Productlist = () => {
     const dispatch = useDispatch();
     useEffect(() => {
@@ -67,16 +57,14 @@ const Productlist = () => {
             title: productState[i].title,
             category: productState[i].category,
             price: (
-                <>
-                    <Currency
-                        quantity={productState[i].price}         // Required
-                        currency="VND"            // Optional (USD by default)
-                        locale="vi_VN"            // Optional
-                        pattern="##,### !"        // Optional
-                        decimal=","               // Optional
-                        group="."                 // Optional
-                    />
-                </>
+                <Currency
+                    quantity={productState[i].price}
+                    currency="VND"
+                    locale="vi_VN"
+                    pattern="##,### !"
+                    decimal=","
+                    group="."
+                />
             ),
             quantity: productState[i].quantity,
             sold: productState[i].sold,

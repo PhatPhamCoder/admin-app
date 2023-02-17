@@ -5,15 +5,15 @@ export const getUsers = createAsyncThunk(
     "customers/get-customers",
     async (thunkAPI) => {
         try {
-            return await customerService.getUsers()
+            return await customerService.getUsers();
         } catch (error) {
-            return thunkAPI.rejectWithValue(error)
+            return thunkAPI.rejectWithValue(error);
         }
     }
 );
 
 const initialState = {
-    customerService: [],
+    customers: [],
     isError: false,
     isLoading: false,
     isSuccess: false,
@@ -21,7 +21,7 @@ const initialState = {
 }
 
 export const customerSlice = createSlice({
-    name: "users",
+    name: "customers",
     initialState: initialState,
     reducers: {},
     extraReducers: (builder) => {

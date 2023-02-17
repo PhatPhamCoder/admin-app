@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Table } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUsers } from '../features/customers/customerSlice';
+import { format } from 'date-fns';
 
 const columns = [
     {
@@ -21,17 +22,11 @@ const columns = [
         title: 'Mobile',
         dataIndex: 'mobile',
     },
+    {
+        title: 'Ngày tạo',
+        dataIndex: 'date',
+    },
 ];
-
-// const data = [];
-// for (let i = 0; i < 40; i++) {
-//     data.push({
-//         key: i + 1,
-//         name: "customerState[i].firstname + customerState[i].lastname",
-//         email: "customerState[i].email",
-//         mobile: "customerState[i].mobile",
-//     });
-// }
 
 const Customers = () => {
     const dispatch = useDispatch();
@@ -39,20 +34,21 @@ const Customers = () => {
         dispatch(getUsers());
     }, []);
     const customerState = useSelector((state) => state.customer.customers);
-
     const data = [];
     for (let i = 0; i < customerState.length; i++) {
+        const date = format(new Date(customerState[i].createdAt), 'dd-MM-yyy');
         data.push({
             key: i + 1,
             name: customerState[i].firstname,
             email: customerState[i].email,
             mobile: customerState[i].mobile,
+            date: date
         });
     }
 
     return (
         <div>
-            <h3 className="mb-4 title">Khách hàng</h3>
+            <h3 className="mb-4 title">Danh sách khách hàng</h3>
             <div>
                 <Table columns={columns} dataSource={data} />
             </div>

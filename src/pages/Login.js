@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { React, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import CustomInput from '../components/CustomInput';
 import { useFormik } from 'formik';
@@ -80,7 +80,8 @@ const Login = () => {
                     <button
                         className='button border-0 px-3 py-2 text-white fw-bold d-flex text-center text-decoration-none fs-5'
                         type="submit"
-                    >Đăng nhập
+                    >
+                        Đăng nhập
                     </button>
                 </form>
             </div>

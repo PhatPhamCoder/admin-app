@@ -5,6 +5,7 @@ import { AiFillDelete } from "react-icons/ai";
 import { useDispatch, useSelector } from 'react-redux';
 import { getCategories } from '../features/bcategory/bcategorySlice';
 import { Link } from 'react-router-dom';
+
 const columns = [
     {
         title: 'Số thứ tự',
@@ -27,17 +28,7 @@ const columns = [
         dataIndex: 'action',
     },
 ];
-// const data1 = [];
-// for (let i = 0; i < 46; i++) {
-//     data1.push({
-//         key: i,
-//         number: `${i}`,
-//         name: `Matta Nguyễn ${i}`,
-//         age: 32,
-//         address: `HCMC, Tô Hiến Thành. ${i}`,
-//         status: `Pending`,
-//     });
-// };
+
 const Blogcatlist = () => {
     const dispatch = useDispatch();
     useEffect(() => {
@@ -73,6 +64,6 @@ const Blogcatlist = () => {
             </div>
         </div>
     )
-}
+};
 
 export default Blogcatlist;

@@ -72,7 +72,7 @@ const Enquiries = () => {
             ),
             action: (
                 <>
-                    <Link to='/' className='fs-5 ms-3'><AiFillDelete /></Link>
+                    <Link to='/' className='fs-5 d-flex justify-content-center align-items-center'><AiFillDelete /></Link>
                 </>
             )
         });

@@ -16,7 +16,8 @@ const Forgotpassword = () => {
                     <button
                         className='button border-0 px-3 py-2 text-white fw-bold d-flex text-center'
                         type="submit"
-                    >Gửi mã
+                    >
+                        Gửi mã
                     </button>
                 </form>
             </div>

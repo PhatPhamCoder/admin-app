@@ -5,6 +5,7 @@ import { AiFillDelete } from "react-icons/ai";
 import { useDispatch, useSelector } from 'react-redux';
 import { getColors } from '../features/color/colorSlice';
 import { Link } from 'react-router-dom';
+
 const columns = [
     {
         title: 'Số thứ tự',

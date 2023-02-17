@@ -21,9 +21,9 @@ const columns = [
         dataIndex: 'status',
     },
 ];
-const data1 = [];
+const data = [];
 for (let i = 0; i < 46; i++) {
-    data1.push({
+    data.push({
         key: i,
         number: `${i}`,
         name: `Matta Nguyễn ${i}`,
@@ -159,7 +159,7 @@ const Dashboard = () => {
             <div className="mt-4">
                 <h3 className="mb-5">Đơn hàng mới nhất</h3>
                 <div>
-                    <Table columns={columns} dataSource={data1} />
+                    <Table columns={columns} dataSource={data} />
                 </div>
             </div>
         </div>

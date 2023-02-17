@@ -5,6 +5,8 @@ import { AiFillDelete } from "react-icons/ai";
 import { useDispatch, useSelector } from 'react-redux';
 import { getBrands } from '../features/brand/brandSlice';
 import { Link } from 'react-router-dom';
+import { format } from 'date-fns';
+
 const columns = [
     {
         title: 'Số thứ tự',
@@ -23,17 +25,7 @@ const columns = [
         dataIndex: 'action',
     },
 ];
-// const data1 = [];
-// for (let i = 0; i < 46; i++) {
-//     data1.push({
-//         key: i,
-//         number: `${i}`,
-//         name: `Matta Nguyễn ${i}`,
-//         age: 32,
-//         address: `HCMC, Tô Hiến Thành. ${i}`,
-//         status: `Pending`,
-//     });
-// };
+
 const Brand = () => {
     const dispatch = useDispatch();
     useEffect(() => {
@@ -43,7 +35,7 @@ const Brand = () => {
 
     const data = [];
     for (let i = 0; i < brandState.length; i++) {
-        const date = brandState[i].createdAt;
+        const date = format(new Date(brandState[i].createdAt), 'dd-MM-yyy');
         const name = brandState[i].title;
         data.push({
             key: i + 1,

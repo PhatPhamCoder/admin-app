@@ -24,17 +24,7 @@ const columns = [
         dataIndex: 'action',
     },
 ];
-// const data1 = [];
-// for (let i = 0; i < 46; i++) {
-//     data1.push({
-//         key: i,
-//         number: `${i}`,
-//         name: `Matta Nguyễn ${i}`,
-//         age: 32,
-//         address: `HCMC, Tô Hiến Thành. ${i}`,
-//         status: `Pending`,
-//     });
-// };
+
 const Brandlist = () => {
     const dispatch = useDispatch();
     useEffect(() => {
