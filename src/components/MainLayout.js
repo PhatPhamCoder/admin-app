@@ -6,6 +6,8 @@ import {
     // UserOutlined,
     // VideoCameraOutlined,
 } from '@ant-design/icons';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { Link, Outlet } from 'react-router-dom';
 import { Layout, Menu, theme } from 'antd';
 import {
@@ -211,6 +213,17 @@ const MainLayout = () => {
                         background: colorBgContainer,
                     }}
                 >
+                    <ToastContainer
+                        position="top-right"
+                        autoClose={1000}
+                        hideProgressBar={false}
+                        newestOnTop={true}
+                        closeOnClick
+                        rtl={false}
+                        pauseOnFocusLoss
+                        draggable
+                        theme="light"
+                    />
                     <Outlet />
                     <p className='text-left mb-0 text-dark'>&copy; {new Date().getFullYear()} Powered By Ptech</p>
                 </Content>

@@ -1,52 +1,61 @@
 import { React, useEffect, useState } from 'react';
 import CustomInput from '../components/CustomInput';
 import ReactQuill from 'react-quill';
+import { toast } from 'react-toastify';
+import { useNavigate } from "react-router-dom";
 import 'react-quill/dist/quill.snow.css';
 import { useFormik } from 'formik';
-import { number, object, string } from 'yup';
+import { array, number, object, string } from 'yup';
 import { getBrands } from '../features/brand/brandSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCategories } from '../features/pcategory/pcategorySlice';
 import { getColors } from '../features/color/colorSlice';
-// import Multiselect
-import Multiselect from "react-widgets/Multiselect";
-import "react-widgets/styles.css";
-
+import { Select } from "antd";
 import Dropzone from 'react-dropzone';
 import { deleteImg, uploadImg } from '../features/upload/uploadSlice';
 import { createProducts } from '../features/product/productSlice';
-
 let userSchema = object().shape({
     title: string().required("Tiêu đề không được để trống"),
     description: string().required("Mô tả không được để trống"),
     price: number().required("Giá tiền không được để trống"),
     brand: string().required("Thương hiệu không được để trống"),
     category: string().required("Danh mục không được để trống"),
+    tags: string().required("Thẻ không được để trống"),
+    color: array().min(1, "Chọn ít nhất 1 màu").required("Màu không được bỏ trống"),
     quantity: number().required("Số lượng không được để trống"),
 });
 
 const Addproduct = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [color, setColor] = useState([]);
     const [images, setImages] = useState([]);
-
     useEffect(() => {
         dispatch(getBrands());
         dispatch(getCategories());
         dispatch(getColors());
     }, []);
 
-
     const brandState = useSelector((state) => state.brand.brands);
     const pCategoryState = useSelector((state) => state.pCategory.pCategories);
     const colorState = useSelector((state) => state.color.colors);
     const imgState = useSelector((state) => state.upload.images);
+    const newProduct = useSelector((state) => state.product);
+    const { isSuccess, isError, isLoading, createdProduct } = newProduct;
+    useEffect(() => {
+        if (isSuccess && createdProduct) {
+            toast.success('Thêm sản phẩm thành công!');
+        }
+        if (isError) {
+            toast.error('Thêm sản phẩm thất bại!');
+        }
+    }, [isSuccess, isError, isLoading]);
 
-    const colors = [];
+    const coloropt = [];
     colorState.forEach((i) => {
-        colors.push({
-            _id: i._id,
-            color: i.title
+        coloropt.push({
+            label: i.title,
+            value: i._id,
         })
     });
 
@@ -59,7 +68,7 @@ const Addproduct = () => {
     });
 
     useEffect(() => {
-        formik.values.color = color;
+        formik.values.color = color ? color : "";
         formik.values.images = img;
     }, [color, img]);
 
@@ -71,21 +80,25 @@ const Addproduct = () => {
             brand: "",
             category: "",
             color: "",
+            tags: "",
             quantity: "",
             images: ""
         },
         validationSchema: userSchema,
         onSubmit: (values) => {
             dispatch(createProducts(values));
+            formik.resetForm();
+            setColor(null);
+            setImages(null);
+            setTimeout(() => {
+                navigate("/admin/list-product")
+            }, 2000)
         },
     });
 
-    //ReactQuill
-    // const { desc } = useState();
-    // const handleDesc = (e) => {
-    //     setDesc(e);
-    // }
-    //ReactQuill End
+    const handleColors = (e) => {
+        setColor(e);
+    }
     return (
         <div>
             <h3 className='mb-4 title'>Thêm sản phẩm</h3>
@@ -152,6 +165,7 @@ const Addproduct = () => {
                         id=""
                         className='form-control py-3 my-3'
                     >
+                        <option value="">Lựa chọn danh mục</option>
                         {pCategoryState.map((item, index) => {
                             return (
                                 <option value={item.title} key={index}>
@@ -163,19 +177,38 @@ const Addproduct = () => {
                     <div className='error'>
                         {formik.touched.category && formik.errors.category}
                     </div>
+
+                    <select
+                        name="tags"
+                        onChange={formik.handleChange("tags")}
+                        onBlur={formik.handleBlur("tags")}
+                        val={formik.values.tags}
+                        id=""
+                        className='form-control py-3 my-3'
+                    >
+                        <option value="" disabled>Nhập thẻ sản phẩm</option>
+                        <option value="Thẻ 1">thẻ 1</option>
+                        <option value="Thẻ 2">thẻ 2</option>
+                        <option value="Thẻ 3">thẻ 3</option>
+                    </select>
+                    <div className='error'>
+                        {formik.touched.tags && formik.errors.tags}
+                    </div>
                     <select name="" id="" className='form-control py-3 mb-3'>
                         <option value="">
                             Lựa chọn loại giấy
                         </option>
                     </select>
-                    <Multiselect
-                        name='color'
-                        className='py-3 mb-3'
-                        dataKey="id"
-                        textField="color"
-                        data={colors}
-                        onChange={(event) => setColor(event)}
+                    <Select
+                        mode='multiple'
+                        allowClear
+                        className='w-100 py-3 my-3'
+                        placeholder='Lựa chọn màu sắc'
+                        defaultValue={color}
+                        onChange={(i) => handleColors(i)}
+                        options={coloropt}
                     />
+
                     <div className='error'>
                         {formik.touched.color && formik.errors.color}
                     </div>
