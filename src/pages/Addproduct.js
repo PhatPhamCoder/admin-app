@@ -14,10 +14,11 @@ import "react-widgets/styles.css";
 
 import Dropzone from 'react-dropzone';
 import { deleteImg, uploadImg } from '../features/upload/uploadSlice';
+import { createProducts } from '../features/product/productSlice';
 
 let userSchema = object().shape({
     title: string().required("Tiêu đề không được để trống"),
-    desciption: string().required("Mô tả không được để trống"),
+    description: string().required("Mô tả không được để trống"),
     price: number().required("Giá tiền không được để trống"),
     brand: string().required("Thương hiệu không được để trống"),
     category: string().required("Danh mục không được để trống"),
@@ -27,18 +28,20 @@ let userSchema = object().shape({
 const Addproduct = () => {
     const dispatch = useDispatch();
     const [color, setColor] = useState([]);
+    const [images, setImages] = useState([]);
 
     useEffect(() => {
         dispatch(getBrands());
         dispatch(getCategories());
         dispatch(getColors());
-        formik.values.color = color
     }, []);
+
 
     const brandState = useSelector((state) => state.brand.brands);
     const pCategoryState = useSelector((state) => state.pCategory.pCategories);
     const colorState = useSelector((state) => state.color.colors);
     const imgState = useSelector((state) => state.upload.images);
+
     const colors = [];
     colorState.forEach((i) => {
         colors.push({
@@ -47,19 +50,33 @@ const Addproduct = () => {
         })
     });
 
+    const img = [];
+    imgState.forEach((i) => {
+        img.push({
+            public_id: i.public_id,
+            url: i.url
+        })
+    });
+
+    useEffect(() => {
+        formik.values.color = color;
+        formik.values.images = img;
+    }, [color, img]);
+
     const formik = useFormik({
         initialValues: {
             title: "",
-            desciption: "",
+            description: "",
             price: "",
             brand: "",
             category: "",
             color: "",
             quantity: "",
+            images: ""
         },
         validationSchema: userSchema,
         onSubmit: (values) => {
-            alert(JSON.stringify(values))
+            dispatch(createProducts(values));
         },
     });
 
@@ -90,13 +107,13 @@ const Addproduct = () => {
                     <div className='mb-3'>
                         <ReactQuill
                             className='quill'
-                            name="desciption"
-                            onChange={formik.handleChange('desciption')}
-                            value={formik.values.desciption}
+                            name="description"
+                            onChange={formik.handleChange('description')}
+                            value={formik.values.description}
                         />
                     </div>
                     <div className='error'>
-                        {formik.touched.desciption && formik.errors.desciption}
+                        {formik.touched.description && formik.errors.description}
                     </div>
                     <CustomInput
                         type='number'
@@ -191,6 +208,7 @@ const Addproduct = () => {
                             return (
                                 <div key={index} className="position-relative">
                                     <button
+                                        type='button'
                                         onClick={() => dispatch(deleteImg(item.public_id))}
                                         className='btn-close position-absolute text-white'
                                         style={{ top: "10px", right: "10px" }}
