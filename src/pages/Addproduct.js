@@ -3,7 +3,7 @@ import CustomInput from '../components/CustomInput';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useFormik } from 'formik';
-import { array, number, object, string } from 'yup';
+import { number, object, string } from 'yup';
 import { getBrands } from '../features/brand/brandSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCategories } from '../features/pcategory/pcategorySlice';
@@ -12,13 +12,15 @@ import { getColors } from '../features/color/colorSlice';
 import Multiselect from "react-widgets/Multiselect";
 import "react-widgets/styles.css";
 
+import Dropzone from 'react-dropzone';
+import { deleteImg, uploadImg } from '../features/upload/uploadSlice';
+
 let userSchema = object().shape({
     title: string().required("Tiêu đề không được để trống"),
     desciption: string().required("Mô tả không được để trống"),
-    price: string().required("Giá tiền không được để trống"),
+    price: number().required("Giá tiền không được để trống"),
     brand: string().required("Thương hiệu không được để trống"),
     category: string().required("Danh mục không được để trống"),
-    color: array().required("Màu sắc không được để trống"),
     quantity: number().required("Số lượng không được để trống"),
 });
 
@@ -30,12 +32,13 @@ const Addproduct = () => {
         dispatch(getBrands());
         dispatch(getCategories());
         dispatch(getColors());
+        formik.values.color = color
     }, []);
 
     const brandState = useSelector((state) => state.brand.brands);
     const pCategoryState = useSelector((state) => state.pCategory.pCategories);
-
     const colorState = useSelector((state) => state.color.colors);
+    const imgState = useSelector((state) => state.upload.images);
     const colors = [];
     colorState.forEach((i) => {
         colors.push({
@@ -61,10 +64,10 @@ const Addproduct = () => {
     });
 
     //ReactQuill
-    const { desc, setDesc } = useState();
-    const handleDesc = (e) => {
-        setDesc(e);
-    }
+    // const { desc } = useState();
+    // const handleDesc = (e) => {
+    //     setDesc(e);
+    // }
     //ReactQuill End
     return (
         <div>
@@ -87,10 +90,9 @@ const Addproduct = () => {
                     <div className='mb-3'>
                         <ReactQuill
                             className='quill'
-                            value={desc}
                             name="desciption"
-                            onChange={(e) => formik.handleDesc('desciption', e)}
-                            values={formik.values.desciption}
+                            onChange={formik.handleChange('desciption')}
+                            value={formik.values.desciption}
                         />
                     </div>
                     <div className='error'>
@@ -156,7 +158,6 @@ const Addproduct = () => {
                         textField="color"
                         data={colors}
                         onChange={(event) => setColor(event)}
-                        values={formik.values.color}
                     />
                     <div className='error'>
                         {formik.touched.color && formik.errors.color}
@@ -172,6 +173,32 @@ const Addproduct = () => {
                     />
                     <div className='error'>
                         {formik.touched.quantity && formik.errors.quantity}
+                    </div>
+                    <div className='bg-white border-1 p-5 text-center mt-3 rounded'>
+                        <Dropzone onDrop={(acceptedFiles) => dispatch(uploadImg(acceptedFiles))}>
+                            {({ getRootProps, getInputProps }) => (
+                                <section>
+                                    <div {...getRootProps()}>
+                                        <input {...getInputProps()} />
+                                        <p>Drag 'n' drop some files here, or click to select files</p>
+                                    </div>
+                                </section>
+                            )}
+                        </Dropzone>
+                    </div>
+                    <div className='showimages my-3 d-flex'>
+                        {imgState.map((item, index) => {
+                            return (
+                                <div key={index} className="position-relative">
+                                    <button
+                                        onClick={() => dispatch(deleteImg(item.public_id))}
+                                        className='btn-close position-absolute text-white'
+                                        style={{ top: "10px", right: "10px" }}
+                                    ></button>
+                                    <img src={item.url} alt="" className='rounded' width={350} />
+                                </div>
+                            )
+                        })}
                     </div>
                     <button
                         className='btn btn-success border-0 rounded-3 my-3 d-flex mx-auto'

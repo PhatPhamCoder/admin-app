@@ -9,6 +9,7 @@ import bCategoryReducer from "../features/bcategory/bcategorySlice";
 import colorReduxer from "../features/color/colorSlice";
 import enquiryReducer from "../features/enquiry/enquirySlice";
 import orderReducer from "../features/auth/authSlice";
+import uploadReducer from "../features/upload/uploadSlice";
 
 export const store = configureStore({
     reducer: {
@@ -21,6 +22,7 @@ export const store = configureStore({
         bCategory: bCategoryReducer,
         color: colorReduxer,
         enquiry: enquiryReducer,
-        order: orderReducer
+        order: orderReducer,
+        upload: uploadReducer
     }
 })
