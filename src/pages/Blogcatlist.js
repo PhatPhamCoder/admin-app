@@ -5,6 +5,7 @@ import { AiFillDelete } from "react-icons/ai";
 import { useDispatch, useSelector } from 'react-redux';
 import { getCategories } from '../features/bcategory/bcategorySlice';
 import { Link } from 'react-router-dom';
+import { format } from 'date-fns';
 
 const columns = [
     {
@@ -12,12 +13,8 @@ const columns = [
         dataIndex: 'key',
     },
     {
-        title: 'Tiêu đề Blog',
+        title: 'Tên danh mục',
         dataIndex: 'name',
-    },
-    {
-        title: 'Danh mục',
-        dataIndex: 'category',
     },
     {
         title: 'Ngày tạo',
@@ -38,7 +35,7 @@ const Blogcatlist = () => {
 
     const data = [];
     for (let i = 0; i < bCategoryState.length; i++) {
-        const date = bCategoryState[i].createdAt;
+        const date = format(new Date(bCategoryState[i].createdAt), 'dd-MM-yyy');
         const name = bCategoryState[i].title;
         const desc = bCategoryState[i].description;
         const category = bCategoryState[i].category;

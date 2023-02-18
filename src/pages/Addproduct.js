@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getCategories } from '../features/pcategory/pcategorySlice';
 import { getColors } from '../features/color/colorSlice';
 import { Select } from "antd";
+// Upload Image
 import Dropzone from 'react-dropzone';
 import { deleteImg, uploadImg } from '../features/upload/uploadSlice';
 import { createProducts } from '../features/product/productSlice';
@@ -177,7 +178,6 @@ const Addproduct = () => {
                     <div className='error'>
                         {formik.touched.category && formik.errors.category}
                     </div>
-
                     <select
                         name="tags"
                         onChange={formik.handleChange("tags")}

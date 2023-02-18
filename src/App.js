@@ -19,7 +19,7 @@ import Addblog from './pages/Addblog';
 import Addblogcat from './pages/Addblogcat';
 import Addcolor from './pages/Addcolor';
 import Addcat from './pages/addcat';
-import Addbranch from './pages/Addbranch';
+import Addbrand from './pages/Addbrand';
 import Addproduct from './pages/Addproduct';
 function App() {
   return (
@@ -42,8 +42,7 @@ function App() {
           <Route path='color' element={<Addcolor />} />
           <Route path='list-category' element={<Categorylist />} />
           <Route path='list-brand' element={<Brandlist />} />
-          <Route path='brand' element={<Brand />} />
-          <Route path='branch' element={<Addbranch />} />
+          <Route path='brand' element={<Addbrand />} />
           <Route path='list-product' element={<Productlist />} />
           <Route path='product' element={<Addproduct />} />
         </Route>

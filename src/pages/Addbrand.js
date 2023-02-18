@@ -5,15 +5,13 @@ import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
 import { useFormik } from 'formik';
 import { object, string } from 'yup';
-import { createCategory } from '../features/pcategory/pcategorySlice';
-
+import { createBrand } from '../features/brand/brandSlice';
 
 let userSchema = object().shape({
     title: string().required("Tiêu đề không được để trống"),
 });
 
-
-const Addcat = () => {
+const Addbrand = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -23,32 +21,33 @@ const Addcat = () => {
         },
         validationSchema: userSchema,
         onSubmit: (values) => {
-            dispatch(createCategory(values));
+            dispatch(createBrand(values));
             formik.resetForm();
             setTimeout(() => {
-                navigate("/admin/list-category")
+                navigate("/admin/list-brand")
             }, 2000)
         },
     });
 
-    const newCategory = useSelector((state) => state.pCategory);
-    const { isSuccess, isError, isLoading, createdCategory } = newCategory;
+    const newBrand = useSelector((state) => state.brand);
+    const { isSuccess, isError, isLoading, createdBrand } = newBrand;
     useEffect(() => {
-        if (isSuccess && createdCategory) {
+        if (isSuccess && createdBrand) {
             toast.success('Thêm đối tác thành công!');
         }
         if (isError) {
             toast.error('Thêm đối tác thất bại!');
         }
     }, [isSuccess, isError, isLoading]);
+
     return (
         <div>
-            <h3 className='mb-4 title'>Thêm danh mục</h3>
+            <h3 className='mb-4 title'>Thêm đối tác</h3>
             <div>
                 <form action="" onSubmit={formik.handleSubmit}>
                     <CustomInput
                         type="text"
-                        label='Nhập tên danh mục sản phẩm'
+                        label='Nhập tên đối tác'
                         name="title"
                         onChng={formik.handleChange("title")}
                         onBlr={formik.handleBlur("title")}
@@ -61,12 +60,12 @@ const Addcat = () => {
                         className='btn btn-success border-0 rounded-3 my-5 d-flex mx-auto'
                         type='submit'
                     >
-                        Thêm danh mục
+                        Thêm đối tác
                     </button>
                 </form>
             </div>
         </div>
     )
-}
+};
 
-export default Addcat
+export default Addbrand;

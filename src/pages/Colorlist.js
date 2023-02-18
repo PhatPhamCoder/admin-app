@@ -12,12 +12,8 @@ const columns = [
         dataIndex: 'key',
     },
     {
-        title: 'Tên màu',
-        dataIndex: 'name',
-    },
-    {
         title: 'Mã màu',
-        dataIndex: 'codecolor',
+        dataIndex: 'name',
     },
     {
         title: 'Chức năng',
