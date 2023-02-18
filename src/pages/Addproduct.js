@@ -2,7 +2,6 @@ import { React, useEffect, useState } from 'react';
 import CustomInput from '../components/CustomInput';
 import ReactQuill from 'react-quill';
 import { toast } from 'react-toastify';
-import { useNavigate } from "react-router-dom";
 import 'react-quill/dist/quill.snow.css';
 import { useFormik } from 'formik';
 import { array, number, object, string } from 'yup';
@@ -29,7 +28,6 @@ let userSchema = object().shape({
 
 const Addproduct = () => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const [color, setColor] = useState([]);
     const [images, setImages] = useState([]);
     useEffect(() => {
@@ -93,7 +91,7 @@ const Addproduct = () => {
             setColor(null);
             setImages(null);
             setTimeout(() => {
-                dispatch(resetState())
+                dispatch(resetState)
             }, 2000)
         },
     });

@@ -2,21 +2,16 @@ import { React, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CustomInput from '../components/CustomInput';
 import { toast } from 'react-toastify';
-import { useNavigate } from "react-router-dom";
 import { useFormik } from 'formik';
 import { object, string } from 'yup';
 import { createCategory, resetState } from '../features/pcategory/pcategorySlice';
-
-
 
 let userSchema = object().shape({
     title: string().required("Tiêu đề không được để trống"),
 });
 
-
 const Addcat = () => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
 
     const formik = useFormik({
         initialValues: {
@@ -70,4 +65,4 @@ const Addcat = () => {
     )
 }
 
-export default Addcat
+export default Addcat;

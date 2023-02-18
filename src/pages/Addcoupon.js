@@ -3,11 +3,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import CustomInput from '../components/CustomInput';
 import { toast } from 'react-toastify';
 import { useFormik } from 'formik';
-import { object, string } from 'yup';
-import { createBrand, resetState } from '../features/brand/brandSlice';
+import { date, number, object, string } from 'yup';
+import { createCoupon, resetState } from '../features/coupon/couponSlice';
 
 let userSchema = object().shape({
-    title: string().required("Tiêu đề không được để trống"),
+    name: string().required("Tiêu đề không được để trống"),
+    expiry: date().required("Thời hạn không được để trống"),
+    discount: number().required("Ngày không được để trống"),
 });
 
 const Addcoupon = () => {
@@ -15,44 +17,73 @@ const Addcoupon = () => {
 
     const formik = useFormik({
         initialValues: {
-            title: "",
+            name: "",
+            expiry: "",
+            discount: ""
         },
         validationSchema: userSchema,
         onSubmit: (values) => {
-            dispatch(createBrand(values));
+            dispatch(createCoupon(values));
             formik.resetForm();
             setTimeout(() => {
-                dispatch(resetState);
+                dispatch(resetState());
             }, 2000)
         },
     });
 
-    const newBrand = useSelector((state) => state.brand);
-    const { isSuccess, isError, isLoading, createdBrand } = newBrand;
+    const newCoupon = useSelector((state) => state.coupon);
+    const { isSuccess, isError, isLoading, createdCoupon } = newCoupon;
     useEffect(() => {
-        if (isSuccess && createdBrand) {
-            toast.success('Thêm đối tác thành công!');
+        if (isSuccess && createdCoupon) {
+            toast.success('Thêm ưu đãi thành công!');
         }
         if (isError) {
-            toast.error('Thêm đối tác thất bại!');
+            toast.error('Thêm ưu đãi thất bại!');
         }
     }, [isSuccess, isError, isLoading]);
 
     return (
         <div>
             <h3 className='mb-4 title'>Thêm ưu đãi</h3>
-            <div>
+            <div className="row">
                 <form action="" onSubmit={formik.handleSubmit}>
-                    <CustomInput
-                        type="text"
-                        label='Nhập tên đối tác'
-                        name="title"
-                        onChng={formik.handleChange("title")}
-                        onBlr={formik.handleBlur("title")}
-                        val={formik.values.title}
-                    />
-                    <div className='error'>
-                        {formik.touched.title && formik.errors.title}
+                    <div className="col-6">
+                        <CustomInput
+                            type="text"
+                            label='Nhập tên ưu đãi'
+                            name="name"
+                            onChng={formik.handleChange("name")}
+                            onBlr={formik.handleBlur("name")}
+                            val={formik.values.name}
+                            id="name"
+                        />
+                        <div className='error'>
+                            {formik.touched.name && formik.errors.name}
+                        </div>
+                        <CustomInput
+                            type="number"
+                            label='Đặt giá trị giảm'
+                            name="discount"
+                            onChng={formik.handleChange("discount")}
+                            onBlr={formik.handleBlur("discount")}
+                            val={formik.values.discount}
+                            id="discount"
+                        />
+                        <div className='error'>
+                            {formik.touched.discount && formik.errors.discount}
+                        </div>
+                        <CustomInput
+                            type="date"
+                            label='Chọn ngày hết hạn'
+                            name="expiry"
+                            onChng={formik.handleChange("expiry")}
+                            onBlr={formik.handleBlur("expiry")}
+                            val={formik.values.expiry}
+                            id="expiry"
+                        />
+                        <div className='error'>
+                            {formik.touched.expiry && formik.errors.expiry}
+                        </div>
                     </div>
                     <button
                         className='btn btn-success border-0 rounded-3 my-5 d-flex mx-auto'
@@ -61,6 +92,7 @@ const Addcoupon = () => {
                         Thêm ưu đãi
                     </button>
                 </form>
+
             </div>
         </div>
     )

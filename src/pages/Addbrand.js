@@ -22,7 +22,7 @@ const Addbrand = () => {
             dispatch(createBrand(values));
             formik.resetForm();
             setTimeout(() => {
-                dispatch(resetState);
+                dispatch(resetState());
             }, 2000)
         },
     });

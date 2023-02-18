@@ -10,6 +10,7 @@ import colorReduxer from "../features/color/colorSlice";
 import enquiryReducer from "../features/enquiry/enquirySlice";
 import orderReducer from "../features/auth/authSlice";
 import uploadReducer from "../features/upload/uploadSlice";
+import couponReducer from "../features/coupon/couponSlice";
 
 export const store = configureStore({
     reducer: {
@@ -23,6 +24,7 @@ export const store = configureStore({
         color: colorReduxer,
         enquiry: enquiryReducer,
         order: orderReducer,
-        upload: uploadReducer
+        upload: uploadReducer,
+        coupon: couponReducer
     }
 })
