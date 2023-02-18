@@ -13,7 +13,7 @@ import Customer from './pages/Customer';
 import Colorlist from './pages/Colorlist';
 import Categorylist from './pages/Categorylist';
 import Brandlist from './pages/Brandlist';
-import Brand from './pages/Brand';
+import Couponlist from './pages/Couponlist';
 import Productlist from './pages/Productlist';
 import Addblog from './pages/Addblog';
 import Addblogcat from './pages/Addblogcat';
@@ -21,6 +21,7 @@ import Addcolor from './pages/Addcolor';
 import Addcat from './pages/addcat';
 import Addbrand from './pages/Addbrand';
 import Addproduct from './pages/Addproduct';
+import Addcoupon from './pages/Addcoupon';
 function App() {
   return (
     <Router>
@@ -33,6 +34,8 @@ function App() {
           <Route path='enquiries' element={<Enquiries />} />
           <Route path='blog-list' element={<Bloglist />} />
           <Route path='add-blog' element={<Addblog />} />
+          <Route path='coupon-list' element={<Couponlist />} />
+          <Route path='coupon' element={<Addcoupon />} />
           <Route path='blog-category' element={<Addblogcat />} />
           <Route path='category' element={<Addcat />} />
           <Route path='blog-category-list' element={<Blogcatlist />} />

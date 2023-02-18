@@ -5,8 +5,7 @@ import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
 import { useFormik } from 'formik';
 import { object, string } from 'yup';
-import { createBlogCategory } from '../features/bcategory/bcategorySlice';
-
+import { createBlogCategory, resetState } from '../features/bcategory/bcategorySlice';
 
 let userSchema = object().shape({
     title: string().required("Tiêu đề không được để trống"),
@@ -26,7 +25,7 @@ const Addblogcat = () => {
             dispatch(createBlogCategory(values));
             formik.resetForm();
             setTimeout(() => {
-                navigate("/admin/blog-category-list")
+                dispatch(resetState())
             }, 2000)
         },
     });

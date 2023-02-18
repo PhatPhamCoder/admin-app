@@ -9,11 +9,11 @@ import 'react-quill/dist/quill.snow.css';
 import Dropzone from 'react-dropzone';
 // import { InboxOutlined } from '@ant-design/icons';
 import { deleteImg, uploadImg } from '../features/upload/uploadSlice';
-import { createBlog } from '../features/blogs/blogSlice'
+import { createBlog } from '../features/blogs/blogSlice';
 // Upload import end
 import { useFormik } from 'formik';
 import { object, string } from 'yup';
-import { getCategories } from '../features/bcategory/bcategorySlice';
+import { getCategories, resetState } from '../features/bcategory/bcategorySlice';
 
 let userSchema = object().shape({
     title: string().required("Tiêu đề không được để trống"),
@@ -71,7 +71,7 @@ const Addblog = () => {
             formik.resetForm();
             setImages(null);
             setTimeout(() => {
-                navigate("/admin/blog-list")
+                dispatch(resetState());
             }, 2000)
         },
     });

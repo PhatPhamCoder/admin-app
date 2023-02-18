@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import blogService from './blogService';
 
 export const getBlogs = createAsyncThunk(
@@ -22,6 +22,8 @@ export const createBlog = createAsyncThunk(
         }
     }
 );
+
+export const resetState = createAction("Reset_all");
 
 const initialState = {
     blogs: [],
@@ -66,7 +68,7 @@ export const blogSlice = createSlice({
                 state.isError = true;
                 state.isSuccess = false;
                 state.message = action.error;
-            });
+            }).addCase(resetState, () => initialState);
     },
 });
 

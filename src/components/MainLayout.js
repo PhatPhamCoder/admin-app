@@ -16,6 +16,7 @@ import {
     AiOutlineUser,
     AiOutlineBgColors
 } from "react-icons/ai";
+import { RiCouponLine } from "react-icons/ri"
 import { FaClipboardList, FaBloggerB } from "react-icons/fa";
 import { MdNotificationsActive } from "react-icons/md";
 import { ImBlog } from "react-icons/im";
@@ -111,6 +112,23 @@ const MainLayout = () => {
                             key: 'orders',
                             icon: <FaClipboardList className='fs-4' />,
                             label: 'Đơn hàng',
+                        },
+                        {
+                            key: 'marketing',
+                            icon: <RiCouponLine className='fs-4' />,
+                            label: 'Marketing',
+                            children: [
+                                {
+                                    key: 'coupon',
+                                    icon: <RiCouponLine className='fs-4' />,
+                                    label: 'Add Coupon',
+                                },
+                                {
+                                    key: 'coupon-list',
+                                    icon: <RiCouponLine className='fs-4' />,
+                                    label: 'Coupn List',
+                                },
+                            ]
                         },
                         {
                             key: 'blog',

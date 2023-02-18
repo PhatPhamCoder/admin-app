@@ -2,19 +2,16 @@ import { React, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CustomInput from '../components/CustomInput';
 import { toast } from 'react-toastify';
-import { useNavigate } from "react-router-dom";
 import { useFormik } from 'formik';
 import { object, string } from 'yup';
-import { createColor, resetState } from '../features/color/colorSlice';
-
+import { createBrand, resetState } from '../features/brand/brandSlice';
 
 let userSchema = object().shape({
     title: string().required("Tiêu đề không được để trống"),
 });
 
-const Addcolor = () => {
+const Addcoupon = () => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
 
     const formik = useFormik({
         initialValues: {
@@ -22,7 +19,7 @@ const Addcolor = () => {
         },
         validationSchema: userSchema,
         onSubmit: (values) => {
-            dispatch(createColor(values));
+            dispatch(createBrand(values));
             formik.resetForm();
             setTimeout(() => {
                 dispatch(resetState);
@@ -30,25 +27,25 @@ const Addcolor = () => {
         },
     });
 
-    const newColor = useSelector((state) => state.color);
-    const { isSuccess, isError, isLoading, createdColor } = newColor;
+    const newBrand = useSelector((state) => state.brand);
+    const { isSuccess, isError, isLoading, createdBrand } = newBrand;
     useEffect(() => {
-        if (isSuccess && createdColor) {
-            toast.success('Thêm màu thành công!');
+        if (isSuccess && createdBrand) {
+            toast.success('Thêm đối tác thành công!');
         }
         if (isError) {
-            toast.error('Thêm màu thất bại!');
+            toast.error('Thêm đối tác thất bại!');
         }
     }, [isSuccess, isError, isLoading]);
 
     return (
         <div>
-            <h3 className='mb-4 title'>Thêm màu sắc</h3>
+            <h3 className='mb-4 title'>Thêm ưu đãi</h3>
             <div>
                 <form action="" onSubmit={formik.handleSubmit}>
                     <CustomInput
-                        type="color"
-                        label='Chọn màu sắc'
+                        type="text"
+                        label='Nhập tên đối tác'
                         name="title"
                         onChng={formik.handleChange("title")}
                         onBlr={formik.handleBlur("title")}
@@ -58,15 +55,15 @@ const Addcolor = () => {
                         {formik.touched.title && formik.errors.title}
                     </div>
                     <button
-                        className='btn btn-success border-0 rounded-3 my-5'
+                        className='btn btn-success border-0 rounded-3 my-5 d-flex mx-auto'
                         type='submit'
                     >
-                        Thêm màu sắc
+                        Thêm ưu đãi
                     </button>
                 </form>
             </div>
         </div>
     )
-}
+};
 
-export default Addcolor
+export default Addcoupon;

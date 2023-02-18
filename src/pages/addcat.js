@@ -5,7 +5,8 @@ import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
 import { useFormik } from 'formik';
 import { object, string } from 'yup';
-import { createCategory } from '../features/pcategory/pcategorySlice';
+import { createCategory, resetState } from '../features/pcategory/pcategorySlice';
+
 
 
 let userSchema = object().shape({
@@ -26,7 +27,7 @@ const Addcat = () => {
             dispatch(createCategory(values));
             formik.resetForm();
             setTimeout(() => {
-                navigate("/admin/list-category")
+                dispatch(resetState);
             }, 2000)
         },
     });

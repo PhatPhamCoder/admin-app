@@ -14,7 +14,8 @@ import { Select } from "antd";
 // Upload Image
 import Dropzone from 'react-dropzone';
 import { deleteImg, uploadImg } from '../features/upload/uploadSlice';
-import { createProducts } from '../features/product/productSlice';
+import { createProducts, resetState } from '../features/product/productSlice';
+
 let userSchema = object().shape({
     title: string().required("Tiêu đề không được để trống"),
     description: string().required("Mô tả không được để trống"),
@@ -92,7 +93,7 @@ const Addproduct = () => {
             setColor(null);
             setImages(null);
             setTimeout(() => {
-                navigate("/admin/list-product")
+                dispatch(resetState())
             }, 2000)
         },
     });

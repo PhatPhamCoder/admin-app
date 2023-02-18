@@ -2,10 +2,9 @@ import { React, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CustomInput from '../components/CustomInput';
 import { toast } from 'react-toastify';
-import { useNavigate } from "react-router-dom";
 import { useFormik } from 'formik';
 import { object, string } from 'yup';
-import { createBrand } from '../features/brand/brandSlice';
+import { createBrand, resetState } from '../features/brand/brandSlice';
 
 let userSchema = object().shape({
     title: string().required("Tiêu đề không được để trống"),
@@ -13,7 +12,6 @@ let userSchema = object().shape({
 
 const Addbrand = () => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
 
     const formik = useFormik({
         initialValues: {
@@ -24,7 +22,7 @@ const Addbrand = () => {
             dispatch(createBrand(values));
             formik.resetForm();
             setTimeout(() => {
-                navigate("/admin/list-brand")
+                dispatch(resetState);
             }, 2000)
         },
     });
