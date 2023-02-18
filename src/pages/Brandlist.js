@@ -36,13 +36,14 @@ const Brandlist = () => {
     for (let i = 0; i < brandState.length; i++) {
         const date = format(new Date(brandState[i].createdAt), 'dd-MM-yyy');
         const name = brandState[i].title;
+        const id = brandState[i]._id;
         data.push({
             key: i + 1,
             name: name,
             date: date,
             action: (
                 <>
-                    <Link to="/" className='fs-5'><BiEdit /></Link>
+                    <Link to={`/admin/brand/${id}`} className='fs-5'><BiEdit /></Link>
                     <Link to='/' className='fs-5 ms-3'><AiFillDelete /></Link>
                 </>
             )

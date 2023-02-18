@@ -4,7 +4,8 @@ import CustomInput from '../components/CustomInput';
 import { toast } from 'react-toastify';
 import { useFormik } from 'formik';
 import { object, string } from 'yup';
-import { createBrand, resetState } from '../features/brand/brandSlice';
+import { createBrand, getBrand, resetState, updateBrand } from '../features/brand/brandSlice';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 let userSchema = object().shape({
     title: string().required("Tiêu đề không được để trống"),
@@ -12,35 +13,58 @@ let userSchema = object().shape({
 
 const Addbrand = () => {
     const dispatch = useDispatch();
-
-    const formik = useFormik({
-        initialValues: {
-            title: "",
-        },
-        validationSchema: userSchema,
-        onSubmit: (values) => {
-            dispatch(createBrand(values));
-            formik.resetForm();
-            setTimeout(() => {
-                dispatch(resetState());
-            }, 2000)
-        },
-    });
-
+    const navigate = useNavigate();
+    const location = useLocation();
+    const getBrandId = location.pathname.split("/")[3];
     const newBrand = useSelector((state) => state.brand);
-    const { isSuccess, isError, isLoading, createdBrand } = newBrand;
+    const { isSuccess, isError, isLoading, createdBrand, brandName, updatedBrand } = newBrand;
+
     useEffect(() => {
         if (isSuccess && createdBrand) {
             toast.success('Thêm đối tác thành công!');
         }
+
+        if (isSuccess && updatedBrand) {
+            toast.success('Cập nhật đối tác thành công!');
+            navigate("/admin/list-brand")
+        }
         if (isError) {
-            toast.error('Thêm đối tác thất bại!');
+            toast.error('Thất bại!');
         }
     }, [isSuccess, isError, isLoading]);
 
+    useEffect(() => {
+        if (getBrandId !== undefined) {
+            dispatch(resetState());
+            dispatch(getBrand(getBrandId));
+        } else {
+            dispatch(resetState());
+        }
+    }, [getBrandId]);
+
+    const formik = useFormik({
+        enableReinitialize: true,
+        initialValues: {
+            title: brandName || "",
+        },
+        validationSchema: userSchema,
+        onSubmit: (values) => {
+            if (getBrandId !== undefined) {
+                const data = { id: getBrandId, brandData: values }
+                dispatch(updateBrand(data))
+            } else {
+                dispatch(createBrand(values));
+                formik.resetForm();
+                setTimeout(() => {
+                    dispatch(resetState());
+                }, 2000)
+            }
+        },
+    });
+
     return (
         <div>
-            <h3 className='mb-4 title'>Thêm đối tác</h3>
+            <h3 className='mb-4 title'>{getBrandId !== undefined ? "Cập nhật" : "Thêm"} đối tác</h3>
             <div>
                 <form action="" onSubmit={formik.handleSubmit}>
                     <CustomInput
@@ -58,7 +82,7 @@ const Addbrand = () => {
                         className='btn btn-success border-0 rounded-3 my-5 d-flex mx-auto'
                         type='submit'
                     >
-                        Thêm đối tác
+                        {getBrandId !== undefined ? "Cập nhật" : "Thêm"} đối tác
                     </button>
                 </form>
             </div>
