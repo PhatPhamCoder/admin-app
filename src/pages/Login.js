@@ -1,4 +1,4 @@
-import { React, useEffect } from 'react'
+import { React, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import CustomInput from '../components/CustomInput';
 import { useFormik } from 'formik';
@@ -26,9 +26,9 @@ const Login = () => {
             dispatch(login(values));
         },
     });
-    const authState = useSelector((state) => state);
+    const authState = useSelector((state) => state.auth);
 
-    const { user, isLoading, isError, isSuccess, message } = authState.auth;
+    const { user, isLoading, isError, isSuccess, message } = authState;
 
     useEffect(() => {
         if (isSuccess) {

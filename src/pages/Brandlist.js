@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { React, useEffect, useState } from 'react';
 import { Table } from 'antd';
 import { BiEdit } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
@@ -6,6 +6,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getBrands } from '../features/brand/brandSlice';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
+import CustomModal from '../components/CustomModal';
+import { deleteABrand } from '../features/brand/brandSlice';
+
 const columns = [
     {
         title: 'Số thứ tự',
@@ -27,9 +30,20 @@ const columns = [
 
 const Brandlist = () => {
     const dispatch = useDispatch();
+    const [open, setOpen] = useState(false);
+    const [brandId, setbrandId] = useState("");
+    const showModal = (e) => {
+        setOpen(true);
+        setbrandId(e);
+    };
+    const hideModal = () => {
+        setOpen(false);
+    };
+
     useEffect(() => {
         dispatch(getBrands());
     }, []);
+
     const brandState = useSelector((state) => state.brand.brands);
 
     const data = [];
@@ -44,17 +58,39 @@ const Brandlist = () => {
             action: (
                 <>
                     <Link to={`/admin/brand/${id}`} className='fs-5'><BiEdit /></Link>
-                    <Link to='/' className='fs-5 ms-3'><AiFillDelete /></Link>
+                    <button
+                        onClick={() => showModal(id)}
+                        className='fs-5 ms-3 bg-transparent border-0 text-danger'
+                    >
+                        <AiFillDelete />
+                    </button>
                 </>
             )
         });
     };
+
+    const deleteBrand = (e) => {
+        dispatch(deleteABrand(e));
+        setOpen(false);
+        setTimeout(() => {
+            dispatch(getBrands());
+        }, 100);
+    };
+
     return (
         <div>
             <h3 className="mb-4 title">Danh sách thương hiệu</h3>
             <div>
                 <Table columns={columns} dataSource={data} />
             </div>
+            <CustomModal
+                hideModal={hideModal}
+                open={open}
+                performAction={() => {
+                    deleteBrand(brandId)
+                }}
+                title="Bạn có chắc mà muốn xóa đối tác này!"
+            />
         </div>
     )
 }

@@ -35,7 +35,6 @@ const Addbrand = () => {
 
     useEffect(() => {
         if (getBrandId !== undefined) {
-            dispatch(resetState());
             dispatch(getBrand(getBrandId));
         } else {
             dispatch(resetState());
@@ -57,7 +56,7 @@ const Addbrand = () => {
                 formik.resetForm();
                 setTimeout(() => {
                     dispatch(resetState());
-                }, 2000)
+                }, 200)
             }
         },
     });
