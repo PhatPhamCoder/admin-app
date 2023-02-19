@@ -1,11 +1,13 @@
-import React, { useEffect } from 'react';
+import { React, useEffect, useState } from 'react';
 import { Table } from 'antd';
 import { BiEdit } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
 import { useDispatch, useSelector } from 'react-redux';
-import { getCategories } from '../features/pcategory/pcategorySlice';
+import { deleteAProductCategory, getCategories, resetState } from '../features/pcategory/pcategorySlice';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
+import CustomModal from '../components/CustomModal';
+
 const columns = [
     {
         title: 'Số thứ tự',
@@ -27,7 +29,17 @@ const columns = [
 
 const Categorylist = () => {
     const dispatch = useDispatch();
+    const [open, setOpen] = useState(false);
+    const [ProductCategoryId, setProductCategoryId] = useState("");
+    const showModal = (e) => {
+        setOpen(true);
+        setProductCategoryId(e);
+    };
+    const hideModal = () => {
+        setOpen(false);
+    };
     useEffect(() => {
+        dispatch(resetState())
         dispatch(getCategories());
     }, []);
     const pCategoryState = useSelector((state) => state.pCategory.pCategories);
@@ -36,17 +48,31 @@ const Categorylist = () => {
     for (let i = 0; i < pCategoryState.length; i++) {
         const date = format(new Date(pCategoryState[i].createdAt), 'dd-MM-yyy');
         const name = pCategoryState[i].title;
+        const id = pCategoryState[i]._id;
         data.push({
             key: i + 1,
             name: name,
             date: date,
             action: (
                 <>
-                    <Link to="/" className='fs-5'><BiEdit /></Link>
-                    <Link to='/' className='fs-5 ms-3'><AiFillDelete /></Link>
+                    <Link to={`/admin/category/${id}`} className='fs-5'><BiEdit /></Link>
+                    <button
+                        onClick={() => showModal(id)}
+                        className='fs-5 ms-3 bg-transparent border-0 text-danger'
+                    >
+                        <AiFillDelete />
+                    </button>
                 </>
             )
         });
+    };
+
+    const deleteCategory = (e) => {
+        dispatch(deleteAProductCategory(e));
+        setOpen(false);
+        setTimeout(() => {
+            dispatch(getCategories());
+        }, 100);
     };
     return (
         <div>
@@ -54,6 +80,14 @@ const Categorylist = () => {
             <div>
                 <Table columns={columns} dataSource={data} />
             </div>
+            <CustomModal
+                hideModal={hideModal}
+                open={open}
+                performAction={() => {
+                    deleteCategory(ProductCategoryId)
+                }}
+                title="Bạn có chắc mà muốn xóa danh mục này!"
+            />
         </div>
     )
 }

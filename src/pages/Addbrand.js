@@ -26,7 +26,7 @@ const Addbrand = () => {
 
         if (isSuccess && updatedBrand) {
             toast.success('Cập nhật đối tác thành công!');
-            navigate("/admin/list-brand")
+            navigate("/admin/list-brand");
         }
         if (isError) {
             toast.error('Thất bại!');
@@ -56,7 +56,7 @@ const Addbrand = () => {
                 formik.resetForm();
                 setTimeout(() => {
                     dispatch(resetState());
-                }, 200)
+                }, 300)
             }
         },
     });

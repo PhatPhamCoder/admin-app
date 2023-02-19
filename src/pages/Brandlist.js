@@ -3,7 +3,7 @@ import { Table } from 'antd';
 import { BiEdit } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
 import { useDispatch, useSelector } from 'react-redux';
-import { getBrands } from '../features/brand/brandSlice';
+import { getBrands, resetState } from '../features/brand/brandSlice';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 import CustomModal from '../components/CustomModal';
@@ -41,6 +41,7 @@ const Brandlist = () => {
     };
 
     useEffect(() => {
+        dispatch(resetState())
         dispatch(getBrands());
     }, []);
 
