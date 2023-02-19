@@ -4,7 +4,8 @@ import CustomInput from '../components/CustomInput';
 import { toast } from 'react-toastify';
 import { useFormik } from 'formik';
 import { date, number, object, string } from 'yup';
-import { createCoupon, resetState } from '../features/coupon/couponSlice';
+import { createCoupon, getCoupon, resetState, updateCoupon } from '../features/coupon/couponSlice';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 let userSchema = object().shape({
     name: string().required("Tiêu đề không được để trống"),
@@ -14,37 +15,77 @@ let userSchema = object().shape({
 
 const Addcoupon = () => {
     const dispatch = useDispatch();
-
-    const formik = useFormik({
-        initialValues: {
-            name: "",
-            expiry: "",
-            discount: ""
-        },
-        validationSchema: userSchema,
-        onSubmit: (values) => {
-            dispatch(createCoupon(values));
-            formik.resetForm();
-            setTimeout(() => {
-                dispatch(resetState());
-            }, 2000)
-        },
-    });
-
+    const navigate = useNavigate();
+    const location = useLocation();
+    const getCouponId = location.pathname.split("/")[3];
     const newCoupon = useSelector((state) => state.coupon);
-    const { isSuccess, isError, isLoading, createdCoupon } = newCoupon;
+    const {
+        isSuccess,
+        isError,
+        isLoading,
+        createdCoupon,
+        couponName,
+        couponDiscount,
+        couponExpiry,
+        updatedCoupon
+    } = newCoupon;
+
+    const changeDateFormat = (date) => {
+        const newDate = new Date(date).toLocaleDateString();
+        const [year, month, day] = newDate.split("/");
+        return [day, year, month].join("-");
+    };
+
     useEffect(() => {
         if (isSuccess && createdCoupon) {
             toast.success('Thêm ưu đãi thành công!');
         }
+
+        if (isSuccess && updatedCoupon) {
+            toast.success('Cập nhật ưu đãi thành công!');
+            navigate("/admin/coupon-list")
+        }
+
         if (isError) {
             toast.error('Thêm ưu đãi thất bại!');
         }
     }, [isSuccess, isError, isLoading]);
 
+    useEffect(() => {
+        if (getCouponId !== undefined) {
+            dispatch(getCoupon(getCouponId));
+        } else {
+            dispatch(resetState());
+        }
+    }, [getCouponId]);
+
+    const formik = useFormik({
+        enableReinitialize: true,
+        initialValues: {
+            name: couponName || "",
+            expiry: changeDateFormat(couponExpiry) || "",
+            discount: couponDiscount || "",
+        },
+        validationSchema: userSchema,
+        onSubmit: (values) => {
+            if (getCouponId !== undefined) {
+                const data = { id: getCouponId, couponData: values }
+                dispatch(updateCoupon(data));
+                dispatch(resetState());
+            } else {
+                dispatch(createCoupon(values));
+                formik.resetForm();
+                setTimeout(() => {
+                    dispatch(resetState());
+                }, 200)
+            }
+
+        },
+    });
+
     return (
         <div>
-            <h3 className='mb-4 title'>Thêm ưu đãi</h3>
+            <h3 className='mb-4 title'>{getCouponId !== undefined ? "Cập nhật" : "Thêm"} ưu đãi</h3>
             <div className="row">
                 <form action="" onSubmit={formik.handleSubmit}>
                     <div className="col-6">
@@ -80,6 +121,7 @@ const Addcoupon = () => {
                             onBlr={formik.handleBlur("expiry")}
                             val={formik.values.expiry}
                             id="expiry"
+                            required pattern="\d{2}-\d{2}-\d{2}"
                         />
                         <div className='error'>
                             {formik.touched.expiry && formik.errors.expiry}
@@ -89,7 +131,7 @@ const Addcoupon = () => {
                         className='btn btn-success border-0 rounded-3 my-5 d-flex mx-auto'
                         type='submit'
                     >
-                        Thêm ưu đãi
+                        {getCouponId !== undefined ? "Cập nhật" : "Thêm"} ưu đãi
                     </button>
                 </form>
 
