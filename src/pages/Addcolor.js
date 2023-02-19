@@ -2,11 +2,10 @@ import { React, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CustomInput from '../components/CustomInput';
 import { toast } from 'react-toastify';
-import { useNavigate } from "react-router-dom";
 import { useFormik } from 'formik';
 import { object, string } from 'yup';
-import { createColor, resetState } from '../features/color/colorSlice';
-
+import { createColor, getColor, resetState, updateColor } from '../features/color/colorSlice';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 let userSchema = object().shape({
     title: string().required("Tiêu đề không được để trống"),
@@ -15,35 +14,58 @@ let userSchema = object().shape({
 const Addcolor = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
-    const formik = useFormik({
-        initialValues: {
-            title: "",
-        },
-        validationSchema: userSchema,
-        onSubmit: (values) => {
-            dispatch(createColor(values));
-            formik.resetForm();
-            setTimeout(() => {
-                dispatch(resetState);
-            }, 2000)
-        },
-    });
-
+    const location = useLocation();
+    const getColorId = location.pathname.split("/")[3];
     const newColor = useSelector((state) => state.color);
-    const { isSuccess, isError, isLoading, createdColor } = newColor;
+    const { isSuccess, isError, isLoading, createdColor, updatedColor, colorName } = newColor;
+
     useEffect(() => {
         if (isSuccess && createdColor) {
             toast.success('Thêm màu thành công!');
         }
+
+        if (isSuccess && updatedColor) {
+            toast.success('Cập nhật màu thành công!');
+            navigate("/admin/list-color");
+        }
+
         if (isError) {
             toast.error('Thêm màu thất bại!');
         }
-    }, [isSuccess, isError, isLoading]);
+    }, [isSuccess, isError, isLoading, createdColor]);
+
+    useEffect(() => {
+        if (getColorId !== undefined) {
+            dispatch(getColor(getColorId));
+        } else {
+            dispatch(resetState());
+        }
+    }, [getColorId]);
+
+    const formik = useFormik({
+        enableReinitialize: true,
+        initialValues: {
+            title: colorName || "",
+        },
+        validationSchema: userSchema,
+        onSubmit: (values) => {
+            if (getColorId !== undefined) {
+                const data = { id: getColorId, colorData: values }
+                dispatch(updateColor(data));
+                dispatch(resetState());
+            } else {
+                dispatch(createColor(values));
+                formik.resetForm();
+                setTimeout(() => {
+                    dispatch(resetState());
+                }, 300)
+            }
+        },
+    });
 
     return (
         <div>
-            <h3 className='mb-4 title'>Thêm màu sắc</h3>
+            <h3 className='mb-4 title'>{getColorId !== undefined ? "Cập nhật" : "Thêm"} màu sắc</h3>
             <div>
                 <form action="" onSubmit={formik.handleSubmit}>
                     <CustomInput
@@ -61,7 +83,7 @@ const Addcolor = () => {
                         className='btn btn-success border-0 rounded-3 my-5'
                         type='submit'
                     >
-                        Thêm màu sắc
+                        {getColorId !== undefined ? "Cập nhật" : "Thêm"} màu sắc
                     </button>
                 </form>
             </div>

@@ -1,15 +1,3 @@
-export const getTokenfromLocalStorage = localStorage.getItem("user")
-    ? JSON.parse(localStorage.getItem("user"))
-    : null;
-
-export const config = {
-    headers: {
-        "Authorization": `Bearer ${getTokenfromLocalStorage.token}`,
-        "Content-type": "Application/json",
-    },
-};
-
-
 //If Browser new can't login!~ run this code
 // export const config = () => {
 //     if (
@@ -20,4 +8,18 @@ export const config = {
 //             .currentUser.accessToken;
 //     } else { return '' }
 // };
+
+const getTokenfromLocalStorage = localStorage.getItem("user")
+    ? JSON.parse(localStorage.getItem("user"))
+    : alert("Truy cập bị từ chối");
+
+export const config = {
+    headers: {
+        "Authorization": `Bearer ${getTokenfromLocalStorage.token}`,
+        "Content-type": "Application/json",
+    },
+};
+
+
+
 

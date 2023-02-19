@@ -5,6 +5,17 @@ const getUserfromLocalStorage = localStorage.getItem('user')
     ? JSON.parse(localStorage.getItem('user'))
     : null;
 
+
+// const configToken = () => {
+//     if (
+//         JSON.parse(JSON.parse(localStorage.getItem('persist:root')).user)
+//             .currentUser.accessToken
+//     ) {
+//         return JSON.parse(JSON.parse(localStorage.getItem('persist:root')).user)
+//             .currentUser.accessToken;
+//     } else { return '' }
+// };
+
 const initialState = {
     user: getUserfromLocalStorage,
     orders: [],
@@ -20,7 +31,7 @@ export const login = createAsyncThunk(
         try {
             return await authService.login(userData);
         } catch (error) {
-            return thunkAPI.rejectWithValue(error)
+            return thunkAPI.rejectWithValue(error);
         }
     }
 );
@@ -29,9 +40,9 @@ export const getOrders = createAsyncThunk(
     "order/get-orders",
     async (thunkAPI) => {
         try {
-            return await authService.getOrders()
+            return await authService.getOrders();
         } catch (error) {
-            return thunkAPI.rejectWithValue(error)
+            return thunkAPI.rejectWithValue(error);
         }
     }
 );
