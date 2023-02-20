@@ -2,14 +2,14 @@ import { React, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CustomInput from '../components/CustomInput';
 import { toast } from 'react-toastify';
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 // Upload Image
 import Dropzone from 'react-dropzone';
 // import { InboxOutlined } from '@ant-design/icons';
 import { deleteImg, uploadImg } from '../features/upload/uploadSlice';
-import { createBlog } from '../features/blogs/blogSlice';
+import { createBlog, getBlog, updateBlog } from '../features/blogs/blogSlice';
 // Upload import end
 import { useFormik } from 'formik';
 import { object, string } from 'yup';
@@ -24,26 +24,52 @@ let userSchema = object().shape({
 const Addblog = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const location = useLocation()
+    const getBlogId = location.pathname.split("/")[3];
 
-    const [images, setImages] = useState([]);
+    useEffect(() => {
+        if (getBlogId !== undefined) {
+            dispatch(getBlog(getBlogId));
+            img.push(blogImages);
+        } else {
+            dispatch(resetState());
+        }
+    }, [getBlogId]);
+
+    useEffect(() => {
+        dispatch(resetState());
+        dispatch(getCategories());
+    }, []);
 
     const imgState = useSelector((state) => state.upload.images);
     const bCategoryState = useSelector((state) => state.bCategory.bCategories);
 
     const newBlog = useSelector((state) => state.blog);
-    const { isSuccess, isError, isLoading, createdBlog } = newBlog;
+    const { isSuccess,
+        isError,
+        isLoading,
+        createdBlog,
+        blogName,
+        blogDesc,
+        blogCategory,
+        blogImages,
+        updatedBlog
+    } = newBlog;
+
     useEffect(() => {
         if (isSuccess && createdBlog) {
             toast.success('Thêm bài viết thành công!');
         }
+
+        if (isSuccess && updatedBlog) {
+            toast.success('Cập nhật bài viết thành công!');
+            navigate("/admin/blog-list")
+        }
+
         if (isError) {
             toast.error('Thêm bài viết thất bại!');
         }
     }, [isSuccess, isError, isLoading]);
-
-    useEffect(() => {
-        dispatch(getCategories());
-    }, []);
 
     const img = [];
     imgState.forEach((i) => {
@@ -55,30 +81,35 @@ const Addblog = () => {
 
     useEffect(() => {
         formik.values.images = img;
-    }, [img]);
+    }, [blogImages]);
 
     const formik = useFormik({
+        enableReinitialize: true,
         initialValues: {
-            title: "",
-            description: "",
-            category: "",
+            title: blogName || "",
+            description: blogDesc || "",
+            category: blogCategory || "",
             images: ""
         },
         validationSchema: userSchema,
         onSubmit: (values) => {
-            // alert(JSON.stringify(values))
-            dispatch(createBlog(values));
-            formik.resetForm();
-            setImages(null);
-            setTimeout(() => {
+            if (getBlogId !== undefined) {
+                const data = { id: getBlogId, blogData: values }
+                dispatch(updateBlog(data))
                 dispatch(resetState());
-            }, 2000)
+            } else {
+                dispatch(createBlog(values));
+                formik.resetForm();
+                setTimeout(() => {
+                    dispatch(resetState());
+                }, 100)
+            }
         },
     });
 
     return (
         <div>
-            <h3 className='mb-4 title'>Thêm bài viết</h3>
+            <h3 className='mb-4 title'>{getBlogId !== undefined ? "Cập nhật" : "Thêm"} bài viết</h3>
             <div>
                 <form action="" onSubmit={formik.handleSubmit}>
                     <div className='row'>
@@ -127,19 +158,19 @@ const Addblog = () => {
                             </div>
                         </div>
                     </div>
-                    <div className='col-12 bg-white border-1 p-5 text-center mt-3 rounded'>
+                    <div className='bg-white py-5 text-center rounded'>
                         <Dropzone onDrop={(acceptedFiles) => dispatch(uploadImg(acceptedFiles))}>
                             {({ getRootProps, getInputProps }) => (
                                 <section>
                                     <div {...getRootProps()}>
                                         <input {...getInputProps()} />
-                                        <p>Drag 'n' drop some files here, or click to select files</p>
+                                        <p>Nhập vào đây để tải hình lên!</p>
                                     </div>
                                 </section>
                             )}
                         </Dropzone>
                     </div>
-                    <div className='col-12 showimages my-3 d-flex'>
+                    <div className='col-6 showimages my-3 d-flex'>
                         {imgState.map((item, index) => {
                             return (
                                 <div key={index} className="position-relative">
@@ -154,7 +185,7 @@ const Addblog = () => {
                             )
                         })}
                     </div>
-                    <div className='mb-3'>
+                    <div className='col-12 my-3'>
                         <ReactQuill
                             className='quill'
                             name="description"
@@ -169,7 +200,7 @@ const Addblog = () => {
                         className='btn btn-success border-0 rounded-3 my-2 d-flex mx-auto'
                         type='submit'
                     >
-                        Thêm bài viết
+                        {getBlogId !== undefined ? "Cập nhật" : "Thêm"} bài viết
                     </button>
                 </form>
             </div>
