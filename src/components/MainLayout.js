@@ -131,12 +131,12 @@ const MainLayout = () => {
                             ]
                         },
                         {
-                            key: 'blog',
+                            key: 'Blog',
                             icon: <FaBloggerB className='fs-4' />,
                             label: 'Blogs',
                             children: [
                                 {
-                                    key: 'add-blog',
+                                    key: 'blog',
                                     icon: <ImBlog className='fs-4' />,
                                     label: 'Add Blog',
                                 },
