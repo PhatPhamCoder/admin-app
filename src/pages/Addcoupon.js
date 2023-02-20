@@ -30,12 +30,6 @@ const Addcoupon = () => {
         updatedCoupon
     } = newCoupon;
 
-    const changeDateFormat = (date) => {
-        const newDate = new Date(date).toLocaleDateString();
-        const [year, month, day] = newDate.split("/");
-        return [day, year, month].join("-");
-    };
-
     useEffect(() => {
         if (isSuccess && createdCoupon) {
             toast.success('Thêm ưu đãi thành công!');
@@ -63,7 +57,7 @@ const Addcoupon = () => {
         enableReinitialize: true,
         initialValues: {
             name: couponName || "",
-            expiry: changeDateFormat(couponExpiry) || "",
+            expiry: "",
             discount: couponDiscount || "",
         },
         validationSchema: userSchema,
@@ -121,8 +115,8 @@ const Addcoupon = () => {
                             onBlr={formik.handleBlur("expiry")}
                             val={formik.values.expiry}
                             id="expiry"
-                            required pattern="\d{2}-\d{2}-\d{2}"
                         />
+
                         <div className='error'>
                             {formik.touched.expiry && formik.errors.expiry}
                         </div>

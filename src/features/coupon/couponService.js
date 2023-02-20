@@ -15,6 +15,7 @@ const createCoupon = async (coupon) => {
 };
 
 const updateCoupon = async (coupon) => {
+    console.log(coupon)
     const response = await axios.put(`${base_url}coupon/${coupon.id}`,
         {
             name: coupon.couponData.name,
