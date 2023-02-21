@@ -11,11 +11,11 @@
 
 const getTokenfromLocalStorage = localStorage.getItem("user")
     ? JSON.parse(localStorage.getItem("user"))
-    : alert("Truy cập bị từ chối");
+    : null;
 
 export const config = {
     headers: {
-        "Authorization": `Bearer ${getTokenfromLocalStorage.token}`,
+        "Authorization": `Bearer ${getTokenfromLocalStorage !== null ? getTokenfromLocalStorage.token : ""}`,
         "Content-type": "Application/json",
     },
 };
