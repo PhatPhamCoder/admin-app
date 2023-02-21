@@ -87,4 +87,4 @@ const Colorlist = () => {
     )
 }
 
-export default Colorlist
+export default Colorlist;

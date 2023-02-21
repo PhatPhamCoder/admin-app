@@ -5,17 +5,6 @@ const getUserfromLocalStorage = localStorage.getItem('user')
     ? JSON.parse(localStorage.getItem('user'))
     : null;
 
-
-// const configToken = () => {
-//     if (
-//         JSON.parse(JSON.parse(localStorage.getItem('persist:root')).user)
-//             .currentUser.accessToken
-//     ) {
-//         return JSON.parse(JSON.parse(localStorage.getItem('persist:root')).user)
-//             .currentUser.accessToken;
-//     } else { return '' }
-// };
-
 const initialState = {
     user: getUserfromLocalStorage,
     orders: [],

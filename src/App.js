@@ -22,6 +22,7 @@ import Addcat from './pages/addcat';
 import Addbrand from './pages/Addbrand';
 import Addproduct from './pages/Addproduct';
 import Addcoupon from './pages/Addcoupon';
+import ViewEng from './pages/ViewEng';
 function App() {
   return (
     <Router>
@@ -32,6 +33,7 @@ function App() {
         <Route path='/admin' element={<MainLayout />}>
           <Route index element={<Dashboard />} />
           <Route path='enquiries' element={<Enquiries />} />
+          <Route path='enquiries/:id' element={<ViewEng />} />
           <Route path='blog-list' element={<Bloglist />} />
           <Route path='blog' element={<Addblog />} />
           <Route path='blog/:id' element={<Addblog />} />

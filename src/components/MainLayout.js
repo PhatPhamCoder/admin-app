@@ -158,7 +158,7 @@ const MainLayout = () => {
                             ]
                         },
                         {
-                            key: 'Enquiries',
+                            key: 'enquiries',
                             icon: <FaClipboardList className='fs-4' />,
                             label: 'Danh sách gửi liên hệ',
                         },
@@ -243,7 +243,7 @@ const MainLayout = () => {
                         theme="light"
                     />
                     <Outlet />
-                    <p className='text-left mb-0 text-dark'>&copy; {new Date().getFullYear()} Powered By Ptech</p>
+                    <p className='text-left mb-0 text-dark' style={{ bottom: 0 }}>&copy; {new Date().getFullYear()} Powered By Ptech</p>
                 </Content>
             </Layout>
         </Layout>
