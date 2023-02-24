@@ -22,7 +22,6 @@ const ViewEng = () => {
         EnquiryEmail,
         EnquiryComment,
         EnquiryStatus,
-        updatedEnquiry
     } = newEnquiry;
 
     useEffect(() => {
