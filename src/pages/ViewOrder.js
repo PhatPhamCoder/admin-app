@@ -3,9 +3,8 @@ import { Table } from 'antd';
 import { BiEdit } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { getOrders } from '../features/auth/authSlice';
-import { format } from 'date-fns';
+import { Link, useLocation } from 'react-router-dom';
+import { getOrderByUser } from '../features/auth/authSlice';
 
 const columns = [
     {
@@ -13,16 +12,20 @@ const columns = [
         dataIndex: 'key',
     },
     {
-        title: 'Họ và tên',
+        title: 'Tên sản phẩm',
         dataIndex: 'name',
     },
     {
-        title: 'Sản phẩm',
-        dataIndex: 'product',
+        title: 'Số lượng sản phẩm',
+        dataIndex: 'count',
     },
     {
-        title: 'Trạng thái',
-        dataIndex: 'status',
+        title: 'Giá bán',
+        dataIndex: 'amount',
+    },
+    {
+        title: 'Màu sắc',
+        dataIndex: 'color',
     },
     {
         title: 'Ngày đặt hàng',
@@ -34,25 +37,23 @@ const columns = [
     },
 ];
 
-const Orders = () => {
+const ViewOrder = () => {
+    const location = useLocation();
+    const userId = location.pathname.split("/")[3];
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(getOrders());
+        dispatch(getOrderByUser(userId));
     }, []);
-    const orderState = useSelector((state) => state.auth.orders);
+    const orderState = useSelector((state) => state.auth.orderbyuser.products);
     const data = [];
     for (let i = 0; i < orderState.length; i++) {
-        const name = orderState[i].orderby.firstname;
-        const products = orderState[i].products
-        const statuspayment = orderState[i].paymentIntent.status;
-        const id = orderState[i].orderby._id;
-        const date = format(new Date(orderState[i].createdAt), 'dd-MM-yyy');
         data.push({
             key: i + 1,
-            name: name,
-            product: <Link to={`/admin/order/${id}`}>Hiện thị đơn hàng</Link>,
-            status: statuspayment,
-            date: date,
+            name: orderState[i].product.title,
+            count: orderState[i].count,
+            amount: orderState[i].product.price,
+            color: orderState[i].product.color,
+            date: new Date(orderState[i].product.createdAt).toLocaleString(),
             action: (
                 <>
                     <Link to="/" className='fs-5'><BiEdit /></Link>
@@ -63,7 +64,7 @@ const Orders = () => {
     };
     return (
         <div>
-            <h3 className="mb-4 title">Danh sách đơn hàng</h3>
+            <h3 className="mb-4 title">Danh sách đơn hàng người mua</h3>
             <div>
                 <Table columns={columns} dataSource={data} />
             </div>
@@ -71,4 +72,4 @@ const Orders = () => {
     )
 }
 
-export default Orders;
+export default ViewOrder;
