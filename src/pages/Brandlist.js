@@ -1,99 +1,101 @@
-import { React, useEffect, useState } from 'react';
-import { Table } from 'antd';
+import { React, useEffect, useState } from "react";
+import { Table } from "antd";
 import { BiEdit } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
-import { useDispatch, useSelector } from 'react-redux';
-import { getBrands, resetState } from '../features/brand/brandSlice';
-import { Link } from 'react-router-dom';
-import { format } from 'date-fns';
-import CustomModal from '../components/CustomModal';
-import { deleteABrand } from '../features/brand/brandSlice';
+import { useDispatch, useSelector } from "react-redux";
+import { getBrands, resetState } from "../features/brand/brandSlice";
+import { Link } from "react-router-dom";
+import { format } from "date-fns";
+import CustomModal from "../components/CustomModal";
+import { deleteABrand } from "../features/brand/brandSlice";
 
 const columns = [
-    {
-        title: 'Số thứ tự',
-        dataIndex: 'key',
-    },
-    {
-        title: 'Tên đối tác',
-        dataIndex: 'name',
-    },
-    {
-        title: 'Ngày tạo',
-        dataIndex: 'date',
-    },
-    {
-        title: 'Chức năng',
-        dataIndex: 'action',
-    },
+  {
+    title: "Số thứ tự",
+    dataIndex: "key",
+  },
+  {
+    title: "Tên đối tác",
+    dataIndex: "name",
+  },
+  {
+    title: "Ngày tạo",
+    dataIndex: "date",
+  },
+  {
+    title: "Chức năng",
+    dataIndex: "action",
+  },
 ];
 
 const Brandlist = () => {
-    const dispatch = useDispatch();
-    const [open, setOpen] = useState(false);
-    const [brandId, setbrandId] = useState("");
-    const showModal = (e) => {
-        setOpen(true);
-        setbrandId(e);
-    };
-    const hideModal = () => {
-        setOpen(false);
-    };
+  const dispatch = useDispatch();
+  const [open, setOpen] = useState(false);
+  const [brandId, setbrandId] = useState("");
+  const showModal = (e) => {
+    setOpen(true);
+    setbrandId(e);
+  };
+  const hideModal = () => {
+    setOpen(false);
+  };
 
-    useEffect(() => {
-        dispatch(resetState())
-        dispatch(getBrands());
-    }, []);
+  useEffect(() => {
+    dispatch(resetState());
+    dispatch(getBrands());
+  }, []);
 
-    const brandState = useSelector((state) => state.brand.brands);
+  const brandState = useSelector((state) => state.brand.brands);
 
-    const data = [];
-    for (let i = 0; i < brandState.length; i++) {
-        const date = format(new Date(brandState[i].createdAt), 'dd-MM-yyy');
-        const name = brandState[i].title;
-        const id = brandState[i]._id;
-        data.push({
-            key: i + 1,
-            name: name,
-            date: date,
-            action: (
-                <>
-                    <Link to={`/admin/brand/${id}`} className='fs-5'><BiEdit /></Link>
-                    <button
-                        onClick={() => showModal(id)}
-                        className='fs-5 ms-3 bg-transparent border-0 text-danger'
-                    >
-                        <AiFillDelete />
-                    </button>
-                </>
-            )
-        });
-    };
+  const data = [];
+  for (let i = 0; i < brandState.length; i++) {
+    const date = format(new Date(brandState[i].createdAt), "dd-MM-yyy");
+    const name = brandState[i].title;
+    const id = brandState[i]._id;
+    data.push({
+      key: i + 1,
+      name: name,
+      date: date,
+      action: (
+        <>
+          <Link to={`/admin/brand/${id}`} className="fs-5">
+            <BiEdit />
+          </Link>
+          <button
+            onClick={() => showModal(id)}
+            className="fs-5 ms-3 bg-transparent border-0 text-danger"
+          >
+            <AiFillDelete />
+          </button>
+        </>
+      ),
+    });
+  }
 
-    const deleteBrand = (e) => {
-        dispatch(deleteABrand(e));
-        setOpen(false);
-        setTimeout(() => {
-            dispatch(getBrands());
-        }, 100);
-    };
+  const deleteBrand = (e) => {
+    dispatch(deleteABrand(e));
+    setOpen(false);
+    setTimeout(() => {
+      dispatch(getBrands());
+    }, 100);
+  };
 
-    return (
-        <div>
-            <h3 className="mb-4 title">Danh sách thương hiệu</h3>
-            <div>
-                <Table columns={columns} dataSource={data} />
-            </div>
-            <CustomModal
-                hideModal={hideModal}
-                open={open}
-                performAction={() => {
-                    deleteBrand(brandId)
-                }}
-                title="Bạn có chắc mà muốn xóa đối tác này!"
-            />
-        </div>
-    )
-}
+  return (
+    <div>
+      <h3 className="mb-4 title">Danh sách thương hiệu</h3>
+      <div>
+        <Table columns={columns} dataSource={data} />
+      </div>
+      <CustomModal
+        hideModal={hideModal}
+        open={open}
+        performAction={() => {
+          deleteBrand(brandId);
+        }}
+        title="Bạn có chắc mà muốn xóa đối tác này!"
+      />
+    </div>
+  );
+};
 
 export default Brandlist;
