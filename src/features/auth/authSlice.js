@@ -22,7 +22,7 @@ export const login = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
-  }
+  },
 );
 
 export const getOrders = createAsyncThunk(
@@ -33,7 +33,7 @@ export const getOrders = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
-  }
+  },
 );
 
 export const getOrderByUser = createAsyncThunk(
@@ -44,7 +44,7 @@ export const getOrderByUser = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
-  }
+  },
 );
 
 export const authSlice = createSlice({

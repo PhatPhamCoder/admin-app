@@ -36,21 +36,25 @@ const columns = [
 
 const Orders = () => {
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(getOrders());
   }, []);
+
   const orderState = useSelector((state) => state.auth.orders);
   const data = [];
   for (let i = 0; i < orderState.length; i++) {
     const name = orderState[i].orderby.firstname;
-    const products = orderState[i].products;
     const statuspayment = orderState[i].paymentIntent.status;
-    const id = orderState[i].orderby._id;
     const date = format(new Date(orderState[i].createdAt), "dd-MM-yyy");
     data.push({
       key: i + 1,
       name: name,
-      product: <Link to={`/admin/order/${id}`}>Hiện thị đơn hàng</Link>,
+      product: (
+        <Link to={`/admin/order/${orderState[i].orderby._id}`}>
+          Hiện thị đơn hàng
+        </Link>
+      ),
       status: statuspayment,
       date: date,
       action: (
