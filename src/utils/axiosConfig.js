@@ -7,6 +7,6 @@ export const config = {
     Authorization: `Bearer ${
       getTokenfromLocalStorage !== null ? getTokenfromLocalStorage.token : ""
     }`,
-    "Content-type": "Application/json",
+    Accept: "application/json",
   },
 };
