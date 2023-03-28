@@ -2,6 +2,18 @@ body {
   font-family: 'Roboto', sans-serif;
 }
 
+body::-webkit-scrollbar{
+  width: 10px;
+}
+
+body::-webkit-scrollbar-thumb{
+  border-radius: 20px;
+}
+
+body::-webkit-scrollbar-thumb{
+  background-color: gray;
+}
+
 .trigger {
   padding: 0 24px;
   font-size: 18px;

@@ -177,11 +177,11 @@ const MainLayout = () => {
             {
               className: "trigger",
               onClick: () => setCollapsed(!collapsed),
-            }
+            },
           )}
           <div className="d-flex gap-4 align-items-center">
             <div className="position-relative">
-              <MdNotificationsActive className="fs-4" />
+              <MdNotificationsActive className="fs-4 fa-i-cursor" />
               <span className="badge bg-warning rounded-circle p-1 position-absolute">
                 4
               </span>
@@ -192,7 +192,7 @@ const MainLayout = () => {
                   width={50}
                   height={50}
                   className="rounded-circle img-fluid"
-                  src="https://scontent.fsgn19-1.fna.fbcdn.net/v/t1.6435-9/120091017_2441839339448292_1661578394510824780_n.png?_nc_cat=100&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=EUuF4F3-BwUAX-7zlC6&tn=FsZVwR4FIsBaUKrl&_nc_ht=scontent.fsgn19-1.fna&oh=00_AfA-ymnIotCzWiOQh0Cr4e1WBEc5DyhZ7gp-FFQQgn5V2g&oe=640BFFB8"
+                  src="https://scontent.fsgn8-3.fna.fbcdn.net/v/t1.6435-9/120091017_2441839339448292_1661578394510824780_n.png?_nc_cat=100&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=cYWgjIvZDJUAX95bpPE&_nc_ht=scontent.fsgn8-3.fna&oh=00_AfCzC6N58vQPTUe4mWgbKCjBh6gllJcpn1L9vXB1MSM-dA&oe=644A66B8"
                   alt=""
                 />
               </div>
