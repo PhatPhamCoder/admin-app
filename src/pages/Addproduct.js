@@ -36,6 +36,7 @@ const Addproduct = () => {
     dispatch(getBrands());
     dispatch(getCategories());
     dispatch(getColors());
+    dispatch(resetState());
   }, []);
 
   const brandState = useSelector((state) => state.brand.brands);

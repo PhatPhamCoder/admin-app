@@ -9,7 +9,7 @@ export const getBlogs = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
-  }
+  },
 );
 
 export const getBlog = createAsyncThunk(
@@ -20,7 +20,7 @@ export const getBlog = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
-  }
+  },
 );
 
 export const createBlog = createAsyncThunk(
@@ -31,7 +31,7 @@ export const createBlog = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
-  }
+  },
 );
 
 export const updateBlog = createAsyncThunk(
@@ -42,7 +42,7 @@ export const updateBlog = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
-  }
+  },
 );
 
 export const deleteABlog = createAsyncThunk(
@@ -53,7 +53,7 @@ export const deleteABlog = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
-  }
+  },
 );
 
 export const resetState = createAction("Reset_all");
