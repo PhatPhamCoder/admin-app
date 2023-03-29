@@ -9,7 +9,7 @@ export const getBrands = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
-  }
+  },
 );
 
 export const getBrand = createAsyncThunk(
@@ -20,7 +20,7 @@ export const getBrand = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
-  }
+  },
 );
 
 export const createBrand = createAsyncThunk(
@@ -31,7 +31,7 @@ export const createBrand = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
-  }
+  },
 );
 
 export const updateBrand = createAsyncThunk(
@@ -42,7 +42,7 @@ export const updateBrand = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
-  }
+  },
 );
 
 export const deleteABrand = createAsyncThunk(
@@ -53,7 +53,7 @@ export const deleteABrand = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
-  }
+  },
 );
 
 export const resetState = createAction("Reset_all");

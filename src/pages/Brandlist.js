@@ -32,6 +32,7 @@ const Brandlist = () => {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [brandId, setbrandId] = useState("");
+
   const showModal = (e) => {
     setOpen(true);
     setbrandId(e);
@@ -77,7 +78,7 @@ const Brandlist = () => {
     setOpen(false);
     setTimeout(() => {
       dispatch(getBrands());
-    }, 100);
+    }, 200);
   };
 
   return (

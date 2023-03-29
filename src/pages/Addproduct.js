@@ -191,9 +191,9 @@ const Addproduct = () => {
               <option value="" disabled>
                 Nhập thẻ sản phẩm
               </option>
-              <option value="Thẻ 1">thẻ 1</option>
-              <option value="Thẻ 2">thẻ 2</option>
-              <option value="Thẻ 3">thẻ 3</option>
+              <option value="Home Page">Home Page</option>
+              <option value="Product Page">Product Page</option>
+              <option value="More">More</option>
             </select>
             <div className="error">
               {formik.touched.tags && formik.errors.tags}
