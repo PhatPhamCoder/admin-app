@@ -24,6 +24,8 @@ import Addproduct from "./pages/Addproduct";
 import Addcoupon from "./pages/Addcoupon";
 import ViewEng from "./pages/ViewEng";
 import ViewOrder from "./pages/ViewOrder";
+import Addpaper from "./pages/Addpaper";
+import Paperlist from "./pages/Paperlist";
 function App() {
   return (
     <Router>
@@ -45,6 +47,8 @@ function App() {
           <Route path="blog-category/:id" element={<Addblogcat />} />
           <Route path="category" element={<Addcat />} />
           <Route path="category/:id" element={<Addcat />} />
+          <Route path="paper" element={<Addpaper />} />
+          <Route path="paper/:id" element={<Addpaper />} />
           <Route path="blog-category-list" element={<Blogcatlist />} />
           <Route path="orders" element={<Orders />} />
           <Route path="order/:id" element={<ViewOrder />} />
@@ -53,6 +57,7 @@ function App() {
           <Route path="color" element={<Addcolor />} />
           <Route path="color/:id" element={<Addcolor />} />
           <Route path="list-category" element={<Categorylist />} />
+          <Route path="list-paper" element={<Paperlist />} />
           <Route path="list-brand" element={<Brandlist />} />
           <Route path="brand" element={<Addbrand />} />
           <Route path="brand/:id" element={<Addbrand />} />
