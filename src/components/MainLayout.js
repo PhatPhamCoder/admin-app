@@ -76,16 +76,6 @@ const MainLayout = () => {
                   label: "Product List",
                 },
                 {
-                  key: "paper",
-                  icon: <BiCategoryAlt className="fs-4" />,
-                  label: "Paper",
-                },
-                {
-                  key: "list-paper",
-                  icon: <BiCategoryAlt className="fs-4" />,
-                  label: "Paper List",
-                },
-                {
                   key: "brand",
                   icon: <SiBrandfolder className="fs-4" />,
                   label: "Brand",
