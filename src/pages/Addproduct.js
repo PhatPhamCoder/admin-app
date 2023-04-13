@@ -231,9 +231,18 @@ const Addproduct = () => {
           </div>
           <div className="col-6 mt-2">
             <div className="col-12 mb-2">
-              <select name="" id="" className="form-control">
-                <option value="">Lựa chọn loại giấy</option>
-              </select>
+              <Select
+                mode="multiple"
+                allowClear
+                className="w-100 p-0"
+                placeholder="Lựa chọn màu sắc"
+                defaultValue={color}
+                onChange={(i) => handleColors(i)}
+                options={coloropt}
+              />
+              <div className="error">
+                {formik.touched.color && formik.errors.color}
+              </div>
             </div>
             <div className="col-12">
               <Select

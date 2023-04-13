@@ -24,8 +24,6 @@ import Addproduct from "./pages/Addproduct";
 import Addcoupon from "./pages/Addcoupon";
 import ViewEng from "./pages/ViewEng";
 import ViewOrder from "./pages/ViewOrder";
-import Addpaper from "./pages/Addpaper";
-import Paperlist from "./pages/Paperlist";
 function App() {
   return (
     <Router>
