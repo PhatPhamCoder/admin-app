@@ -23,7 +23,7 @@ const updateBlog = async (blog) => {
       category: blog.blogData.category,
       images: blog.blogData.images,
     },
-    config
+    config,
   );
 
   return response.data;

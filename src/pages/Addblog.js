@@ -47,7 +47,8 @@ const Addblog = () => {
   const imgState = useSelector((state) => state.upload.images);
   const bCategoryState = useSelector((state) => state.bCategory.bCategories);
 
-  const newBlog = useSelector((state) => state.blog);
+  const newBlog = useSelector((state) => state?.blog);
+  console.log(newBlog);
   const {
     isSuccess,
     isError,
@@ -93,7 +94,7 @@ const Addblog = () => {
       title: blogName || "",
       description: blogDesc || "",
       category: blogCategory || "",
-      images: "",
+      images: blogImages || "",
     },
     validationSchema: userSchema,
     onSubmit: (values) => {
@@ -171,7 +172,7 @@ const Addblog = () => {
                 <section>
                   <div {...getRootProps()}>
                     <input {...getInputProps()} />
-                    <p>Nhập vào đây để tải hình lên!</p>
+                    <p>Nhấn vào đây để tải file lên!</p>
                   </div>
                 </section>
               )}
