@@ -47,12 +47,12 @@ const Bloglist = () => {
     dispatch(resetState());
     dispatch(getBlogs());
   }, []);
-  const blogState = useSelector((state) => state.blog.blogs);
+  const blogState = useSelector((state) => state?.blog?.blogs);
 
   const data = [];
   for (let i = 0; i < blogState.length; i++) {
     const date = format(new Date(blogState[i].createdAt), "dd-MM-yyy");
-    const name = blogState[i].title;
+    const name = blogState[i].title.substr(0, 80) + "...";
     const desc = blogState[i].description;
     const category = blogState[i].category;
     const id = blogState[i]._id;

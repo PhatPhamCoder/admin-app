@@ -17,6 +17,8 @@ import {
   getCategories,
   resetState,
 } from "../features/bcategory/bcategorySlice";
+import "react-quill/dist/quill.snow.css";
+import EditorToolbar, { modules, formats } from "../utils/EditorToolbar";
 
 let userSchema = object().shape({
   title: string().required("Tiêu đề không được để trống"),
@@ -33,7 +35,6 @@ const Addblog = () => {
   useEffect(() => {
     if (getBlogId !== undefined) {
       dispatch(getBlog(getBlogId));
-      img.push(blogImages);
     } else {
       dispatch(resetState());
     }
@@ -48,7 +49,6 @@ const Addblog = () => {
   const bCategoryState = useSelector((state) => state.bCategory.bCategories);
 
   const newBlog = useSelector((state) => state?.blog);
-  console.log(newBlog);
   const {
     isSuccess,
     isError,
@@ -57,7 +57,6 @@ const Addblog = () => {
     blogName,
     blogDesc,
     blogCategory,
-    blogImages,
     updatedBlog,
   } = newBlog;
 
@@ -86,7 +85,7 @@ const Addblog = () => {
 
   useEffect(() => {
     formik.values.images = img;
-  }, [blogImages]);
+  }, [img]);
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -94,7 +93,7 @@ const Addblog = () => {
       title: blogName || "",
       description: blogDesc || "",
       category: blogCategory || "",
-      images: blogImages || "",
+      images: "",
     },
     validationSchema: userSchema,
     onSubmit: (values) => {
@@ -118,7 +117,7 @@ const Addblog = () => {
         {getBlogId !== undefined ? "Cập nhật" : "Thêm"} bài viết
       </h3>
       <div>
-        <form action="" onSubmit={formik.handleSubmit}>
+        <form onSubmit={formik.handleSubmit}>
           <div className="row">
             <div className="col-12">
               <div className="row">
@@ -147,8 +146,8 @@ const Addblog = () => {
                       id=""
                       className="form-control py-3 mt-2"
                     >
-                      <option value="">Lựa chọn danh mục</option>
-                      {bCategoryState.map((item, index) => {
+                      <option value="">Chọn danh mục bài viết</option>
+                      {bCategoryState?.map((item, index) => {
                         return (
                           <option value={item.title} key={index}>
                             {item.title}
@@ -164,52 +163,70 @@ const Addblog = () => {
               </div>
             </div>
           </div>
-          <div className="bg-white py-5 text-center rounded">
-            <Dropzone
-              onDrop={(acceptedFiles) => dispatch(uploadImg(acceptedFiles))}
-            >
-              {({ getRootProps, getInputProps }) => (
-                <section>
-                  <div {...getRootProps()}>
-                    <input {...getInputProps()} />
-                    <p>Nhấn vào đây để tải file lên!</p>
-                  </div>
-                </section>
-              )}
-            </Dropzone>
-          </div>
-          <div className="col-6 showimages my-3 d-flex">
-            {imgState.map((item, index) => {
-              return (
-                <div key={index} className="position-relative">
-                  <button
-                    type="button"
-                    onClick={() => dispatch(deleteImg(item.public_id))}
-                    className="btn-close position-absolute text-white"
-                    style={{ top: "10px", right: "10px" }}
-                  ></button>
-                  <img src={item.url} alt="" className="rounded" width={350} />
-                </div>
-              );
-            })}
-          </div>
           <div className="col-12 my-3">
-            <ReactQuill
+            {/* <ReactQuill
               className="quill"
               name="description"
               onChange={formik.handleChange("description")}
               value={formik.values.description}
+            /> */}
+            <EditorToolbar />
+            <ReactQuill
+              theme="snow"
+              value={formik.values.description}
+              onChange={formik.handleChange("description")}
+              placeholder={"Nội dung của bài viết"}
+              modules={modules}
+              formats={formats}
             />
           </div>
           <div className="error">
             {formik.touched.description && formik.errors.description}
           </div>
-          <button
-            className="btn btn-success border-0 rounded-3 my-2 d-flex mx-auto"
-            type="submit"
-          >
-            {getBlogId !== undefined ? "Cập nhật" : "Thêm"} bài viết
-          </button>
+          <div className="col-12 row">
+            <div className="col-6 text-center" style={{ cursor: "pointer" }}>
+              <div className="bg-white p-4 rounded mt-2">
+                <Dropzone
+                  onDrop={(acceptedFiles) => dispatch(uploadImg(acceptedFiles))}
+                >
+                  {({ getRootProps, getInputProps }) => (
+                    <section>
+                      <div {...getRootProps()}>
+                        <input {...getInputProps()} />
+                        <p>Nhấn vào đây để tải file lên!</p>
+                      </div>
+                    </section>
+                  )}
+                </Dropzone>
+              </div>
+              <button
+                className="btn btn-success border-0 rounded-3 my-2 d-flex mx-auto"
+                type="submit"
+              >
+                {getBlogId !== undefined ? "Cập nhật" : "Thêm"} bài viết
+              </button>
+            </div>
+            <div className="col-6 showimages my-3 d-flex">
+              {imgState.map((item, index) => {
+                return (
+                  <div key={index} className="position-relative">
+                    <button
+                      type="button"
+                      onClick={() => dispatch(deleteImg(item.public_id))}
+                      className="btn-close position-absolute text-white"
+                      style={{ top: "10px", right: "10px" }}
+                    ></button>
+                    <img
+                      src={item.url}
+                      alt=""
+                      className="rounded"
+                      width={350}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </form>
       </div>
     </div>

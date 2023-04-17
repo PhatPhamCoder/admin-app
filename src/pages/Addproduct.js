@@ -31,7 +31,6 @@ let userSchema = object().shape({
 const Addproduct = () => {
   const dispatch = useDispatch();
   const [color, setColor] = useState([]);
-  const [images, setImages] = useState([]);
   useEffect(() => {
     dispatch(getBrands());
     dispatch(getCategories());
@@ -93,7 +92,6 @@ const Addproduct = () => {
       dispatch(createProducts(values));
       formik.resetForm();
       setColor(null);
-      setImages(null);
       setTimeout(() => {
         dispatch(resetState);
       }, 2000);
@@ -103,6 +101,7 @@ const Addproduct = () => {
   const handleColors = (e) => {
     setColor(e);
   };
+
   return (
     <div>
       <h3 className="mb-4 title">Thêm sản phẩm</h3>
