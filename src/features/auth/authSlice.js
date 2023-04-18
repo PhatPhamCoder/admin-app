@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import authService from "./authService";
+import { toast } from "react-toastify";
 
 const getUserfromLocalStorage = localStorage.getItem("user")
   ? JSON.parse(localStorage.getItem("user"))
@@ -25,6 +26,28 @@ export const login = createAsyncThunk(
   },
 );
 
+export const getMonthlyData = createAsyncThunk(
+  "orders/monthlydata",
+  async (thunkAPI) => {
+    try {
+      return await authService.getMonthlyOrders();
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  },
+);
+
+export const getYearlyData = createAsyncThunk(
+  "orders/yearlydata",
+  async (thunkAPI) => {
+    try {
+      return await authService.getYearlyStatis();
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  },
+);
+
 export const getOrders = createAsyncThunk(
   "order/get-orders",
   async (thunkAPI) => {
@@ -36,8 +59,19 @@ export const getOrders = createAsyncThunk(
   },
 );
 
-export const getOrderByUser = createAsyncThunk(
-  "order/get-order",
+export const updateOrders = createAsyncThunk(
+  "order/update-orders",
+  async (data, thunkAPI) => {
+    try {
+      return await authService.updateOrder(data);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  },
+);
+
+export const getSingleOrder = createAsyncThunk(
+  "order/get-single-order",
   async (id, thunkAPI) => {
     try {
       return await authService.getOrder(id);
@@ -85,21 +119,74 @@ export const authSlice = createSlice({
         state.message = action.error;
         state.isLoading = false;
       })
-      .addCase(getOrderByUser.pending, (state) => {
+      .addCase(getSingleOrder.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getOrderByUser.fulfilled, (state, action) => {
+      .addCase(getSingleOrder.fulfilled, (state, action) => {
         state.isError = false;
         state.isLoading = false;
         state.isSuccess = true;
-        state.orderbyuser = action.payload;
+        state.singleOrder = action.payload;
         state.message = "success";
       })
-      .addCase(getOrderByUser.rejected, (state, action) => {
+      .addCase(getSingleOrder.rejected, (state, action) => {
         state.isError = true;
         state.isSuccess = false;
         state.message = action.error;
         state.isLoading = false;
+      })
+      .addCase(getMonthlyData.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getMonthlyData.fulfilled, (state, action) => {
+        state.isError = false;
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.monthlyData = action.payload;
+        state.message = "success";
+      })
+      .addCase(getMonthlyData.rejected, (state, action) => {
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.error;
+        state.isLoading = false;
+      })
+      .addCase(getYearlyData.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getYearlyData.fulfilled, (state, action) => {
+        state.isError = false;
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.yearlyData = action.payload;
+        state.message = "success";
+      })
+      .addCase(getYearlyData.rejected, (state, action) => {
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.error;
+        state.isLoading = false;
+      })
+      .addCase(updateOrders.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateOrders.fulfilled, (state, action) => {
+        state.isError = false;
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.updatedOrder = action.payload;
+        if (state.isSuccess) {
+          toast.success("Cập nhật thành công");
+        }
+      })
+      .addCase(updateOrders.rejected, (state, action) => {
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.error;
+        state.isLoading = false;
+        if (state.isError) {
+          toast.success("Cập nhật bị lỗi");
+        }
       });
   },
 });

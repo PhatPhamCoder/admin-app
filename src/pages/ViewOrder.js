@@ -4,7 +4,8 @@ import { BiEdit } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
-import { getOrderByUser } from "../features/auth/authSlice";
+import { getSingleOrder } from "../features/auth/authSlice";
+import Currency from "react-currency-formatter";
 
 const columns = [
   {
@@ -24,51 +25,69 @@ const columns = [
     dataIndex: "amount",
   },
   {
-    title: "Màu sắc",
-    dataIndex: "color",
+    title: "Địa chỉ giao hàng",
+    dataIndex: "address",
+  },
+  {
+    title: "Thành tiền",
+    dataIndex: "Price",
   },
   {
     title: "Ngày đặt hàng",
     dataIndex: "date",
   },
-  {
-    title: "Chức năng",
-    dataIndex: "action",
-  },
 ];
 
 const ViewOrder = () => {
   const location = useLocation();
-  const userId = location.pathname.split("/")[3];
+  const orderId = location.pathname.split("/")[3];
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getOrderByUser(userId));
+    dispatch(getSingleOrder(orderId));
   }, []);
-  const orderState = useSelector((state) => state.auth.orderbyuser.products);
+  const orderState = useSelector((state) => state?.auth?.singleOrder?.orders);
   const data = [];
-  for (let i = 0; i < orderState.length; i++) {
+  for (let i = 0; i < orderState?.orderItems?.length; i++) {
     data.push({
       key: i + 1,
-      name: orderState[i].product.title,
-      count: orderState[i].count,
-      amount: orderState[i].product.price,
-      color: orderState[i].product.color,
-      date: new Date(orderState[i].product.createdAt).toLocaleString(),
-      action: (
-        <>
-          <Link to="/" className="fs-5">
-            <BiEdit />
-          </Link>
-          <Link to="/" className="fs-5 ms-3">
-            <AiFillDelete />
-          </Link>
-        </>
-      ),
+      name: orderState?.orderItems[i]?.product?.title,
+      count: orderState?.orderItems[i]?.quantity,
+      amount: orderState?.orderItems[i]?.price,
+      date: new Date(orderState?.createdAt).toLocaleString(),
+      Price:
+        orderState?.orderItems[i]?.quantity * orderState?.orderItems[i]?.price,
+      address:
+        orderState?.shippingInfo?.address + orderState?.shippingInfo?.city,
     });
   }
   return (
     <div>
-      <h3 className="mb-4 title">Danh sách đơn hàng người mua</h3>
+      <h3 className="mb-4 title">Đơn hàng chi tiết</h3>
+      <div
+        className="mb-3"
+        style={{
+          color: "white",
+          border: "1px solid",
+          borderRadius: "10px",
+          padding: "5px",
+          backgroundColor: "#001529",
+        }}
+      >
+        <h3
+          className="fs-3 d-flex align-items-center justify-content-end gap-2 p-2"
+          style={{ width: "fit-content" }}
+        >
+          <div>Tổng giá trị đơn hàng:</div>
+          <Currency
+            quantity={orderState?.totalPrice}
+            currency="VND"
+            locale="vi_VN"
+            pattern="##,### !"
+            decimal=","
+            group="."
+          />
+        </h3>
+      </div>
       <div>
         <Table columns={columns} dataSource={data} />
       </div>

@@ -15,6 +15,7 @@ import {
   AiOutlineShoppingCart,
   AiOutlineUser,
   AiOutlineBgColors,
+  AiOutlineLogout,
 } from "react-icons/ai";
 import { RiCouponLine } from "react-icons/ri";
 import { FaClipboardList, FaBloggerB } from "react-icons/fa";
@@ -23,6 +24,7 @@ import { ImBlog } from "react-icons/im";
 import { SiBrandfolder } from "react-icons/si";
 import { BiCategoryAlt } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 const { Header, Sider, Content } = Layout;
 const MainLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -30,6 +32,12 @@ const MainLayout = () => {
     token: { colorBgContainer },
   } = theme.useToken();
   const navigate = useNavigate();
+
+  const userState = useSelector((state) => state?.auth?.user);
+  const handleLogout = () => {
+    localStorage.clear();
+    window.location.reload();
+  };
   return (
     <Layout>
       <Sider trigger={null} collapsible collapsed={collapsed}>
@@ -45,6 +53,8 @@ const MainLayout = () => {
           defaultSelectedKeys={[""]}
           onClick={({ key }) => {
             if (key === "signout") {
+              localStorage.clear();
+              window.location.reload();
             } else {
               navigate(key);
             }
@@ -161,6 +171,11 @@ const MainLayout = () => {
               icon: <FaClipboardList className="fs-4" />,
               label: "Danh sách gửi liên hệ",
             },
+            {
+              key: "signout",
+              icon: <AiOutlineLogout className="fs-4" />,
+              label: "Đăng xuất",
+            },
           ]}
         />
       </Sider>
@@ -202,8 +217,10 @@ const MainLayout = () => {
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                <h5 className="mb-0">Matta Nguyễn</h5>
-                <p className="mb-0">ngocnhi130396@gmail.com</p>
+                <h5 className="mb-0">
+                  {userState?.firstname + userState?.lastname || "Admin"}
+                </h5>
+                <p className="mb-0">{userState?.email}</p>
               </div>
               <div
                 className="dropdown-menu"
@@ -221,9 +238,9 @@ const MainLayout = () => {
                   className="dropdown-item py-1 mb-1"
                   style={{ height: "auto", lineHeight: "20px" }}
                 >
-                  <Link className="dropdown-item" to="/">
+                  <button className="dropdown-item" onClick={handleLogout}>
                     Đăng xuất
-                  </Link>
+                  </button>
                 </li>
               </div>
             </div>
@@ -239,13 +256,14 @@ const MainLayout = () => {
         >
           <ToastContainer
             position="top-right"
-            autoClose={1000}
+            autoClose={5000}
             hideProgressBar={false}
-            newestOnTop={true}
+            newestOnTop={false}
             closeOnClick
             rtl={false}
             pauseOnFocusLoss
             draggable
+            pauseOnHover
             theme="light"
           />
           <Outlet />

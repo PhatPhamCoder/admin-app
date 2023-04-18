@@ -33,7 +33,7 @@ const Customers = () => {
   useEffect(() => {
     dispatch(getUsers());
   }, []);
-  const customerState = useSelector((state) => state.customer.customers);
+  const customerState = useSelector((state) => state?.customer?.customers);
   const data = [];
   for (let i = 0; i < customerState.length; i++) {
     const date = format(new Date(customerState[i].createdAt), "dd-MM-yyy");
