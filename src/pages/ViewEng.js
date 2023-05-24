@@ -52,9 +52,9 @@ const ViewEng = () => {
   return (
     <div>
       <div className="d-flex align-items-center justify-content-between">
-        <h3 className="mb-4 title">Thông tin chi tiết liên hệ</h3>
+        <h3 className="my-2 title">Thông tin chi tiết liên hệ</h3>
         <button
-          className="bg-transparent border-0 d-flex align-items-center gap-1 fs-5 mb-0 "
+          className="bg-transparent border-0 d-flex align-items-center gap-1 fs-5 mb-0"
           onClick={goBack}
         >
           <BiArrowBack className="fs-5" />
@@ -62,7 +62,7 @@ const ViewEng = () => {
         </button>
       </div>
 
-      <div className="mt-5 p-4 bg-white rounded-3">
+      <div className="my-2 p-4 bg-white rounded-3 w-50">
         <div className="d-flex align-items-center gap-3 mb-2">
           <h6 className="mb-0">Họ và tên:</h6>
           <p className="mb-0">{EnquiryName}</p>
@@ -88,8 +88,6 @@ const ViewEng = () => {
         <div className="d-flex align-items-center gap-3">
           <h6 className="mb-0">Thay đổi trạng thái:</h6>
           <select
-            name=""
-            id=""
             defaultValue={EnquiryStatus ? EnquiryStatus : "Đã nhận"}
             className="form-control form-select w-25"
             onChange={(e) => setEnquiryStatus(e.target.value, getEngId)}

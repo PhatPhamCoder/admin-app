@@ -2,15 +2,15 @@ body {
   font-family: 'Roboto', sans-serif;
 }
 
-body::-webkit-scrollbar{
+body::-webkit-scrollbar {
   width: 10px;
 }
 
-body::-webkit-scrollbar-thumb{
+body::-webkit-scrollbar-thumb {
   border-radius: 20px;
 }
 
-body::-webkit-scrollbar-thumb{
+body::-webkit-scrollbar-thumb {
   background-color: gray;
 }
 

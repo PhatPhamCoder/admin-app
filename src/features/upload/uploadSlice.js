@@ -13,7 +13,7 @@ export const uploadImg = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
-  }
+  },
 );
 
 export const deleteImg = createAsyncThunk(
@@ -24,7 +24,7 @@ export const deleteImg = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
-  }
+  },
 );
 
 const initialState = {

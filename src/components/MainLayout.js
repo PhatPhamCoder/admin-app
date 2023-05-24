@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  // UploadOutlined,
-  // UserOutlined,
-  // VideoCameraOutlined,
-} from "@ant-design/icons";
+import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link, Outlet } from "react-router-dom";
@@ -14,8 +8,8 @@ import {
   AiOutlineDashboard,
   AiOutlineShoppingCart,
   AiOutlineUser,
-  AiOutlineBgColors,
   AiOutlineLogout,
+  AiOutlineOrderedList,
 } from "react-icons/ai";
 import { RiCouponLine } from "react-icons/ri";
 import { FaClipboardList, FaBloggerB } from "react-icons/fa";
@@ -25,6 +19,7 @@ import { SiBrandfolder } from "react-icons/si";
 import { BiCategoryAlt } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import logo from "../images/avatar.png";
 const { Header, Sider, Content } = Layout;
 const MainLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -34,10 +29,12 @@ const MainLayout = () => {
   const navigate = useNavigate();
 
   const userState = useSelector((state) => state?.auth?.user);
+
   const handleLogout = () => {
     localStorage.clear();
     window.location.reload();
   };
+
   return (
     <Layout>
       <Sider trigger={null} collapsible collapsed={collapsed}>
@@ -68,7 +65,7 @@ const MainLayout = () => {
             {
               key: "customers",
               icon: <AiOutlineUser className="fs-4" />,
-              label: "Customers",
+              label: "Khách hàng",
             },
             {
               key: "catalog",
@@ -76,19 +73,9 @@ const MainLayout = () => {
               label: "Catalog",
               children: [
                 {
-                  key: "product",
-                  icon: <AiOutlineShoppingCart className="fs-4" />,
-                  label: "Add Product",
-                },
-                {
                   key: "list-product",
-                  icon: <AiOutlineShoppingCart className="fs-4" />,
+                  icon: <AiOutlineOrderedList className="fs-4" />,
                   label: "Product List",
-                },
-                {
-                  key: "brand",
-                  icon: <SiBrandfolder className="fs-4" />,
-                  label: "Brand",
                 },
                 {
                   key: "list-brand",
@@ -96,25 +83,20 @@ const MainLayout = () => {
                   label: "Brand List",
                 },
                 {
-                  key: "category",
-                  icon: <BiCategoryAlt className="fs-4" />,
-                  label: "Category",
-                },
-                {
                   key: "list-category",
                   icon: <BiCategoryAlt className="fs-4" />,
                   label: "Category List",
                 },
-                {
-                  key: "color",
-                  icon: <AiOutlineBgColors className="fs-4" />,
-                  label: "color",
-                },
-                {
-                  key: "list-color",
-                  icon: <AiOutlineBgColors className="fs-4" />,
-                  label: "color List",
-                },
+                // {
+                //   key: "color",
+                //   icon: <AiOutlineBgColors className="fs-4" />,
+                //   label: "color",
+                // },
+                // {
+                //   key: "list-color",
+                //   icon: <AiOutlineBgColors className="fs-4" />,
+                //   label: "color List",
+                // },
               ],
             },
             {
@@ -122,33 +104,18 @@ const MainLayout = () => {
               icon: <FaClipboardList className="fs-4" />,
               label: "Đơn hàng",
             },
+
             {
-              key: "marketing",
+              key: "coupon-list",
               icon: <RiCouponLine className="fs-4" />,
-              label: "Marketing",
-              children: [
-                {
-                  key: "coupon",
-                  icon: <RiCouponLine className="fs-4" />,
-                  label: "Add Coupon",
-                },
-                {
-                  key: "coupon-list",
-                  icon: <RiCouponLine className="fs-4" />,
-                  label: "Coupn List",
-                },
-              ],
+              label: "Mã ưu đãi",
             },
+
             {
               key: "Blog",
               icon: <FaBloggerB className="fs-4" />,
-              label: "Blogs",
+              label: "Bài viết",
               children: [
-                {
-                  key: "blog",
-                  icon: <ImBlog className="fs-4" />,
-                  label: "Add Blog",
-                },
                 {
                   key: "blog-list",
                   icon: <FaBloggerB className="fs-4" />,
@@ -202,13 +169,14 @@ const MainLayout = () => {
               </span>
             </div>
             <div className="d-flex gap-3 align-items-center dropdown">
-              <div>
+              <div className="border-1 rounded-circle">
                 <img
                   width={50}
                   height={50}
                   className="rounded-circle img-fluid"
-                  src="https://scontent.fsgn8-3.fna.fbcdn.net/v/t1.6435-9/120091017_2441839339448292_1661578394510824780_n.png?_nc_cat=100&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=cYWgjIvZDJUAX95bpPE&_nc_ht=scontent.fsgn8-3.fna&oh=00_AfCzC6N58vQPTUe4mWgbKCjBh6gllJcpn1L9vXB1MSM-dA&oe=644A66B8"
+                  src={logo}
                   alt=""
+                  style={{ objectFit: "contain" }}
                 />
               </div>
               <div
@@ -218,7 +186,7 @@ const MainLayout = () => {
                 aria-expanded="false"
               >
                 <h5 className="mb-0">
-                  {userState?.firstname + userState?.lastname || "Admin"}
+                  {"Admin" || userState?.firstname + userState?.lastname}
                 </h5>
                 <p className="mb-0">{userState?.email}</p>
               </div>
@@ -256,7 +224,7 @@ const MainLayout = () => {
         >
           <ToastContainer
             position="top-right"
-            autoClose={5000}
+            autoClose={2000}
             hideProgressBar={false}
             newestOnTop={false}
             closeOnClick

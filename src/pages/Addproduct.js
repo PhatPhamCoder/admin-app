@@ -1,66 +1,70 @@
 import { React, useEffect, useState } from "react";
 import CustomInput from "../components/CustomInput";
-import ReactQuill from "react-quill";
 import { toast } from "react-toastify";
-import "react-quill/dist/quill.snow.css";
 import { useFormik } from "formik";
 import { array, number, object, string } from "yup";
 import { getBrands } from "../features/brand/brandSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { getCategories } from "../features/pcategory/pcategorySlice";
-import { getColors } from "../features/color/colorSlice";
-import { Select } from "antd";
 // Upload Image
 import Dropzone from "react-dropzone";
 import { deleteImg, uploadImg } from "../features/upload/uploadSlice";
 import { createProducts, resetState } from "../features/product/productSlice";
+import { useLocation, useNavigate } from "react-router-dom";
+import Editor from "../utils/Editor";
+import { Select } from "antd";
+import { Option } from "antd/es/mentions";
+import { BsArrowLeft } from "react-icons/bs";
 
 let userSchema = object().shape({
   title: string().required("Tiêu đề không được để trống"),
+  slug: string(),
+  codeProduct: string().required("Mã sản sản phẩm không được để trống"),
   description: string().required("Mô tả không được để trống"),
   price: number().required("Giá tiền không được để trống"),
-  brand: string().required("Thương hiệu không được để trống"),
+  discount: number(),
   category: string().required("Danh mục không được để trống"),
+  brand: string().required("Thương hiệu không được để trống"),
   tags: string().required("Thẻ không được để trống"),
-  color: array()
-    .min(1, "Chọn ít nhất 1 màu")
-    .required("Màu không được bỏ trống"),
   quantity: number().required("Số lượng không được để trống"),
+  pageNumber: number(),
+  images: array(),
 });
 
 const Addproduct = () => {
   const dispatch = useDispatch();
-  const [color, setColor] = useState([]);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const getProductSlug = location.pathname.split("/")[3];
   useEffect(() => {
     dispatch(getBrands());
     dispatch(getCategories());
-    dispatch(getColors());
-    dispatch(resetState());
   }, []);
 
-  const brandState = useSelector((state) => state.brand.brands);
-  const pCategoryState = useSelector((state) => state.pCategory.pCategories);
-  const colorState = useSelector((state) => state.color.colors);
-  const imgState = useSelector((state) => state.upload.images);
-  const newProduct = useSelector((state) => state.product);
+  const brandState = useSelector((state) => state?.brand?.brands);
+  const pCategoryState = useSelector((state) => state?.pCategory?.pCategories);
+  const imgState = useSelector((state) => state?.upload?.images);
+  const newProduct = useSelector((state) => state?.product);
+  const [editorLoaded, setEditorLoaded] = useState(false);
   const { isSuccess, isError, isLoading, createdProduct } = newProduct;
+
+  useEffect(() => {
+    setEditorLoaded(true);
+  }, []);
 
   useEffect(() => {
     if (isSuccess && createdProduct) {
       toast.success("Thêm sản phẩm thành công!");
     }
-    if (isError) {
+
+    if (isError && createdProduct) {
       toast.error("Thêm sản phẩm thất bại!");
     }
   }, [isSuccess, isError, isLoading]);
 
-  const coloropt = [];
-  colorState.forEach((i) => {
-    coloropt.push({
-      label: i.title,
-      value: i._id,
-    });
-  });
+  useEffect(() => {
+    formik.values.images = img;
+  }, []);
 
   const img = [];
   imgState.forEach((i) => {
@@ -70,56 +74,151 @@ const Addproduct = () => {
     });
   });
 
-  useEffect(() => {
-    formik.values.color = color ? color : "";
-    formik.values.images = img;
-  }, [color, img]);
-
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
       title: "",
+      slug: "",
+      codeProduct: "",
       description: "",
       price: "",
+      discount: "",
       brand: "",
       category: "",
-      color: "",
       tags: "",
       quantity: "",
-      images: "",
+      pageNumber: "",
+      images: [],
     },
     validationSchema: userSchema,
     onSubmit: (values) => {
+      // console.log(values);
       dispatch(createProducts(values));
-      formik.resetForm();
-      setColor(null);
-      setTimeout(() => {
-        dispatch(resetState);
-      }, 2000);
+      // dispatch(resetState());
+      // formik.resetForm();
     },
   });
 
-  const handleColors = (e) => {
-    setColor(e);
+  const handleReset = () => {
+    dispatch(resetState());
+    formik.resetForm();
   };
 
   return (
     <div>
-      <h3 className="mb-4 title">Thêm sản phẩm</h3>
+      <div>
+        <div
+          className="d-flex align-items-center gap-1"
+          style={{
+            cursor: "pointer",
+          }}
+          onClick={() => navigate("/admin/list-product")}
+        >
+          <BsArrowLeft size={20} />
+          Quay lại danh danh sách
+        </div>
+        <h3 className="my-2 title">
+          {getProductSlug !== undefined ? "Cập nhật" : "Thêm"} sản phẩm
+        </h3>
+      </div>
       <div>
         <form onSubmit={formik.handleSubmit} className="row">
           <div className="col-12 col-md-6">
-            <div className="mb-3">
-              <CustomInput
-                type="text"
-                label="Nhập tên sản phẩm"
-                name="title"
-                onChng={formik.handleChange("title")}
-                onBlr={formik.handleBlur("title")}
-                val={formik.values.title}
-              />
+            <select
+              name="brand"
+              onChange={formik.handleChange("brand")}
+              onBlur={formik.handleBlur("brand")}
+              val={formik.values.brand}
+              className="form-control py-3 mt-2"
+            >
+              <option value="">Chọn Thương hiệu</option>
+              {brandState &&
+                brandState.map((item, index) => {
+                  return (
+                    <option value={item?.title} key={index}>
+                      {item?.title}
+                    </option>
+                  );
+                })}
+            </select>
+            <div className="error">
+              {formik.touched.brand && formik.errors.brand}
             </div>
+          </div>
+          <div className="col-12 col-md-6">
+            <select
+              name="category"
+              onChange={formik.handleChange("category")}
+              onBlur={formik.handleBlur("category")}
+              val={formik.values.category}
+              className="form-control py-3 mt-2"
+              // multiple
+            >
+              <option value="">Lựa chọn danh mục</option>
+              {pCategoryState &&
+                pCategoryState.map((item, index) => {
+                  return (
+                    <option value={item.title} key={index}>
+                      {item.title}
+                    </option>
+                  );
+                })}
+            </select>
+            <div className="error">
+              {formik.touched.category && formik.errors.category}
+            </div>
+          </div>
+          <div className="col-12 col-md-6">
+            <CustomInput
+              type="text"
+              label="Nhập tên sản phẩm"
+              name="title"
+              onChng={formik.handleChange("title")}
+              onBlr={formik.handleBlur("title")}
+              val={formik.values.title}
+            />
             <div className="error">
               {formik.touched.title && formik.errors.title}
+            </div>
+          </div>
+          <div className="col-12 col-md-6">
+            <CustomInput
+              type="text"
+              label="Nhập slug sản phẩm"
+              name="slug"
+              onChng={formik.handleChange("slug")}
+              onBlr={formik.handleBlur("slug")}
+              val={
+                (formik.values.slug = formik.values.title
+                  .toLowerCase()
+                  .trim()
+                  .replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a")
+                  .replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e")
+                  .replace(/ì|í|ị|ỉ|ĩ/g, "i")
+                  .replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o")
+                  .replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u")
+                  .replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y")
+                  .replace(/đ/g, "d")
+                  .replace(/[^\w\s-]/g, "")
+                  .replace(/[\s_-]+/g, "-")
+                  .replace(/^-+|-+$/g, ""))
+              }
+            />
+            <div className="error">
+              {formik.touched.slug && formik.errors.slug}
+            </div>
+          </div>
+          <div className="col-12 col-md-6">
+            <CustomInput
+              type="text"
+              label="Nhập mã sản phẩm"
+              name="codeProduct"
+              onChng={formik.handleChange("codeProduct")}
+              onBlr={formik.handleBlur("codeProduct")}
+              val={formik.values.codeProduct}
+            />
+            <div className="error">
+              {formik.touched.codeProduct && formik.errors.codeProduct}
             </div>
           </div>
           <div className="col-12 col-md-6">
@@ -136,60 +235,28 @@ const Addproduct = () => {
             </div>
           </div>
           <div className="col-12 col-md-6">
-            <select
-              name="brand"
-              onChange={formik.handleChange("brand")}
-              onBlur={formik.handleBlur("brand")}
-              val={formik.values.brand}
-              id=""
-              className="form-control py-3 my-3"
-            >
-              {brandState.map((item, index) => {
-                return (
-                  <option value={item.title} key={index}>
-                    {item.title}
-                  </option>
-                );
-              })}
-            </select>
+            <CustomInput
+              type="number"
+              label="Nhập giá giảm"
+              name="discount"
+              onChng={formik.handleChange("discount")}
+              onBlr={formik.handleBlur("discount")}
+              val={formik.values.discount}
+            />
             <div className="error">
-              {formik.touched.brand && formik.errors.brand}
+              {formik.touched.discount && formik.errors.discount}
             </div>
           </div>
+
           <div className="col-12 col-md-6">
-            <select
-              name="category"
-              onChange={formik.handleChange("category")}
-              onBlur={formik.handleBlur("category")}
-              val={formik.values.category}
-              id=""
-              className="form-control py-3 my-3"
-            >
-              <option value="">Lựa chọn danh mục</option>
-              {pCategoryState.map((item, index) => {
-                return (
-                  <option value={item.title} key={index}>
-                    {item.title}
-                  </option>
-                );
-              })}
-            </select>
-            <div className="error">
-              {formik.touched.category && formik.errors.category}
-            </div>
-          </div>
-          <div className="col-6">
             <select
               name="tags"
               onChange={formik.handleChange("tags")}
               onBlur={formik.handleBlur("tags")}
               val={formik.values.tags}
-              id=""
-              className="form-control py-3 my-3"
+              className="form-control py-3 mt-2"
             >
-              <option value="" disabled>
-                Nhập thẻ sản phẩm
-              </option>
+              <option value="">Nhập thẻ sản phẩm</option>
               <option value="Home Page">Home Page</option>
               <option value="Product Page">Product Page</option>
               <option value="More">More</option>
@@ -198,7 +265,7 @@ const Addproduct = () => {
               {formik.touched.tags && formik.errors.tags}
             </div>
           </div>
-          <div className="col-6 mt-2">
+          <div className="col-12 col-md-6">
             <CustomInput
               className="py-3 mb-3"
               type="number"
@@ -210,6 +277,20 @@ const Addproduct = () => {
             />
             <div className="error">
               {formik.touched.quantity && formik.errors.quantity}
+            </div>
+          </div>
+          <div className="col-12 col-md-6">
+            <CustomInput
+              className="py-3 mb-3"
+              type="number"
+              label="Nhập số trang"
+              name="pageNumber"
+              onChng={formik.handleChange("pageNumber")}
+              onBlr={formik.handleBlur("pageNumber")}
+              val={formik.values.pageNumber}
+            />
+            <div className="error">
+              {formik.touched.pageNumber && formik.errors.pageNumber}
             </div>
           </div>
           <div className="col-6 text-center" style={{ cursor: "pointer" }}>
@@ -228,58 +309,34 @@ const Addproduct = () => {
               </Dropzone>
             </div>
           </div>
-          <div className="col-6 mt-2">
-            <div className="col-12 mb-2">
-              <Select
-                mode="multiple"
-                allowClear
-                className="w-100 p-0"
-                placeholder="Lựa chọn màu sắc"
-                defaultValue={color}
-                onChange={(i) => handleColors(i)}
-                options={coloropt}
-              />
-              <div className="error">
-                {formik.touched.color && formik.errors.color}
-              </div>
-            </div>
-            <div className="col-12">
-              <Select
-                mode="multiple"
-                allowClear
-                className="w-100 p-0"
-                placeholder="Lựa chọn màu sắc"
-                defaultValue={color}
-                onChange={(i) => handleColors(i)}
-                options={coloropt}
-              />
-              <div className="error">
-                {formik.touched.color && formik.errors.color}
-              </div>
-            </div>
-          </div>
           <div className="showimages my-3 d-flex">
-            {imgState.map((item, index) => {
-              return (
-                <div key={index} className="position-relative">
-                  <button
-                    type="button"
-                    onClick={() => dispatch(deleteImg(item.public_id))}
-                    className="btn-close position-absolute text-white"
-                    style={{ top: "10px", right: "10px" }}
-                  ></button>
-                  <img src={item.url} alt="" className="rounded" width={350} />
-                </div>
-              );
-            })}
+            {imgState &&
+              imgState?.map((item, index) => {
+                return (
+                  <div key={index} className="position-relative">
+                    <button
+                      type="button"
+                      onClick={() => dispatch(deleteImg(item.public_id))}
+                      className="btn-close position-absolute text-white"
+                      style={{ top: "10px", right: "10px" }}
+                    />
+                    <img
+                      src={item.url}
+                      alt="Banner Product"
+                      className="rounded"
+                      width={350}
+                    />
+                  </div>
+                );
+              })}
           </div>
           <div className="col-12">
             <div className="mb-3">
-              <ReactQuill
-                className="quill"
+              <Editor
                 name="description"
                 onChange={formik.handleChange("description")}
                 value={formik.values.description}
+                editorLoaded={editorLoaded}
               />
             </div>
             <div className="error">
@@ -289,13 +346,27 @@ const Addproduct = () => {
           <div className="col-12 d-flex align-items-center">
             <div className="mx-auto">
               <button
-                className="btn btn-success"
+                className="btn btn-success fw-bold"
                 type="submit"
                 style={{ marginRight: "10px" }}
               >
-                Thêm sản phẩm
+                {getProductSlug !== undefined ? "Cập nhật" : "Thêm"} sản phẩm
               </button>
-              <button className="btn btn-warning" type="submit">
+              <button
+                className="btn btn-danger fw-bold"
+                style={{
+                  marginRight: "10px",
+                }}
+                type="button"
+                onClick={handleReset}
+              >
+                Reset
+              </button>
+              <button
+                className="btn btn-warning fw-bold"
+                type="button"
+                onClick={() => navigate("/admin/list-product")}
+              >
                 Hủy
               </button>
             </div>

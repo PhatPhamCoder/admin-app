@@ -11,6 +11,7 @@ import {
   updateAProductCategory,
 } from "../features/pcategory/pcategorySlice";
 import { useLocation, useNavigate } from "react-router-dom";
+import { BsArrowLeft } from "react-icons/bs";
 
 let userSchema = object().shape({
   title: string().required("Tiêu đề không được để trống"),
@@ -77,9 +78,21 @@ const Addcat = () => {
 
   return (
     <div>
-      <h3 className="mb-4 title">
-        {getProductCategoryId !== undefined ? "Cập nhật" : "Thêm"} danh mục
-      </h3>
+      <div>
+        <div
+          className="d-flex align-items-center gap-1"
+          style={{
+            cursor: "pointer",
+          }}
+          onClick={() => navigate("/admin/list-category")}
+        >
+          <BsArrowLeft size={20} />
+          Quay lại danh danh sách
+        </div>
+        <h3 className="my-2 title">
+          {getProductCategoryId !== undefined ? "Cập nhật" : "Thêm"} thương hiệu
+        </h3>
+      </div>
       <div>
         <form action="" onSubmit={formik.handleSubmit}>
           <CustomInput

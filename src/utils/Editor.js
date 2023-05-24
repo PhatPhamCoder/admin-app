@@ -1,27 +1,32 @@
-import React from "react";
-import ReactQuill from "react-quill";
-import EditorToolbar, { modules, formats } from "./EditorToolbar";
-import "react-quill/dist/quill.snow.css";
-// import "../styles.css";
+import { useEffect, useRef } from "react";
 
-export const Editor = () => {
-  const [state, setState] = React.useState({ value: null });
-  const handleChange = (value) => {
-    setState({ value });
-  };
+export default function Editor({ onChange, editorLoaded, name, value }) {
+  const editorRef = useRef();
+  const { CKEditor, ClassicEditor } = editorRef.current || {};
+
+  useEffect(() => {
+    editorRef.current = {
+      CKEditor: require("@ckeditor/ckeditor5-react").CKEditor, // v3+
+      ClassicEditor: require("@ckeditor/ckeditor5-build-classic"),
+    };
+  }, []);
+
   return (
-    <div className="text-editor">
-      <EditorToolbar />
-      <ReactQuill
-        theme="snow"
-        value={state.value}
-        onChange={handleChange}
-        placeholder={"Write something awesome..."}
-        modules={modules}
-        formats={formats}
-      />
+    <div>
+      {editorLoaded ? (
+        <CKEditor
+          type=""
+          name={name}
+          editor={ClassicEditor}
+          data={value}
+          onChange={(event, editor) => {
+            const data = editor.getData();
+            onChange(data);
+          }}
+        />
+      ) : (
+        <div>Đang tải nội dung</div>
+      )}
     </div>
   );
-};
-
-export default Editor;
+}

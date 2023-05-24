@@ -3,7 +3,7 @@ import { Table } from "antd";
 import { BiEdit } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import {
   deleteACoupon,
@@ -11,6 +11,7 @@ import {
   resetState,
 } from "../features/coupon/couponSlice";
 import CustomModal from "../components/CustomModal";
+import { MdOutlineAddModerator } from "react-icons/md";
 
 const columns = [
   {
@@ -41,6 +42,7 @@ const columns = [
 
 const Couponlist = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [couponId, setcouponId] = useState("");
   const showModal = (e) => {
@@ -95,7 +97,17 @@ const Couponlist = () => {
 
   return (
     <div>
-      <h3 className="mb-4 title">Danh sách mã ưu đãi</h3>
+      <div className="d-flex align-items-center gap-3">
+        <h3 className="title">Danh sách mã ưu đãi</h3>
+        <MdOutlineAddModerator
+          size={30}
+          onClick={() => navigate("/admin/coupon")}
+          style={{
+            cursor: "pointer",
+            fontWeight: "bold",
+          }}
+        />
+      </div>
       <div>
         <Table columns={columns} dataSource={data} />
       </div>

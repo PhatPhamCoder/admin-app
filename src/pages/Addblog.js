@@ -3,8 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import CustomInput from "../components/CustomInput";
 import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
 // Upload Image
 import Dropzone from "react-dropzone";
 // import { InboxOutlined } from '@ant-design/icons';
@@ -17,8 +15,8 @@ import {
   getCategories,
   resetState,
 } from "../features/bcategory/bcategorySlice";
-import "react-quill/dist/quill.snow.css";
-import EditorToolbar, { modules, formats } from "../utils/EditorToolbar";
+import Editor from "../utils/Editor";
+import { BsArrowLeft } from "react-icons/bs";
 
 let userSchema = object().shape({
   title: string().required("Tiêu đề không được để trống"),
@@ -31,6 +29,11 @@ const Addblog = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const getBlogId = location.pathname.split("/")[3];
+  const [editorLoaded, setEditorLoaded] = useState(false);
+
+  useEffect(() => {
+    setEditorLoaded(true);
+  }, []);
 
   useEffect(() => {
     if (getBlogId !== undefined) {
@@ -45,8 +48,8 @@ const Addblog = () => {
     dispatch(getCategories());
   }, []);
 
-  const imgState = useSelector((state) => state.upload.images);
-  const bCategoryState = useSelector((state) => state.bCategory.bCategories);
+  const imgState = useSelector((state) => state?.upload?.images);
+  const bCategoryState = useSelector((state) => state?.bCategory?.bCategories);
 
   const newBlog = useSelector((state) => state?.blog);
   const {
@@ -85,7 +88,7 @@ const Addblog = () => {
 
   useEffect(() => {
     formik.values.images = img;
-  }, [img]);
+  }, []);
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -106,16 +109,28 @@ const Addblog = () => {
         formik.resetForm();
         setTimeout(() => {
           dispatch(resetState());
-        }, 100);
+        }, 200);
       }
     },
   });
 
   return (
     <div>
-      <h3 className="mb-4 title">
-        {getBlogId !== undefined ? "Cập nhật" : "Thêm"} bài viết
-      </h3>
+      <div>
+        <div
+          className="d-flex align-items-center gap-1"
+          style={{
+            cursor: "pointer",
+          }}
+          onClick={() => navigate("/admin/blog-list")}
+        >
+          <BsArrowLeft size={20} />
+          Quay lại danh danh sách
+        </div>
+        <h3 className="my-2 title">
+          {getBlogId !== undefined ? "Cập nhật" : "Thêm"} bài viết
+        </h3>
+      </div>
       <div>
         <form onSubmit={formik.handleSubmit}>
           <div className="row">
@@ -143,17 +158,17 @@ const Addblog = () => {
                       onChange={formik.handleChange("category")}
                       onBlur={formik.handleBlur("category")}
                       value={formik.values.category}
-                      id=""
                       className="form-control py-3 mt-2"
                     >
                       <option value="">Chọn danh mục bài viết</option>
-                      {bCategoryState?.map((item, index) => {
-                        return (
-                          <option value={item.title} key={index}>
-                            {item.title}
-                          </option>
-                        );
-                      })}
+                      {bCategoryState &&
+                        bCategoryState?.map((item, index) => {
+                          return (
+                            <option value={item.title} key={index}>
+                              {item.title}
+                            </option>
+                          );
+                        })}
                     </select>
                     <div className="error">
                       {formik.touched.category && formik.errors.category}
@@ -164,20 +179,11 @@ const Addblog = () => {
             </div>
           </div>
           <div className="col-12 my-3">
-            {/* <ReactQuill
-              className="quill"
+            <Editor
               name="description"
               onChange={formik.handleChange("description")}
               value={formik.values.description}
-            /> */}
-            <EditorToolbar />
-            <ReactQuill
-              theme="snow"
-              value={formik.values.description}
-              onChange={formik.handleChange("description")}
-              placeholder={"Nội dung của bài viết"}
-              modules={modules}
-              formats={formats}
+              editorLoaded={editorLoaded}
             />
           </div>
           <div className="error">

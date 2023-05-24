@@ -5,7 +5,6 @@ import { AiFillDelete } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import { getSingleOrder } from "../features/auth/authSlice";
-import Currency from "react-currency-formatter";
 
 const columns = [
   {
@@ -46,6 +45,7 @@ const ViewOrder = () => {
     dispatch(getSingleOrder(orderId));
   }, []);
   const orderState = useSelector((state) => state?.auth?.singleOrder?.orders);
+  console.log(orderState);
   const data = [];
   for (let i = 0; i < orderState?.orderItems?.length; i++) {
     data.push({
@@ -78,14 +78,13 @@ const ViewOrder = () => {
           style={{ width: "fit-content" }}
         >
           <div>Tổng giá trị đơn hàng:</div>
-          <Currency
-            quantity={orderState?.totalPrice}
-            currency="VND"
-            locale="vi_VN"
-            pattern="##,### !"
-            decimal=","
-            group="."
-          />
+          {/* {(
+            orderState?.orderItems[i]?.quantity *
+            orderState?.orderItems[i]?.price
+          ).toLocaleString("en-US", {
+            style: "currency",
+            currency: "VND",
+          })} */}
         </h3>
       </div>
       <div>

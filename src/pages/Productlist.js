@@ -8,9 +8,9 @@ import {
   resetState,
   deleteAProduct,
 } from "../features/product/productSlice";
-import { Link } from "react-router-dom";
-import Currency from "react-currency-formatter";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import CustomModal from "../components/CustomModal";
+import { BsPlusCircle } from "react-icons/bs";
 
 const columns = [
   {
@@ -26,10 +26,6 @@ const columns = [
     title: "Danh mục sản phẩm",
     dataIndex: "category",
     sorter: (a, b) => a.category.length - b.category.length,
-  },
-  {
-    title: "Hình ảnh",
-    dataIndex: "images",
   },
   {
     title: "Giá Bán",
@@ -52,46 +48,43 @@ const columns = [
 
 const Productlist = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  const [productId, setProductId] = useState("");
+  const [productSlug, setProductSlug] = useState("");
+
   const showModal = (e) => {
     setOpen(true);
-    setProductId(e);
+    setProductSlug(e);
   };
   const hideModal = () => {
     setOpen(false);
   };
   useEffect(() => {
-    dispatch(resetState());
     dispatch(getProducts());
+    dispatch(resetState());
   }, []);
-  const productState = useSelector((state) => state.product.products);
+  const productState = useSelector((state) => state?.product?.products);
   const data = [];
   for (let i = 0; i < productState.length; i++) {
-    const id = productState[i]._id;
+    const slug = productState[i].slug;
     data.push({
       key: i + 1,
+      slug: slug,
       title: productState[i].title,
       category: productState[i].category,
-      price: (
-        <Currency
-          quantity={productState[i].price}
-          currency="VND"
-          locale="vi_VN"
-          pattern="##,### !"
-          decimal=","
-          group="."
-        />
-      ),
+      price: productState[i].price.toLocaleString("en-US", {
+        style: "currency",
+        currency: "VND",
+      }),
       quantity: productState[i].quantity,
       sold: productState[i].sold,
       action: (
         <>
-          <Link to="/" className="fs-5">
+          <Link to={`/admin/product/${slug}`} className="fs-5">
             <BiEdit />
           </Link>
           <button
-            onClick={() => showModal(id)}
+            onClick={() => showModal(slug)}
             className="fs-5 ms-3 bg-transparent border-0 text-danger"
           >
             <AiFillDelete />
@@ -104,13 +97,22 @@ const Productlist = () => {
   const deleteProduct = (e) => {
     dispatch(deleteAProduct(e));
     setOpen(false);
-    setTimeout(() => {
-      dispatch(getProducts());
-    }, 100);
+    dispatch(getProducts());
+    window.location.reload();
   };
   return (
     <div>
-      <h3 className="mb-4 title">Danh sách sản phẩm</h3>
+      <div className="d-flex align-items-center gap-3">
+        <h3 className="title">Danh sách sản phẩm</h3>
+        <BsPlusCircle
+          size={30}
+          onClick={() => navigate("/admin/product")}
+          style={{
+            cursor: "pointer",
+            fontWeight: "bold",
+          }}
+        />
+      </div>
       <div>
         <Table columns={columns} dataSource={data} />
       </div>
@@ -118,7 +120,7 @@ const Productlist = () => {
         hideModal={hideModal}
         open={open}
         performAction={() => {
-          deleteProduct(productId);
+          deleteProduct(productSlug);
         }}
         title="Bạn có chắc mà muốn xóa sản phẩm này!"
       />

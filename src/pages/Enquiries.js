@@ -14,7 +14,7 @@ import CustomModal from "../components/CustomModal";
 
 const columns = [
   {
-    title: "Số thứ tự",
+    title: "STT",
     dataIndex: "key",
   },
   {
@@ -26,7 +26,7 @@ const columns = [
     dataIndex: "email",
   },
   {
-    title: "Số điện thoại",
+    title: "SĐT",
     dataIndex: "mobile",
   },
   {
@@ -34,7 +34,7 @@ const columns = [
     dataIndex: "comment",
   },
   {
-    title: "Ngày tạo",
+    title: "Ngày nhận",
     dataIndex: "date",
   },
   {
@@ -97,7 +97,7 @@ const Enquiries = () => {
         </>
       ),
       action: (
-        <>
+        <div className="d-flex">
           <Link to={`/admin/enquiries/${id}`} className="fs-4 ms-2">
             <AiOutlineEye />
           </Link>
@@ -107,7 +107,7 @@ const Enquiries = () => {
           >
             <AiFillDelete />
           </button>
-        </>
+        </div>
       ),
     });
   }

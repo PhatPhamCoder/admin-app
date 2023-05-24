@@ -11,6 +11,7 @@ import {
   updateCoupon,
 } from "../features/coupon/couponSlice";
 import { useLocation, useNavigate } from "react-router-dom";
+import { BsArrowLeft } from "react-icons/bs";
 
 let userSchema = object().shape({
   name: string().required("Tiêu đề không được để trống"),
@@ -83,9 +84,21 @@ const Addcoupon = () => {
 
   return (
     <div>
-      <h3 className="mb-4 title">
-        {getCouponId !== undefined ? "Cập nhật" : "Thêm"} ưu đãi
-      </h3>
+      <div>
+        <div
+          className="d-flex align-items-center gap-1"
+          style={{
+            cursor: "pointer",
+          }}
+          onClick={() => navigate("/admin/coupon-list")}
+        >
+          <BsArrowLeft size={20} />
+          Quay lại danh danh sách
+        </div>
+        <h3 className="my-2 title">
+          {getCouponId !== undefined ? "Cập nhật" : "Thêm"} ưu đãi
+        </h3>
+      </div>
       <div className="row">
         <form action="" onSubmit={formik.handleSubmit}>
           <div className="col-6">

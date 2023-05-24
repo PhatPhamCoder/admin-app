@@ -4,10 +4,11 @@ import { BiEdit } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { getBrands, resetState } from "../features/brand/brandSlice";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import CustomModal from "../components/CustomModal";
 import { deleteABrand } from "../features/brand/brandSlice";
+import { BsPlusCircle } from "react-icons/bs";
 
 const columns = [
   {
@@ -30,6 +31,7 @@ const columns = [
 
 const Brandlist = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [brandId, setbrandId] = useState("");
 
@@ -83,7 +85,17 @@ const Brandlist = () => {
 
   return (
     <div>
-      <h3 className="mb-4 title">Danh sách thương hiệu</h3>
+      <div className="d-flex align-items-center gap-3">
+        <h3 className="title">Danh sách thương hiệu</h3>
+        <BsPlusCircle
+          size={30}
+          onClick={() => navigate("/admin/brand")}
+          style={{
+            cursor: "pointer",
+            fontWeight: "bold",
+          }}
+        />
+      </div>
       <div>
         <Table columns={columns} dataSource={data} />
       </div>

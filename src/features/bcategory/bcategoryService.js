@@ -12,7 +12,7 @@ const createBlogCategory = async (bcategory) => {
   const response = await axios.post(
     `${base_url}blogcategory/`,
     bcategory,
-    config
+    config,
   );
 
   return response.data;
@@ -22,7 +22,7 @@ const updateBlogCategory = async (blogCat) => {
   const response = await axios.put(
     `${base_url}blogcategory/${blogCat.id}`,
     { title: blogCat.blogCatData.title },
-    config
+    config,
   );
 
   return response.data;

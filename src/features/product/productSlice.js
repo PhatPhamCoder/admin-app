@@ -1,6 +1,17 @@
 import { createAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import productService from "./productService";
 
+export const createProducts = createAsyncThunk(
+  "product/create-product",
+  async (productData, thunkAPI) => {
+    try {
+      return await productService.createProduct(productData);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  },
+);
+
 export const getProducts = createAsyncThunk(
   "product/get-products",
   async (thunkAPI) => {
@@ -12,11 +23,22 @@ export const getProducts = createAsyncThunk(
   },
 );
 
-export const createProducts = createAsyncThunk(
-  "product/create-products",
-  async (productData, thunkAPI) => {
+export const getProduct = createAsyncThunk(
+  "product/get-product",
+  async (slug, thunkAPI) => {
     try {
-      return await productService.createProduct(productData);
+      return await productService.getProduct(slug);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  },
+);
+
+export const updateProduct = createAsyncThunk(
+  "product/update-product",
+  async (product, thunkAPI) => {
+    try {
+      return await productService.updateProduct(product);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -25,9 +47,9 @@ export const createProducts = createAsyncThunk(
 
 export const deleteAProduct = createAsyncThunk(
   "product/delete-product",
-  async (id, thunkAPI) => {
+  async (slug, thunkAPI) => {
     try {
-      return await productService.deleteProduct(id);
+      return await productService.deleteProduct(slug);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -50,6 +72,21 @@ export const productSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      .addCase(createProducts.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(createProducts.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.createdProduct = action.payload;
+      })
+      .addCase(createProducts.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.error;
+      })
       .addCase(getProducts.pending, (state) => {
         state.isLoading = true;
       })
@@ -65,16 +102,39 @@ export const productSlice = createSlice({
         state.isSuccess = false;
         state.message = action.error;
       })
-      .addCase(createProducts.pending, (state) => {
+      .addCase(getProduct.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(createProducts.fulfilled, (state, action) => {
+      .addCase(getProduct.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
-        state.createdProduct = action.payload;
+        state.productName = action.payload.title;
+        state.productDesc = action.payload.description;
+        state.productCategory = action.payload.category;
+        state.productPrice = action.payload.price;
+        state.productQuantity = action.payload.quantity;
+        state.productCodeProduct = action.payload.codeProduct;
+        state.productBrand = action.payload.brand;
+        state.productTags = action.payload.tags;
+        state.productColor = action.payload.color;
       })
-      .addCase(createProducts.rejected, (state, action) => {
+      .addCase(getProduct.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.error;
+      })
+      .addCase(updateProduct.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateProduct.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.updatedProduct = action.payload;
+      })
+      .addCase(updateProduct.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
