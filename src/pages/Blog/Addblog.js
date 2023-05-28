@@ -1,21 +1,29 @@
 import { React, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import CustomInput from "../components/CustomInput";
+import CustomInput from "../../components/CustomInput";
 import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
 // Upload Image
 import Dropzone from "react-dropzone";
 // import { InboxOutlined } from '@ant-design/icons';
-import { deleteImg, uploadImg } from "../features/upload/uploadSlice";
-import { createBlog, getBlog, updateBlog } from "../features/blogs/blogSlice";
+import {
+  deleteImage,
+  deleteImg,
+  uploadImg,
+} from "../../features/upload/uploadSlice";
+import {
+  createBlog,
+  getBlog,
+  updateBlog,
+} from "../../features/blogs/blogSlice";
 // Upload import end
 import { useFormik } from "formik";
 import { object, string } from "yup";
 import {
   getCategories,
   resetState,
-} from "../features/bcategory/bcategorySlice";
-import Editor from "../utils/Editor";
+} from "../../features/bcategory/bcategorySlice";
+import Editor from "../../utils/Editor";
 import { BsArrowLeft } from "react-icons/bs";
 
 let userSchema = object().shape({
@@ -96,7 +104,7 @@ const Addblog = () => {
       title: blogName || "",
       description: blogDesc || "",
       category: blogCategory || "",
-      images: "",
+      images: [],
     },
     validationSchema: userSchema,
     onSubmit: (values) => {
@@ -218,7 +226,7 @@ const Addblog = () => {
                   <div key={index} className="position-relative">
                     <button
                       type="button"
-                      onClick={() => dispatch(deleteImg(item.public_id))}
+                      onClick={() => dispatch(deleteImage(item.public_id))}
                       className="btn-close position-absolute text-white"
                       style={{ top: "10px", right: "10px" }}
                     ></button>

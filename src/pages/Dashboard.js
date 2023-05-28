@@ -105,7 +105,6 @@ const Dashboard = () => {
     },
     label: {
       position: "middle",
-      // 'top', 'bottom', 'middle',
       style: {
         fill: "#FFFFFF",
         opacity: 0.6,

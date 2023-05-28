@@ -3,12 +3,15 @@ import { Table } from "antd";
 import { BiEdit } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteABlog, getBlogs, resetState } from "../features/blogs/blogSlice";
+import {
+  deleteAProductCategory,
+  getCategories,
+  resetState,
+} from "../../features/pcategory/pcategorySlice";
 import { Link, useNavigate } from "react-router-dom";
 import { format } from "date-fns";
-import CustomModal from "../components/CustomModal";
+import CustomModal from "../../components/CustomModal";
 import { BsPlusCircle } from "react-icons/bs";
-import { toast } from "react-toastify";
 
 const columns = [
   {
@@ -16,12 +19,8 @@ const columns = [
     dataIndex: "key",
   },
   {
-    title: "Tiêu đề Blog",
+    title: "Tên Danh mục",
     dataIndex: "name",
-  },
-  {
-    title: "Danh mục",
-    dataIndex: "category",
   },
   {
     title: "Ngày tạo",
@@ -33,41 +32,36 @@ const columns = [
   },
 ];
 
-const Bloglist = () => {
+const Categorylist = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  const [blogId, setblogId] = useState("");
+  const [ProductCategoryId, setProductCategoryId] = useState("");
   const showModal = (e) => {
     setOpen(true);
-    setblogId(e);
+    setProductCategoryId(e);
   };
   const hideModal = () => {
     setOpen(false);
   };
-
   useEffect(() => {
     dispatch(resetState());
-    dispatch(getBlogs());
+    dispatch(getCategories());
   }, []);
-  const blogState = useSelector((state) => state?.blog?.blogs);
+  const pCategoryState = useSelector((state) => state.pCategory.pCategories);
 
   const data = [];
-  for (let i = 0; i < blogState.length; i++) {
-    const date = format(new Date(blogState[i].createdAt), "dd-MM-yyy");
-    const name = blogState[i].title.substr(0, 80) + "...";
-    const desc = blogState[i].description;
-    const category = blogState[i].category;
-    const id = blogState[i]._id;
+  for (let i = 0; i < pCategoryState.length; i++) {
+    const date = format(new Date(pCategoryState[i].createdAt), "dd-MM-yyy");
+    const name = pCategoryState[i].title;
+    const id = pCategoryState[i]._id;
     data.push({
       key: i + 1,
       name: name,
-      description: desc,
-      category: category,
       date: date,
       action: (
         <>
-          <Link to={`/admin/blog/${id}`} className="fs-5">
+          <Link to={`/admin/category/${id}`} className="fs-5">
             <BiEdit />
           </Link>
           <button
@@ -81,22 +75,20 @@ const Bloglist = () => {
     });
   }
 
-  const deleteBlog = (e) => {
-    dispatch(deleteABlog(e));
-    toast.success("Xóa thành công");
+  const deleteCategory = (e) => {
+    dispatch(deleteAProductCategory(e));
     setOpen(false);
     setTimeout(() => {
-      dispatch(getBlogs());
-    }, 200);
+      dispatch(getCategories());
+    }, 100);
   };
-
   return (
     <div>
       <div className="d-flex align-items-center gap-3">
-        <h3 className="title">Danh sách bài viết</h3>
+        <h3 className="title">Danh mục sản phẩm</h3>
         <BsPlusCircle
           size={30}
-          onClick={() => navigate("/admin/blog")}
+          onClick={() => navigate("/admin/category")}
           style={{
             cursor: "pointer",
             fontWeight: "bold",
@@ -110,12 +102,12 @@ const Bloglist = () => {
         hideModal={hideModal}
         open={open}
         performAction={() => {
-          deleteBlog(blogId);
+          deleteCategory(ProductCategoryId);
         }}
-        title="Bạn có chắc mà muốn xóa blog này!"
+        title="Bạn có chắc mà muốn xóa danh mục này!"
       />
     </div>
   );
 };
 
-export default Bloglist;
+export default Categorylist;

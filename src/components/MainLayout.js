@@ -68,9 +68,9 @@ const MainLayout = () => {
               label: "Khách hàng",
             },
             {
-              key: "catalog",
+              key: "product",
               icon: <AiOutlineShoppingCart className="fs-4" />,
-              label: "Catalog",
+              label: "Sản phẩm",
               children: [
                 {
                   key: "list-product",
@@ -87,16 +87,6 @@ const MainLayout = () => {
                   icon: <BiCategoryAlt className="fs-4" />,
                   label: "Category List",
                 },
-                // {
-                //   key: "color",
-                //   icon: <AiOutlineBgColors className="fs-4" />,
-                //   label: "color",
-                // },
-                // {
-                //   key: "list-color",
-                //   icon: <AiOutlineBgColors className="fs-4" />,
-                //   label: "color List",
-                // },
               ],
             },
             {

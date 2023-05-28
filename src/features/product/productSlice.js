@@ -1,11 +1,13 @@
 import { createAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import productService from "./productService";
+import { toast } from "react-toastify";
 
 export const createProducts = createAsyncThunk(
-  "product/create-product",
-  async (productData, thunkAPI) => {
+  "product/create",
+  async (data, thunkAPI) => {
     try {
-      return await productService.createProduct(productData);
+      // console.log(data);
+      return await productService.createProduct(data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -13,7 +15,7 @@ export const createProducts = createAsyncThunk(
 );
 
 export const getProducts = createAsyncThunk(
-  "product/get-products",
+  "product/getAll",
   async (thunkAPI) => {
     try {
       return await productService.getProducts();
@@ -24,7 +26,7 @@ export const getProducts = createAsyncThunk(
 );
 
 export const getProduct = createAsyncThunk(
-  "product/get-product",
+  "product/get",
   async (slug, thunkAPI) => {
     try {
       return await productService.getProduct(slug);
@@ -35,10 +37,11 @@ export const getProduct = createAsyncThunk(
 );
 
 export const updateProduct = createAsyncThunk(
-  "product/update-product",
-  async (product, thunkAPI) => {
+  "product/update",
+  async (productData, thunkAPI) => {
     try {
-      return await productService.updateProduct(product);
+      // console.log("Check product update", product);
+      return await productService.updateProduct(productData);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -46,7 +49,7 @@ export const updateProduct = createAsyncThunk(
 );
 
 export const deleteAProduct = createAsyncThunk(
-  "product/delete-product",
+  "product/delete",
   async (slug, thunkAPI) => {
     try {
       return await productService.deleteProduct(slug);
@@ -59,7 +62,7 @@ export const deleteAProduct = createAsyncThunk(
 export const resetState = createAction("Reset_all");
 
 const initialState = {
-  products: [],
+  product: [],
   isError: false,
   isLoading: false,
   isSuccess: false,
@@ -67,7 +70,7 @@ const initialState = {
 };
 
 export const productSlice = createSlice({
-  name: "products",
+  name: "product",
   initialState: initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -80,6 +83,9 @@ export const productSlice = createSlice({
         state.isError = false;
         state.isSuccess = true;
         state.createdProduct = action.payload;
+        if (state.isSuccess) {
+          toast.success(action.payload);
+        }
       })
       .addCase(createProducts.rejected, (state, action) => {
         state.isLoading = false;
@@ -109,15 +115,22 @@ export const productSlice = createSlice({
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
+        state.productId = action.payload._id;
         state.productName = action.payload.title;
         state.productDesc = action.payload.description;
         state.productCategory = action.payload.category;
         state.productPrice = action.payload.price;
+        state.productDiscount = action.payload.discount;
         state.productQuantity = action.payload.quantity;
         state.productCodeProduct = action.payload.codeProduct;
         state.productBrand = action.payload.brand;
         state.productTags = action.payload.tags;
-        state.productColor = action.payload.color;
+        state.productCode = action.payload.codeProduct;
+        state.productSlug = action.payload.slug;
+        state.productPage = action.payload.pageNumber;
+        state.productSize = action.payload.paperSize;
+        state.productKindOfPaper = action.payload.kindOfPaper;
+        state.images = action.payload.images;
       })
       .addCase(getProduct.rejected, (state, action) => {
         state.isLoading = false;
@@ -133,6 +146,9 @@ export const productSlice = createSlice({
         state.isError = false;
         state.isSuccess = true;
         state.updatedProduct = action.payload;
+        if (state.isSuccess) {
+          toast.success("Cập nhật thành công");
+        }
       })
       .addCase(updateProduct.rejected, (state, action) => {
         state.isLoading = false;
@@ -158,5 +174,7 @@ export const productSlice = createSlice({
       .addCase(resetState, () => initialState);
   },
 });
+
+export const selectProduct = (state) => state?.product;
 
 export default productSlice.reducer;

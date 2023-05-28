@@ -3,11 +3,11 @@ import { Table } from "antd";
 import { BiEdit } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
-import { getBrands, resetState } from "../features/brand/brandSlice";
+import { getBrands, resetState } from "../../features/brand/brandSlice";
 import { Link, useNavigate } from "react-router-dom";
 import { format } from "date-fns";
-import CustomModal from "../components/CustomModal";
-import { deleteABrand } from "../features/brand/brandSlice";
+import CustomModal from "../../components/CustomModal";
+import { deleteABrand } from "../../features/brand/brandSlice";
 import { BsPlusCircle } from "react-icons/bs";
 
 const columns = [

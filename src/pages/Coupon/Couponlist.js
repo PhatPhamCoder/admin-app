@@ -9,8 +9,8 @@ import {
   deleteACoupon,
   getCoupons,
   resetState,
-} from "../features/coupon/couponSlice";
-import CustomModal from "../components/CustomModal";
+} from "../../features/coupon/couponSlice";
+import CustomModal from "../../components/CustomModal";
 import { MdOutlineAddModerator } from "react-icons/md";
 
 const columns = [

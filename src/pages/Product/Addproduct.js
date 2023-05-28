@@ -1,24 +1,33 @@
 import { React, useEffect, useState } from "react";
-import CustomInput from "../components/CustomInput";
+
 import { toast } from "react-toastify";
 import { useFormik } from "formik";
 import { array, number, object, string } from "yup";
-import { getBrands } from "../features/brand/brandSlice";
+
 import { useDispatch, useSelector } from "react-redux";
-import { getCategories } from "../features/pcategory/pcategorySlice";
 // Upload Image
-import Dropzone from "react-dropzone";
-import { deleteImg, uploadImg } from "../features/upload/uploadSlice";
-import { createProducts, resetState } from "../features/product/productSlice";
+// import Dropzone from "react-dropzone";
+
+import {
+  createProducts,
+  getProduct,
+  resetState,
+  selectProduct,
+  updateProduct,
+} from "../../features/product/productSlice";
 import { useLocation, useNavigate } from "react-router-dom";
-import Editor from "../utils/Editor";
-import { Select } from "antd";
-import { Option } from "antd/es/mentions";
+import Editor from "../../utils/Editor";
 import { BsArrowLeft } from "react-icons/bs";
+import CustomInput from "../../components/CustomInput";
+import { deleteImage, uploadImg } from "../../features/upload/uploadSlice";
+import { getBrands } from "../../features/brand/brandSlice";
+import { getCategories } from "../../features/pcategory/pcategorySlice";
+import { AiOutlineCloudUpload } from "react-icons/ai";
+import Spinner from "../../components/Spinner";
 
 let userSchema = object().shape({
   title: string().required("Tiêu đề không được để trống"),
-  slug: string(),
+  slug: string().required("Dữ liệu bắt buộc"),
   codeProduct: string().required("Mã sản sản phẩm không được để trống"),
   description: string().required("Mô tả không được để trống"),
   price: number().required("Giá tiền không được để trống"),
@@ -27,7 +36,9 @@ let userSchema = object().shape({
   brand: string().required("Thương hiệu không được để trống"),
   tags: string().required("Thẻ không được để trống"),
   quantity: number().required("Số lượng không được để trống"),
-  pageNumber: number(),
+  pageNumber: number().required("Dữ liệu bắt buộc"),
+  kindOfPaper: string().required("Dữ liệu bắt buộc"),
+  paperSize: string().required("Dữ liệu bắt buộc"),
   images: array(),
 });
 
@@ -37,30 +48,105 @@ const Addproduct = () => {
   const location = useLocation();
   const getProductSlug = location.pathname.split("/")[3];
   useEffect(() => {
+    dispatch(getProduct(getProductSlug));
     dispatch(getBrands());
     dispatch(getCategories());
   }, []);
 
+  const productState = useSelector(selectProduct);
+  // console.log("Check data product", productState);
+
   const brandState = useSelector((state) => state?.brand?.brands);
   const pCategoryState = useSelector((state) => state?.pCategory?.pCategories);
   const imgState = useSelector((state) => state?.upload?.images);
-  const newProduct = useSelector((state) => state?.product);
+  const loadingImg = useSelector((state) => state?.upload);
   const [editorLoaded, setEditorLoaded] = useState(false);
-  const { isSuccess, isError, isLoading, createdProduct } = newProduct;
+  const {
+    productBrand,
+    productCategory,
+    productCodeProduct,
+    productDesc,
+    productName,
+    productPrice,
+    productDiscount,
+    productQuantity,
+    productTags,
+    productSlug,
+    productPage,
+    productSize,
+    productKindOfPaper,
+    images,
+    productId,
+  } = productState;
 
   useEffect(() => {
     setEditorLoaded(true);
   }, []);
 
-  useEffect(() => {
-    if (isSuccess && createdProduct) {
-      toast.success("Thêm sản phẩm thành công!");
-    }
+  const formik = useFormik({
+    enableReinitialize: true,
+    initialValues: {
+      title: productName || "",
+      slug: productSlug || "",
+      codeProduct: productCodeProduct || "",
+      description: productDesc || "",
+      price: productPrice || "",
+      discount: productDiscount || "",
+      brand: productBrand || "",
+      category: productCategory || "",
+      tags: productTags || "",
+      quantity: productQuantity || "",
+      pageNumber: productPage || "",
+      kindOfPaper: productKindOfPaper || "",
+      paperSize: productSize || "",
+      images: [],
+    },
+    validationSchema: userSchema,
+  });
 
-    if (isError && createdProduct) {
-      toast.error("Thêm sản phẩm thất bại!");
-    }
-  }, [isSuccess, isError, isLoading]);
+  // create Product
+  const handleAddData = async () => {
+    let data = {
+      title: formik.values.title,
+      slug: formik.values.slug,
+      codeProduct: formik.values.codeProduct,
+      description: formik.values.description,
+      price: formik.values.price,
+      discount: formik.values.discount,
+      brand: formik.values.brand,
+      category: formik.values.category,
+      tags: formik.values.tags,
+      quantity: formik.values.quantity,
+      pageNumber: formik.values.pageNumber,
+      kindOfPaper: formik.values.kindOfPaper,
+      paperSize: formik.values.paperSize,
+      images: img,
+    };
+    await dispatch(createProducts(data));
+  };
+
+  // Update Product
+  const handleUpdateData = async () => {
+    let productData = {
+      id: productId,
+      title: formik.values.title,
+      slug: formik.values.slug,
+      codeProduct: formik.values.codeProduct,
+      description: formik.values.description,
+      price: formik.values.price,
+      discount: formik.values.discount,
+      brand: formik.values.brand,
+      category: formik.values.category,
+      tags: formik.values.tags,
+      quantity: formik.values.quantity,
+      pageNumber: formik.values.pageNumber,
+      kindOfPaper: formik.values.kindOfPaper,
+      paperSize: formik.values.paperSize,
+      images: img,
+    };
+    // console.log("Check data update", dataUpdate);
+    await dispatch(updateProduct(productData));
+  };
 
   useEffect(() => {
     formik.values.images = img;
@@ -74,34 +160,42 @@ const Addproduct = () => {
     });
   });
 
-  const formik = useFormik({
-    enableReinitialize: true,
-    initialValues: {
-      title: "",
-      slug: "",
-      codeProduct: "",
-      description: "",
-      price: "",
-      discount: "",
-      brand: "",
-      category: "",
-      tags: "",
-      quantity: "",
-      pageNumber: "",
-      images: [],
-    },
-    validationSchema: userSchema,
-    onSubmit: (values) => {
-      // console.log(values);
-      dispatch(createProducts(values));
-      // dispatch(resetState());
-      // formik.resetForm();
-    },
-  });
+  const handleDeleteImg = async (public_id) => {
+    await dispatch(deleteImage(public_id));
+  };
+
+  const showButton = () => {
+    if (getProductSlug !== undefined) {
+      return (
+        <button
+          onClick={() => handleUpdateData()}
+          className="btn btn-primary"
+          style={{ marginRight: "10px" }}
+        >
+          Cập nhật
+        </button>
+      );
+    } else {
+      return (
+        <button
+          onClick={() => handleAddData()}
+          className="btn btn-primary"
+          style={{ marginRight: "10px" }}
+        >
+          Thêm
+        </button>
+      );
+    }
+  };
 
   const handleReset = () => {
     dispatch(resetState());
     formik.resetForm();
+  };
+
+  const handleUpload = (e) => {
+    const files = e.target.files;
+    dispatch(uploadImg(files));
   };
 
   return (
@@ -256,7 +350,7 @@ const Addproduct = () => {
               val={formik.values.tags}
               className="form-control py-3 mt-2"
             >
-              <option value="">Nhập thẻ sản phẩm</option>
+              <option value="">Chọn thẻ sản phẩm</option>
               <option value="Home Page">Home Page</option>
               <option value="Product Page">Product Page</option>
               <option value="More">More</option>
@@ -293,42 +387,93 @@ const Addproduct = () => {
               {formik.touched.pageNumber && formik.errors.pageNumber}
             </div>
           </div>
-          <div className="col-6 text-center" style={{ cursor: "pointer" }}>
-            <div className="bg-white p-4 rounded mt-2">
-              <Dropzone
-                onDrop={(acceptedFiles) => dispatch(uploadImg(acceptedFiles))}
-              >
-                {({ getRootProps, getInputProps }) => (
-                  <section>
-                    <div {...getRootProps()}>
-                      <input {...getInputProps()} />
-                      <p>Nhấn vào đây để tải file lên!</p>
-                    </div>
-                  </section>
-                )}
-              </Dropzone>
+          <div className="col-12 col-md-6">
+            <CustomInput
+              className="py-3 mb-3"
+              type="text"
+              label="Nhập loại giấy"
+              name="kindOfPaper"
+              onChng={formik.handleChange("kindOfPaper")}
+              onBlr={formik.handleBlur("kindOfPaper")}
+              val={formik.values.kindOfPaper}
+            />
+            <div className="error">
+              {formik.touched.kindOfPaper && formik.errors.kindOfPaper}
             </div>
           </div>
-          <div className="showimages my-3 d-flex">
-            {imgState &&
-              imgState?.map((item, index) => {
-                return (
-                  <div key={index} className="position-relative">
-                    <button
-                      type="button"
-                      onClick={() => dispatch(deleteImg(item.public_id))}
-                      className="btn-close position-absolute text-white"
-                      style={{ top: "10px", right: "10px" }}
-                    />
-                    <img
-                      src={item.url}
-                      alt="Banner Product"
-                      className="rounded"
-                      width={350}
-                    />
-                  </div>
-                );
-              })}
+          <div className="col-12 col-md-6">
+            <CustomInput
+              className="py-3 mb-3"
+              type="text"
+              label="Nhập khổ giấy"
+              name="paperSize"
+              onChng={formik.handleChange("paperSize")}
+              onBlr={formik.handleBlur("paperSize")}
+              val={formik.values.paperSize}
+            />
+            <div className="error">
+              {formik.touched.paperSize && formik.errors.paperSize}
+            </div>
+          </div>
+          <div className="col-12 row my-2">
+            <div className="col-3 w-25 h-25 text-center">
+              <div className="bg-white py-5 rounded">
+                <label
+                  htmlFor="upload"
+                  className="fs-4 fw-bold d-flex flex-column align-items-center"
+                  style={{ cursor: "pointer" }}
+                >
+                  <AiOutlineCloudUpload size={50} /> Tải ảnh sản phẩm
+                  {loadingImg?.isLoading === true && <Spinner />}
+                </label>
+                <input
+                  id="upload"
+                  type="file"
+                  multiple
+                  hidden
+                  onChange={(e) => handleUpload(e)}
+                />
+              </div>
+            </div>
+            <div className="col-9 mb-3 d-flex gap-3 flex-wrap">
+              {getProductSlug === undefined
+                ? imgState?.map((item, index) => {
+                    return (
+                      <div key={index} className="position-relative">
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteImg(item?.public_id)}
+                          className="btn-close position-absolute"
+                          style={{ top: "10px", right: "10px", color: "#fff" }}
+                        />
+                        <img
+                          src={item?.url}
+                          alt="Banner Product"
+                          className="rounded"
+                          width={250}
+                        />
+                      </div>
+                    );
+                  })
+                : images?.map((item, index) => {
+                    return (
+                      <div key={index} className="position-relative">
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteImg(item?.public_id)}
+                          className="btn-close position-absolute"
+                          style={{ top: "10px", right: "10px", color: "#fff" }}
+                        />
+                        <img
+                          src={item?.url}
+                          alt="Banner Product"
+                          className="rounded"
+                          width={250}
+                        />
+                      </div>
+                    );
+                  })}
+            </div>
           </div>
           <div className="col-12">
             <div className="mb-3">
@@ -345,13 +490,7 @@ const Addproduct = () => {
           </div>
           <div className="col-12 d-flex align-items-center">
             <div className="mx-auto">
-              <button
-                className="btn btn-success fw-bold"
-                type="submit"
-                style={{ marginRight: "10px" }}
-              >
-                {getProductSlug !== undefined ? "Cập nhật" : "Thêm"} sản phẩm
-              </button>
+              {showButton()}
               <button
                 className="btn btn-danger fw-bold"
                 style={{

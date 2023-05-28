@@ -25,6 +25,26 @@ export const login = createAsyncThunk(
     }
   },
 );
+export const blockUser = createAsyncThunk(
+  "auth/block",
+  async (id, thunkAPI) => {
+    try {
+      return await authService.blockUser(id);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  },
+);
+export const unLockUser = createAsyncThunk(
+  "auth/unlock",
+  async (id, thunkAPI) => {
+    try {
+      return await authService.UnLockUser(id);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  },
+);
 
 export const getMonthlyData = createAsyncThunk(
   "orders/monthlydata",
@@ -186,6 +206,46 @@ export const authSlice = createSlice({
         state.isLoading = false;
         if (state.isError) {
           toast.success("Cập nhật bị lỗi");
+        }
+      })
+      .addCase(blockUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(blockUser.fulfilled, (state, action) => {
+        state.isError = false;
+        state.isLoading = false;
+        state.isSuccess = true;
+        if (state.isSuccess) {
+          toast.success(action.payload);
+        }
+      })
+      .addCase(blockUser.rejected, (state, action) => {
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.error;
+        state.isLoading = false;
+        if (state.isError) {
+          toast.success(action.error);
+        }
+      })
+      .addCase(unLockUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(unLockUser.fulfilled, (state, action) => {
+        state.isError = false;
+        state.isLoading = false;
+        state.isSuccess = true;
+        if (state.isSuccess) {
+          toast.success(action.payload);
+        }
+      })
+      .addCase(unLockUser.rejected, (state, action) => {
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.error;
+        state.isLoading = false;
+        if (state.isError) {
+          toast.success(action.error);
         }
       });
   },

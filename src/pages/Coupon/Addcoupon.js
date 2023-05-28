@@ -1,6 +1,6 @@
 import { React, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import CustomInput from "../components/CustomInput";
+import CustomInput from "../../components/CustomInput";
 import { toast } from "react-toastify";
 import { useFormik } from "formik";
 import { date, number, object, string } from "yup";
@@ -9,7 +9,7 @@ import {
   getCoupon,
   resetState,
   updateCoupon,
-} from "../features/coupon/couponSlice";
+} from "../../features/coupon/couponSlice";
 import { useLocation, useNavigate } from "react-router-dom";
 import { BsArrowLeft } from "react-icons/bs";
 

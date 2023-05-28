@@ -5,10 +5,8 @@ import {
   getEnquiry,
   resetState,
   updateEnquiry,
-} from "../features/enquiry/enquirySlice";
+} from "../../features/enquiry/enquirySlice";
 import { BiArrowBack } from "react-icons/bi";
-import { id } from "date-fns/locale";
-import { toast } from "react-toastify";
 
 const ViewEng = () => {
   const dispatch = useDispatch();
@@ -18,9 +16,6 @@ const ViewEng = () => {
 
   const newEnquiry = useSelector((state) => state.enquiry);
   const {
-    isSuccess,
-    isError,
-    isLoading,
     EnquiryName,
     EnquiryMobile,
     EnquiryEmail,

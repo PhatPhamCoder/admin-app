@@ -1,6 +1,6 @@
 import { React, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import CustomInput from "../components/CustomInput";
+import CustomInput from "../../components/CustomInput";
 import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
@@ -10,7 +10,7 @@ import {
   getBlogCat,
   resetState,
   updateBlogCat,
-} from "../features/bcategory/bcategorySlice";
+} from "../../features/bcategory/bcategorySlice";
 
 let userSchema = object().shape({
   title: string().required("Tiêu đề không được để trống"),

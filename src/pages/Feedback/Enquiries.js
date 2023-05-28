@@ -7,10 +7,10 @@ import {
   getEnquiries,
   resetState,
   updateEnquiry,
-} from "../features/enquiry/enquirySlice";
+} from "../../features/enquiry/enquirySlice";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
-import CustomModal from "../components/CustomModal";
+import CustomModal from "../../components/CustomModal";
 
 const columns = [
   {

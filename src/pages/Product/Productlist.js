@@ -7,9 +7,10 @@ import {
   getProducts,
   resetState,
   deleteAProduct,
-} from "../features/product/productSlice";
-import { Link, Navigate, useNavigate } from "react-router-dom";
-import CustomModal from "../components/CustomModal";
+  selectProduct,
+} from "../../features/product/productSlice";
+import { Link, useNavigate } from "react-router-dom";
+import CustomModal from "../../components/CustomModal";
 import { BsPlusCircle } from "react-icons/bs";
 
 const columns = [
@@ -31,6 +32,10 @@ const columns = [
     title: "Giá Bán",
     dataIndex: "price",
     sorter: (a, b) => a.price - b.price,
+  },
+  {
+    title: "Giá Khuyến mãi",
+    dataIndex: "priceDiscount",
   },
   {
     title: "Số lượng",
@@ -63,21 +68,27 @@ const Productlist = () => {
     dispatch(getProducts());
     dispatch(resetState());
   }, []);
-  const productState = useSelector((state) => state?.product?.products);
+
+  const productState = useSelector(selectProduct);
+  const { products } = productState;
   const data = [];
-  for (let i = 0; i < productState.length; i++) {
-    const slug = productState[i].slug;
+  for (let i = 0; i < products?.length; i++) {
+    const slug = products[i].slug;
     data.push({
       key: i + 1,
       slug: slug,
-      title: productState[i].title,
-      category: productState[i].category,
-      price: productState[i].price.toLocaleString("en-US", {
+      title: products[i].title,
+      category: products[i].category,
+      price: products[i].price.toLocaleString("en-US", {
         style: "currency",
         currency: "VND",
       }),
-      quantity: productState[i].quantity,
-      sold: productState[i].sold,
+      priceDiscount: products[i].discount.toLocaleString("en-US", {
+        style: "currency",
+        currency: "VND",
+      }),
+      quantity: products[i].quantity,
+      sold: products[i].sold,
       action: (
         <>
           <Link to={`/admin/product/${slug}`} className="fs-5">
@@ -100,6 +111,7 @@ const Productlist = () => {
     dispatch(getProducts());
     window.location.reload();
   };
+
   return (
     <div>
       <div className="d-flex align-items-center gap-3">

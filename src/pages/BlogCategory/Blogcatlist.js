@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { TiDocumentAdd } from "react-icons/ti";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { format } from "date-fns";
-import CustomModal from "../components/CustomModal";
+import CustomModal from "../../components/CustomModal";
 import { toast } from "react-toastify";
 import { useFormik } from "formik";
 import { object, string } from "yup";
@@ -17,8 +17,8 @@ import {
   deleteABlogCat,
   getCategories,
   resetState,
-} from "../features/bcategory/bcategorySlice";
-import CustomInput from "../components/CustomInput";
+} from "../../features/bcategory/bcategorySlice";
+import CustomInput from "../../components/CustomInput";
 const columns = [
   {
     title: "Số thứ tự",
