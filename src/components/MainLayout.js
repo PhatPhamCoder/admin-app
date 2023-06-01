@@ -20,6 +20,7 @@ import { BiCategoryAlt } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import logo from "../images/avatar.png";
+import { selectAuth } from "../features/auth/authSlice";
 const { Header, Sider, Content } = Layout;
 const MainLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -28,7 +29,8 @@ const MainLayout = () => {
   } = theme.useToken();
   const navigate = useNavigate();
 
-  const userState = useSelector((state) => state?.auth?.user);
+  const userState = useSelector(selectAuth);
+  const { userAuth } = userState;
 
   const handleLogout = () => {
     localStorage.clear();
@@ -181,9 +183,11 @@ const MainLayout = () => {
                 aria-expanded="false"
               >
                 <h5 className="mb-0">
-                  {"Admin" || userState?.firstname + userState?.lastname}
+                  {new Date().getHours() < 12 ? "Chào buổi sáng, Admin" : ""}
+                  {new Date().getHours() < 18 ? "Chào buổi chiều, Admin" : ""}
+                  {new Date().getHours() < 23 ? "Chào buổi tối, Admin" : ""}
                 </h5>
-                <p className="mb-0">{userState?.email}</p>
+                <p className="mb-0">{userAuth?.email}</p>
               </div>
               <div
                 className="dropdown-menu"

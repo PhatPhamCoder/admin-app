@@ -26,6 +26,16 @@ const updateStatus = async (id, data) => {
   return response.data;
 };
 
+const updateFlashSale = async (id, data) => {
+  const response = await axiosClient.put(
+    `${base_url}product/flash-sale/${id}`,
+    data,
+    config,
+  );
+
+  return response.data;
+};
+
 const updateProduct = async (productData) => {
   // console.log(product);
   const response = await axiosClient.put(
@@ -67,6 +77,7 @@ const productService = {
   updateProduct,
   getProduct,
   updateStatus,
+  updateFlashSale,
 };
 
 export default productService;

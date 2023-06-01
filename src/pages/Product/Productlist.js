@@ -49,9 +49,8 @@ const Productlist = () => {
           />
         </div>
       </div>
-      <div>
-        <ListItem productData={data} />
-      </div>
+
+      <ListItem productData={data} />
     </div>
   );
 };

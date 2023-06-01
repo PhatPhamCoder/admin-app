@@ -1,6 +1,7 @@
 import axios from "axios";
-const getTokenfromLocalStorage = localStorage.getItem("user")
-  ? JSON.parse(localStorage.getItem("user"))
+
+const getTokenfromLocalStorage = localStorage.getItem("admin")
+  ? JSON.parse(localStorage.getItem("admin"))
   : null;
 
 export const config = {

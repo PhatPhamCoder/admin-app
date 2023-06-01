@@ -62,6 +62,32 @@ export const updateStatus = createAsyncThunk(
   },
 );
 
+export const updateFlashSale = createAsyncThunk(
+  "product/updateFlashSale",
+  async (dataFlashSale, thunkAPI) => {
+    // console.log(dataStatus);
+    const id = dataFlashSale?.id;
+    const flashSale = dataFlashSale?.active;
+    try {
+      const data = {
+        flashSale: flashSale,
+      };
+      const response = await productService.updateFlashSale(id, data);
+      if (response.result) {
+        const results = {
+          id: id,
+          flashSale: flashSale,
+          msg: response.msg,
+        };
+        toast.success(response.msg);
+        return results;
+      }
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  },
+);
+
 export const getProduct = createAsyncThunk(
   "product/get",
   async (slug, thunkAPI) => {
@@ -225,9 +251,22 @@ export const productSlice = createSlice({
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
-        state.dataUpdate = action.payload;
       })
       .addCase(updateStatus.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.error;
+      })
+      .addCase(updateFlashSale.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateFlashSale.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+      })
+      .addCase(updateFlashSale.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;

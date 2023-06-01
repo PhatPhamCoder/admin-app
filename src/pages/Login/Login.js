@@ -4,7 +4,7 @@ import CustomInput from "../../components/CustomInput";
 import { useFormik } from "formik";
 import { object, string } from "yup";
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../../features/auth/authSlice";
+import { loginAdmin, selectAuth } from "../../features/auth/authSlice";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 let userSchema = object().shape({
   email: string()
@@ -24,12 +24,12 @@ const Login = () => {
     },
     validationSchema: userSchema,
     onSubmit: (values) => {
-      dispatch(login(values));
+      dispatch(loginAdmin(values));
     },
   });
-  const authState = useSelector((state) => state?.auth);
+  const authState = useSelector(selectAuth);
 
-  const { user, isLoading, isError, isSuccess, message } = authState;
+  const { isLoading, isError, isSuccess, message } = authState;
 
   useEffect(() => {
     if (isSuccess) {
@@ -37,7 +37,7 @@ const Login = () => {
     } else {
       navigate("");
     }
-  }, [user, isLoading, isError, isSuccess]);
+  }, [isLoading, isError, isSuccess]);
 
   return (
     <div className="login-container py-5">

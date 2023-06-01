@@ -2,28 +2,22 @@ import { base_url } from "../../utils/base_url";
 import { axiosClient, config } from "../../utils/axiosConfig";
 
 const login = async (userData) => {
-  const response = await axiosClient.post(
-    `${base_url}user/admin-login`,
-    userData,
-  );
-  if (response.data) {
-    localStorage.setItem("user", JSON.stringify(response.data));
-  }
-  return response.data;
-};
-
-const getOrders = async () => {
-  const response = await axiosClient.get(
-    `${base_url}user/getallorders`,
-    config,
-  );
-  return response.data;
+  return await axiosClient.post(`${base_url}user/admin-login`, userData);
 };
 
 const statusUser = async (id, data) => {
   const response = await axiosClient.put(
     `${base_url}user/status/${id}`,
     data,
+    config,
+  );
+  return response.data;
+};
+
+// order
+const getOrders = async () => {
+  const response = await axiosClient.get(
+    `${base_url}user/getallorders`,
     config,
   );
   return response.data;

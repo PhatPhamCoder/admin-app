@@ -5,11 +5,13 @@ import { Link, useNavigate } from "react-router-dom";
 import {
   deleteAProduct,
   getProducts,
+  updateFlashSale,
   updateStatus,
 } from "../../features/product/productSlice";
 import { BiEdit } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
 import CustomModal from "../../components/CustomModal";
+
 const columns = [
   {
     title: "STT",
@@ -69,17 +71,14 @@ export const ListItem = ({ productData = [] }) => {
     setOpen(false);
   };
 
-  const handleStatus = (e, id, i) => {
+  const handleStatus = (e, id) => {
     const active = e.target.checked;
     dispatch(updateStatus({ id, active }));
-    // console.log(productData);
-    // console.log(id);
-    // const checkIndex = productData.findIndex((arrow) => arrow.i);
-    // console.log(checkIndex);
   };
 
   const handleFlashSale = (e, id) => {
     const active = e.target.checked;
+    dispatch(updateFlashSale({ id, active }));
   };
 
   let dataColumn = [];
@@ -102,9 +101,9 @@ export const ListItem = ({ productData = [] }) => {
         <>
           <input
             type="checkbox"
-            checked={productData[i].status === "true"}
+            defaultChecked={productData[i].status === "true"}
             className="text-center p-2 ms-3"
-            onChange={(e) => handleStatus(e, productData[i]._id, i)}
+            onChange={(e) => handleStatus(e, productData[i]._id)}
           />
         </>
       ),
@@ -112,7 +111,7 @@ export const ListItem = ({ productData = [] }) => {
         <>
           <input
             type="checkbox"
-            checked={productData[i].flashSale}
+            defaultChecked={productData[i].flashSale === "true"}
             className="text-center p-2 ms-4"
             onChange={(e) => handleFlashSale(e, productData[i]._id)}
           />
@@ -147,6 +146,7 @@ export const ListItem = ({ productData = [] }) => {
       <div>
         <Table columns={columns} dataSource={dataColumn} />
       </div>
+
       <CustomModal
         hideModal={hideModal}
         open={open}

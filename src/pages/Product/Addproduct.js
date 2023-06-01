@@ -496,7 +496,7 @@ const Addproduct = () => {
                   })}
             </div>
           </div>
-          <div>
+          {/* <div>
             <label className="mx-2 fs-4">Cài đặt Flash sale</label>
             <div className="mb-3">
               <DatePicker
@@ -505,7 +505,7 @@ const Addproduct = () => {
                 className="form-control w-25"
               />
             </div>
-          </div>
+          </div> */}
           <div className="col-12">
             <div className="mb-3">
               <Editor

@@ -171,7 +171,9 @@ const Dashboard = () => {
               <BsArrowDownRight />
               32%
             </h6>
-            <p className="mb-0 desc">So sánh đến tháng 04/2023</p>
+            <p className="mb-0 desc">
+              So sánh đến tháng {new Date().getMonth() + 1}/2023
+            </p>
           </div>
         </div>
         <div className="d-flex flex-grow-1 justify-content-between align-items-end bg-white p-3 rounded-3">
@@ -183,7 +185,9 @@ const Dashboard = () => {
             <h6 className="red">
               <BsArrowDownRight /> 50%
             </h6>
-            <p className="mb-0 desc">So sánh đến tháng 02/2023</p>
+            <p className="mb-0 desc">
+              So sánh đến tháng {new Date().getMonth() + 1}/2023
+            </p>
           </div>
         </div>
         <div className="d-flex flex-grow-1 justify-content-between align-items-end bg-white p-3 rounded-3">
@@ -195,7 +199,9 @@ const Dashboard = () => {
             <h6 className="green">
               <BsArrowUpRight /> 32%
             </h6>
-            <p className="mb-0 desc">So sánh đến tháng 02/2023</p>
+            <p className="mb-0 desc">
+              So sánh đến tháng {new Date().getMonth() + 1}/2023
+            </p>
           </div>
         </div>
       </div>
@@ -214,7 +220,7 @@ const Dashboard = () => {
         </div>
       </div>
       <div className="mt-4">
-        <h3 className="mb-5">Đơn hàng mới nhất</h3>
+        <h3 className="mb-3">Đơn hàng mới nhất</h3>
         <div>
           <Table columns={columns} dataSource={orderData} />
         </div>

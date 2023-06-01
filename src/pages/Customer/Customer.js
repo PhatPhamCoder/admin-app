@@ -39,10 +39,11 @@ const Customers = () => {
     dispatch(getUsers());
   }, []);
 
-  const handleStatus = async (e, _id) => {
+  const handleStatus = async (_id, e) => {
     const isBlocked = e.target.value;
     await dispatch(statusUser({ _id, isBlocked }));
   };
+
   const customerState = useSelector((state) => state?.customer?.customers);
   const data = [];
   for (let i = 0; i < customerState?.length; i++) {
@@ -55,26 +56,13 @@ const Customers = () => {
       status: (
         <div className="d-flex text-center gap-2 align-items-center">
           <select
-            className="form-select"
-            value={customerState[i]?.isBlocked}
-            onChange={(e) => handleStatus(e, customerState[i]._id)}
+            className="form-select form-control"
+            defaultValue={customerState[i]?.isBlocked}
+            onChange={(e) => handleStatus(customerState[i]?._id, e)}
           >
             <option value="1">Active</option>
             <option value="0">Block</option>
           </select>
-          {/* <input
-            type="checkbox"
-            className="form-check-input d-flex text-center"
-            checked={customerState[i] === false}
-            onChange={(e) => handleStatus(e, customerState[i]._id)}
-          />
-          <div className="fs-5">
-            {!customerState[i] ? (
-              <div className="text-primary fw-bold">Active</div>
-            ) : (
-              <div className="text-danger fw-bold">No Active</div>
-            )}
-          </div> */}
         </div>
       ),
       date: date,

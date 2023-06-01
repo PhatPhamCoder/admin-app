@@ -2,15 +2,20 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import authService from "./authService";
 import { toast } from "react-toastify";
 
-const getUserfromLocalStorage = localStorage.getItem("user")
-  ? JSON.parse(localStorage.getItem("user"))
+const getUserfromLocalStorage = localStorage.getItem("admin")
+  ? JSON.parse(localStorage.getItem("admin"))
   : null;
 
-export const login = createAsyncThunk(
+export const loginAdmin = createAsyncThunk(
   "auth/login",
   async (userData, thunkAPI) => {
     try {
-      return await authService.login(userData);
+      const response = await authService.login(userData);
+      // console.log(response);
+      if (response.data) {
+        localStorage.setItem("admin", JSON.stringify(response.data)); // Lưu thông tin admin vô LocalStorge
+      }
+      return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -31,7 +36,9 @@ export const statusUser = createAsyncThunk(
         const results = {
           id: id,
           isBlocked: isBlocked,
+          msg: response.message,
         };
+        toast.success(response.message);
         return results;
       }
     } catch (error) {
@@ -96,13 +103,14 @@ export const getSingleOrder = createAsyncThunk(
 );
 
 const initialState = {
-  user: getUserfromLocalStorage,
+  user: "",
   orders: [],
   isError: false,
   isLoading: false,
   isSuccess: false,
   message: "",
   data: [],
+  userAuth: getUserfromLocalStorage,
 };
 
 export const authSlice = createSlice({
@@ -111,17 +119,16 @@ export const authSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(login.pending, (state) => {
+      .addCase(loginAdmin.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(login.fulfilled, (state, action) => {
+      .addCase(loginAdmin.fulfilled, (state, action) => {
         state.isError = false;
         state.isLoading = false;
         state.isSuccess = true;
-        state.user = action.payload;
-        state.message = "success";
+        state.userAuth = action.payload;
       })
-      .addCase(login.rejected, (state, action) => {
+      .addCase(loginAdmin.rejected, (state, action) => {
         state.isError = true;
         state.isSuccess = false;
         state.message = action.error;
@@ -219,16 +226,6 @@ export const authSlice = createSlice({
         state.isError = false;
         state.isLoading = false;
         state.isSuccess = true;
-        // state.customer.customers.isBlocked = action.payload.isBlocked;
-        const checkIndex = state.customer.customers.findIndex(
-          (row) => row?.id === action.payload.id,
-        );
-        console.log(checkIndex);
-        console.log(state.customer.customers[action.payload.id].isBlocked);
-        console.log(action.payload.isBlocked);
-        if (state.isSuccess) {
-          toast.success(action.payload.msg);
-        }
       })
       .addCase(statusUser.rejected, (state, action) => {
         state.isLoading = false;
@@ -241,5 +238,6 @@ export const authSlice = createSlice({
       });
   },
 });
+export const selectAuth = (state) => state?.auth;
 
 export default authSlice.reducer;
