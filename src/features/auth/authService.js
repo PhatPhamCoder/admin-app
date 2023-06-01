@@ -1,4 +1,3 @@
-import axios from "axios";
 import { base_url } from "../../utils/base_url";
 import { axiosClient, config } from "../../utils/axiosConfig";
 
@@ -21,19 +20,10 @@ const getOrders = async () => {
   return response.data;
 };
 
-const blockUser = async (id, active) => {
+const statusUser = async (id, data) => {
   const response = await axiosClient.put(
-    `${base_url}user/block-user/${id}`,
-    active,
-    config,
-  );
-  return response.data;
-};
-
-const UnLockUser = async (id, active) => {
-  const response = await axiosClient.put(
-    `${base_url}user/unlock-user/${id}`,
-    active,
+    `${base_url}user/status/${id}`,
+    data,
     config,
   );
   return response.data;
@@ -48,7 +38,6 @@ const getOrder = async (id) => {
 };
 
 const updateOrder = async (data) => {
-  // console.log(data);
   const response = await axiosClient.put(
     `${base_url}user/updateorder/${data.id}`,
     { status: data.status },
@@ -80,8 +69,7 @@ const authService = {
   getYearlyStatis,
   getOrder,
   updateOrder,
-  blockUser,
-  UnLockUser,
+  statusUser,
 };
 
 export default authService;

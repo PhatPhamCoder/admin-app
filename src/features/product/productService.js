@@ -2,9 +2,7 @@ import { base_url } from "../../utils/base_url";
 import { axiosClient, config } from "../../utils/axiosConfig";
 
 const getProducts = async () => {
-  const response = await axiosClient.get(`${base_url}product/`);
-
-  return response.data;
+  return await axiosClient.get(`${base_url}product/`);
 };
 
 const createProduct = async (data) => {
@@ -14,6 +12,16 @@ const createProduct = async (data) => {
 
 const getProduct = async (slug) => {
   const response = await axiosClient.get(`${base_url}product/${slug}`);
+
+  return response.data;
+};
+
+const updateStatus = async (id, data) => {
+  const response = await axiosClient.put(
+    `${base_url}product/status/${id}`,
+    data,
+    config,
+  );
 
   return response.data;
 };
@@ -58,6 +66,7 @@ const productService = {
   deleteProduct,
   updateProduct,
   getProduct,
+  updateStatus,
 };
 
 export default productService;

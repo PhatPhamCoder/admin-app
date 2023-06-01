@@ -6,15 +6,6 @@ const getUserfromLocalStorage = localStorage.getItem("user")
   ? JSON.parse(localStorage.getItem("user"))
   : null;
 
-const initialState = {
-  user: getUserfromLocalStorage,
-  orders: [],
-  isError: false,
-  isLoading: false,
-  isSuccess: false,
-  message: "",
-};
-
 export const login = createAsyncThunk(
   "auth/login",
   async (userData, thunkAPI) => {
@@ -25,21 +16,24 @@ export const login = createAsyncThunk(
     }
   },
 );
-export const blockUser = createAsyncThunk(
-  "auth/block",
-  async (id, thunkAPI) => {
+
+export const statusUser = createAsyncThunk(
+  "auth/status",
+  async (dataUpdate, thunkAPI) => {
+    const id = dataUpdate?._id;
+    const isBlocked = dataUpdate?.isBlocked;
     try {
-      return await authService.blockUser(id);
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error);
-    }
-  },
-);
-export const unLockUser = createAsyncThunk(
-  "auth/unlock",
-  async (id, thunkAPI) => {
-    try {
-      return await authService.UnLockUser(id);
+      const data = {
+        isBlocked: isBlocked,
+      };
+      const response = await authService.statusUser(id, data);
+      if (response) {
+        const results = {
+          id: id,
+          isBlocked: isBlocked,
+        };
+        return results;
+      }
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -100,6 +94,16 @@ export const getSingleOrder = createAsyncThunk(
     }
   },
 );
+
+const initialState = {
+  user: getUserfromLocalStorage,
+  orders: [],
+  isError: false,
+  isLoading: false,
+  isSuccess: false,
+  message: "",
+  data: [],
+};
 
 export const authSlice = createSlice({
   name: "auth",
@@ -208,42 +212,29 @@ export const authSlice = createSlice({
           toast.success("Cập nhật bị lỗi");
         }
       })
-      .addCase(blockUser.pending, (state) => {
+      .addCase(statusUser.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(blockUser.fulfilled, (state, action) => {
+      .addCase(statusUser.fulfilled, (state, action) => {
         state.isError = false;
         state.isLoading = false;
         state.isSuccess = true;
+        // state.customer.customers.isBlocked = action.payload.isBlocked;
+        const checkIndex = state.customer.customers.findIndex(
+          (row) => row?.id === action.payload.id,
+        );
+        console.log(checkIndex);
+        console.log(state.customer.customers[action.payload.id].isBlocked);
+        console.log(action.payload.isBlocked);
         if (state.isSuccess) {
-          toast.success(action.payload);
+          toast.success(action.payload.msg);
         }
       })
-      .addCase(blockUser.rejected, (state, action) => {
+      .addCase(statusUser.rejected, (state, action) => {
+        state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
         state.message = action.error;
-        state.isLoading = false;
-        if (state.isError) {
-          toast.success(action.error);
-        }
-      })
-      .addCase(unLockUser.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(unLockUser.fulfilled, (state, action) => {
-        state.isError = false;
-        state.isLoading = false;
-        state.isSuccess = true;
-        if (state.isSuccess) {
-          toast.success(action.payload);
-        }
-      })
-      .addCase(unLockUser.rejected, (state, action) => {
-        state.isError = true;
-        state.isSuccess = false;
-        state.message = action.error;
-        state.isLoading = false;
         if (state.isError) {
           toast.success(action.error);
         }

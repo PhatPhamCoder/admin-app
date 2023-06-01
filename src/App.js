@@ -24,6 +24,7 @@ import ViewEng from "./pages/Feedback/ViewEng";
 import ViewOrder from "./pages/Order/ViewOrder";
 import { PrivateRoutes } from "./routing/PrivateRoutes";
 import { OpenRoutes } from "./routing/OpenRoutes";
+import EmailMarketing from "./pages/Email/EmailMarketing";
 function App() {
   return (
     <Router>
@@ -71,6 +72,7 @@ function App() {
           <Route path="list-product" element={<Productlist />} />
           <Route path="product" element={<Addproduct />} />
           <Route path="product/:slug" element={<Addproduct />} />
+          <Route path="email" element={<EmailMarketing />} />
         </Route>
       </Routes>
     </Router>

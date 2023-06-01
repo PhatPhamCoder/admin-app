@@ -13,7 +13,7 @@ import {
 } from "react-icons/ai";
 import { RiCouponLine } from "react-icons/ri";
 import { FaClipboardList, FaBloggerB } from "react-icons/fa";
-import { MdNotificationsActive } from "react-icons/md";
+import { MdAlternateEmail, MdNotificationsActive } from "react-icons/md";
 import { ImBlog } from "react-icons/im";
 import { SiBrandfolder } from "react-icons/si";
 import { BiCategoryAlt } from "react-icons/bi";
@@ -127,6 +127,11 @@ const MainLayout = () => {
               key: "enquiries",
               icon: <FaClipboardList className="fs-4" />,
               label: "Danh sách gửi liên hệ",
+            },
+            {
+              key: "email",
+              icon: <MdAlternateEmail className="fs-4" />,
+              label: "Nhận tin khuyến mãi",
             },
             {
               key: "signout",

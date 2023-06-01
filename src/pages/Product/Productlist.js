@@ -1,141 +1,57 @@
-import React, { useEffect, useState } from "react";
-import { Table } from "antd";
-import { BiEdit } from "react-icons/bi";
-import { AiFillDelete } from "react-icons/ai";
+import React, { useEffect } from "react";
+
 import { useDispatch, useSelector } from "react-redux";
 import {
   getProducts,
   resetState,
-  deleteAProduct,
   selectProduct,
 } from "../../features/product/productSlice";
-import { Link, useNavigate } from "react-router-dom";
-import CustomModal from "../../components/CustomModal";
-import { BsPlusCircle } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 
-const columns = [
-  {
-    title: "Số thứ tự",
-    dataIndex: "key",
-  },
-  {
-    title: "Tên sản phẩm",
-    dataIndex: "title",
-    sorter: (a, b) => a.title.length - b.title.length,
-  },
-  {
-    title: "Danh mục sản phẩm",
-    dataIndex: "category",
-    sorter: (a, b) => a.category.length - b.category.length,
-  },
-  {
-    title: "Giá Bán",
-    dataIndex: "price",
-    sorter: (a, b) => a.price - b.price,
-  },
-  {
-    title: "Giá Khuyến mãi",
-    dataIndex: "priceDiscount",
-  },
-  {
-    title: "Số lượng",
-    dataIndex: "quantity",
-  },
-  {
-    title: "Đã bán",
-    dataIndex: "sold",
-  },
-  {
-    title: "Chức năng",
-    dataIndex: "action",
-  },
-];
+import { BsPlusCircle } from "react-icons/bs";
+import { ListItem } from "./ListItem";
+import { AiOutlineReload } from "react-icons/ai";
 
 const Productlist = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
-  const [productSlug, setProductSlug] = useState("");
 
-  const showModal = (e) => {
-    setOpen(true);
-    setProductSlug(e);
-  };
-  const hideModal = () => {
-    setOpen(false);
-  };
   useEffect(() => {
     dispatch(getProducts());
     dispatch(resetState());
-  }, []);
+  }, [dispatch]);
 
   const productState = useSelector(selectProduct);
-  const { products } = productState;
-  const data = [];
-  for (let i = 0; i < products?.length; i++) {
-    const slug = products[i].slug;
-    data.push({
-      key: i + 1,
-      slug: slug,
-      title: products[i].title,
-      category: products[i].category,
-      price: products[i].price.toLocaleString("en-US", {
-        style: "currency",
-        currency: "VND",
-      }),
-      priceDiscount: products[i].discount.toLocaleString("en-US", {
-        style: "currency",
-        currency: "VND",
-      }),
-      quantity: products[i].quantity,
-      sold: products[i].sold,
-      action: (
-        <>
-          <Link to={`/admin/product/${slug}`} className="fs-5">
-            <BiEdit />
-          </Link>
-          <button
-            onClick={() => showModal(slug)}
-            className="fs-5 ms-3 bg-transparent border-0 text-danger"
-          >
-            <AiFillDelete />
-          </button>
-        </>
-      ),
-    });
-  }
-
-  const deleteProduct = (e) => {
-    dispatch(deleteAProduct(e));
-    setOpen(false);
-    dispatch(getProducts());
-    window.location.reload();
-  };
+  const { data } = productState;
 
   return (
     <div>
-      <div className="d-flex align-items-center gap-3">
-        <h3 className="title">Danh sách sản phẩm</h3>
-        <BsPlusCircle
-          size={30}
-          onClick={() => navigate("/admin/product")}
-          style={{
-            cursor: "pointer",
-            fontWeight: "bold",
-          }}
-        />
+      <div className="d-flex align-items-center justify-content-between">
+        <div className="d-flex align-items-center gap-2 mb-0">
+          <h3 className="title">Danh sách sản phẩm</h3>
+          <BsPlusCircle
+            size={30}
+            onClick={() => navigate("/admin/product")}
+            style={{
+              cursor: "pointer",
+              fontWeight: "bold",
+            }}
+          />
+        </div>
+        <div
+          className="p-1 rounded bg-primary fw-bold"
+          style={{ cursor: "pointer", border: "2px solid" }}
+        >
+          <AiOutlineReload
+            size={30}
+            onClick={() => window.location.reload()}
+            color="#fff"
+          />
+        </div>
       </div>
       <div>
-        <Table columns={columns} dataSource={data} />
+        <ListItem productData={data} />
       </div>
-      <CustomModal
-        hideModal={hideModal}
-        open={open}
-        performAction={() => {
-          deleteProduct(productSlug);
-        }}
-        title="Bạn có chắc mà muốn xóa sản phẩm này!"
-      />
     </div>
   );
 };

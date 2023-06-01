@@ -1,13 +1,10 @@
-import { React, useEffect, useState } from "react";
-
-import { toast } from "react-toastify";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { array, number, object, string } from "yup";
-
 import { useDispatch, useSelector } from "react-redux";
-// Upload Image
-// import Dropzone from "react-dropzone";
-
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { format } from "date-fns";
 import {
   createProducts,
   getProduct,
@@ -39,6 +36,7 @@ let userSchema = object().shape({
   pageNumber: number().required("Dữ liệu bắt buộc"),
   kindOfPaper: string().required("Dữ liệu bắt buộc"),
   paperSize: string().required("Dữ liệu bắt buộc"),
+  dateSale: string,
   images: array(),
 });
 
@@ -47,6 +45,7 @@ const Addproduct = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const getProductSlug = location.pathname.split("/")[3];
+  const [startDate, setStartDate] = useState(new Date());
   useEffect(() => {
     dispatch(getProduct(getProductSlug));
     dispatch(getBrands());
@@ -77,6 +76,7 @@ const Addproduct = () => {
     productKindOfPaper,
     images,
     productId,
+    dateSale,
   } = productState;
 
   useEffect(() => {
@@ -99,6 +99,7 @@ const Addproduct = () => {
       pageNumber: productPage || "",
       kindOfPaper: productKindOfPaper || "",
       paperSize: productSize || "",
+      dateSale: dateSale || "",
       images: [],
     },
     validationSchema: userSchema,
@@ -120,8 +121,10 @@ const Addproduct = () => {
       pageNumber: formik.values.pageNumber,
       kindOfPaper: formik.values.kindOfPaper,
       paperSize: formik.values.paperSize,
+      dateSale: startDate,
       images: img,
     };
+    // console.log(data);
     await dispatch(createProducts(data));
   };
 
@@ -142,9 +145,10 @@ const Addproduct = () => {
       pageNumber: formik.values.pageNumber,
       kindOfPaper: formik.values.kindOfPaper,
       paperSize: formik.values.paperSize,
+      dateSale: startDate,
       images: img,
     };
-    // console.log("Check data update", dataUpdate);
+    // console.log("Check data update", productData);
     await dispatch(updateProduct(productData));
   };
 
@@ -341,7 +345,6 @@ const Addproduct = () => {
               {formik.touched.discount && formik.errors.discount}
             </div>
           </div>
-
           <div className="col-12 col-md-6">
             <select
               name="tags"
@@ -455,7 +458,25 @@ const Addproduct = () => {
                       </div>
                     );
                   })
-                : images?.map((item, index) => {
+                : imgState?.map((item, index) => {
+                    return (
+                      <div key={index} className="position-relative">
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteImg(item?.public_id)}
+                          className="btn-close position-absolute"
+                          style={{ top: "10px", right: "10px", color: "#fff" }}
+                        />
+                        <img
+                          src={item?.url}
+                          alt="Banner Product"
+                          className="rounded"
+                          width={250}
+                        />
+                      </div>
+                    );
+                  }) &&
+                  images?.map((item, index) => {
                     return (
                       <div key={index} className="position-relative">
                         <button
@@ -473,6 +494,16 @@ const Addproduct = () => {
                       </div>
                     );
                   })}
+            </div>
+          </div>
+          <div>
+            <label className="mx-2 fs-4">Cài đặt Flash sale</label>
+            <div className="mb-3">
+              <DatePicker
+                selected={startDate}
+                onChange={(date) => setStartDate(date)}
+                className="form-control w-25"
+              />
             </div>
           </div>
           <div className="col-12">

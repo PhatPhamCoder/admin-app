@@ -3,8 +3,7 @@ import { Table } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { getUsers } from "../../features/customers/customerSlice";
 import { format } from "date-fns";
-import { blockUser, unLockUser } from "../../features/auth/authSlice";
-
+import { statusUser } from "../../features/auth/authSlice";
 const columns = [
   {
     title: "Số thứ tự",
@@ -35,24 +34,14 @@ const columns = [
 
 const Customers = () => {
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(getUsers());
   }, []);
 
-  const handleStatus = (e, id) => {
-    const active = e.target.checked;
-    if (active === false) {
-      dispatch(blockUser(id, active));
-      setTimeout(() => {
-        window.location.reload();
-      }, 300);
-    }
-    if (active === true) {
-      dispatch(unLockUser(id, active));
-      setTimeout(() => {
-        window.location.reload();
-      }, 300);
-    }
+  const handleStatus = async (e, _id) => {
+    const isBlocked = e.target.value;
+    await dispatch(statusUser({ _id, isBlocked }));
   };
   const customerState = useSelector((state) => state?.customer?.customers);
   const data = [];
@@ -65,19 +54,27 @@ const Customers = () => {
       mobile: customerState[i].mobile,
       status: (
         <div className="d-flex text-center gap-2 align-items-center">
-          <input
+          <select
+            className="form-select"
+            value={customerState[i]?.isBlocked}
+            onChange={(e) => handleStatus(e, customerState[i]._id)}
+          >
+            <option value="1">Active</option>
+            <option value="0">Block</option>
+          </select>
+          {/* <input
             type="checkbox"
             className="form-check-input d-flex text-center"
-            checked={customerState[i].isBlocked === false}
+            checked={customerState[i] === false}
             onChange={(e) => handleStatus(e, customerState[i]._id)}
           />
           <div className="fs-5">
-            {!customerState[i].isBlocked ? (
+            {!customerState[i] ? (
               <div className="text-primary fw-bold">Active</div>
             ) : (
               <div className="text-danger fw-bold">No Active</div>
             )}
-          </div>
+          </div> */}
         </div>
       ),
       date: date,
