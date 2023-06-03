@@ -2,9 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { array, number, object, string } from "yup";
 import { useDispatch, useSelector } from "react-redux";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { format } from "date-fns";
 import {
   createProducts,
   getProduct,
@@ -356,6 +354,7 @@ const Addproduct = () => {
               <option value="">Chọn thẻ sản phẩm</option>
               <option value="Home Page">Home Page</option>
               <option value="Product Page">Product Page</option>
+              <option value="Flash Sale">Flash Sale</option>
               <option value="More">More</option>
             </select>
             <div className="error">
@@ -496,16 +495,7 @@ const Addproduct = () => {
                   })}
             </div>
           </div>
-          {/* <div>
-            <label className="mx-2 fs-4">Cài đặt Flash sale</label>
-            <div className="mb-3">
-              <DatePicker
-                selected={startDate}
-                onChange={(date) => setStartDate(date)}
-                className="form-control w-25"
-              />
-            </div>
-          </div> */}
+
           <div className="col-12">
             <div className="mb-3">
               <Editor

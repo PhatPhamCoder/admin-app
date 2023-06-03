@@ -11,6 +11,7 @@ import {
   AiOutlineLogout,
   AiOutlineOrderedList,
 } from "react-icons/ai";
+import { IoFlashSharp } from "react-icons/io5";
 import { RiCouponLine } from "react-icons/ri";
 import { FaClipboardList, FaBloggerB } from "react-icons/fa";
 import { MdAlternateEmail, MdNotificationsActive } from "react-icons/md";
@@ -88,6 +89,11 @@ const MainLayout = () => {
                   key: "list-category",
                   icon: <BiCategoryAlt className="fs-4" />,
                   label: "Category List",
+                },
+                {
+                  key: "flash-sale",
+                  icon: <IoFlashSharp className="fs-4" />,
+                  label: "Flash Sale",
                 },
               ],
             },
@@ -172,7 +178,7 @@ const MainLayout = () => {
                   height={50}
                   className="rounded-circle img-fluid"
                   src={logo}
-                  alt=""
+                  alt="avatar"
                   style={{ objectFit: "contain" }}
                 />
               </div>
@@ -183,9 +189,16 @@ const MainLayout = () => {
                 aria-expanded="false"
               >
                 <h5 className="mb-0">
-                  {new Date().getHours() < 12 ? "Chào buổi sáng, Admin" : ""}
-                  {new Date().getHours() < 18 ? "Chào buổi chiều, Admin" : ""}
-                  {new Date().getHours() < 23 ? "Chào buổi tối, Admin" : ""}
+                  {/* {new Date().getHours()} */}
+                  {1 < new Date().getHours() && new Date().getHours() < 12
+                    ? "Chào buổi sáng, Admin"
+                    : ""}
+                  {13 < new Date().getHours() && new Date().getHours() < 17
+                    ? "Chào buổi chiều, Admin"
+                    : ""}
+                  {18 < new Date().getHours() && new Date().getHours() < 24
+                    ? "Chào buổi tối, Admin"
+                    : ""}
                 </h5>
                 <p className="mb-0">{userAuth?.email}</p>
               </div>

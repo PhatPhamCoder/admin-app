@@ -49,7 +49,6 @@ const Productlist = () => {
           />
         </div>
       </div>
-
       <ListItem productData={data} />
     </div>
   );

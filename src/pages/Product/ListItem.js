@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import {
   deleteAProduct,
   getProducts,
+  updateDisplayHome,
   updateFlashSale,
   updateStatus,
 } from "../../features/product/productSlice";
@@ -49,6 +50,10 @@ const columns = [
     dataIndex: "sale",
   },
   {
+    title: "Home",
+    dataIndex: "home",
+  },
+  {
     title: "Sold",
     dataIndex: "sold",
   },
@@ -79,6 +84,11 @@ export const ListItem = ({ productData = [] }) => {
   const handleFlashSale = (e, id) => {
     const active = e.target.checked;
     dispatch(updateFlashSale({ id, active }));
+  };
+
+  const handleDispalyHome = (e, id) => {
+    const active = e.target.checked;
+    dispatch(updateDisplayHome({ id, active }));
   };
 
   let dataColumn = [];
@@ -117,6 +127,16 @@ export const ListItem = ({ productData = [] }) => {
           />
         </>
       ),
+      home: (
+        <>
+          <input
+            type="checkbox"
+            defaultChecked={productData[i].home === "true"}
+            className="text-center p-2 ms-3"
+            onChange={(e) => handleDispalyHome(e, productData[i]._id)}
+          />
+        </>
+      ),
       sold: productData[i].sold,
       action: (
         <>
@@ -138,7 +158,6 @@ export const ListItem = ({ productData = [] }) => {
     dispatch(deleteAProduct(e));
     setOpen(false);
     dispatch(getProducts());
-    window.location.reload();
   };
 
   return (

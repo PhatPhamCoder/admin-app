@@ -49,7 +49,7 @@ const Dashboard = () => {
     dispatch(getMonthlyData());
     dispatch(getYearlyData());
     dispatch(getOrders());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     let monthNames = [
@@ -94,7 +94,7 @@ const Dashboard = () => {
       });
     }
     setOrderData(data1);
-  }, [monthlyDataState]);
+  }, [monthlyDataState, orderState]);
 
   const config = {
     data: dataMonthly,

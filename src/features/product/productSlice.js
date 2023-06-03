@@ -88,6 +88,32 @@ export const updateFlashSale = createAsyncThunk(
   },
 );
 
+export const updateDisplayHome = createAsyncThunk(
+  "product/displayHome",
+  async (dataDisplayHome, thunkAPI) => {
+    // console.log(dataStatus);
+    const id = dataDisplayHome?.id;
+    const home = dataDisplayHome?.active;
+    try {
+      const data = {
+        home: home,
+      };
+      const response = await productService.displayHome(id, data);
+      if (response.result) {
+        const results = {
+          id: id,
+          home: home,
+          msg: response.msg,
+        };
+        toast.success(response.msg);
+        return results;
+      }
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  },
+);
+
 export const getProduct = createAsyncThunk(
   "product/get",
   async (slug, thunkAPI) => {
@@ -267,6 +293,20 @@ export const productSlice = createSlice({
         state.isSuccess = true;
       })
       .addCase(updateFlashSale.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.error;
+      })
+      .addCase(updateDisplayHome.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateDisplayHome.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+      })
+      .addCase(updateDisplayHome.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;

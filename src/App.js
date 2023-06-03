@@ -23,6 +23,7 @@ import ViewOrder from "./pages/Order/ViewOrder";
 import { PrivateRoutes } from "./routing/PrivateRoutes";
 import { OpenRoutes } from "./routing/OpenRoutes";
 import EmailMarketing from "./pages/Email/EmailMarketing";
+import { FlashSale } from "./pages/FlashSale/flashSale";
 function App() {
   return (
     <Router>
@@ -67,6 +68,7 @@ function App() {
           <Route path="list-product" element={<Productlist />} />
           <Route path="product" element={<Addproduct />} />
           <Route path="product/:slug" element={<Addproduct />} />
+          <Route path="flash-sale" element={<FlashSale />} />
           <Route path="email" element={<EmailMarketing />} />
         </Route>
       </Routes>
