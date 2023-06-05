@@ -37,13 +37,25 @@ const Orders = () => {
 
   useEffect(() => {
     dispatch(getOrders());
-  }, []);
+  }, [dispatch]);
 
   const orderState = useSelector((state) => state?.auth?.orders?.orders);
 
+  // Format Currency VND
+  function formatCash(str) {
+    return str
+      .split("")
+      .reverse()
+      .reduce((prev, next, index) => {
+        return (index % 3 ? next : next + ",") + prev;
+      });
+  }
+
   const data = [];
   for (let i = 0; i < orderState?.length; i++) {
-    const name = orderState[i]?.user?.firstname + orderState[i]?.user?.lastname;
+    const name =
+      orderState[i]?.shippingInfo?.firstName +
+      orderState[i]?.shippingInfo?.lastName;
     const date = format(new Date(orderState[i].createdAt), "dd-MM-yyy");
     data.push({
       key: i + 1,
@@ -51,13 +63,11 @@ const Orders = () => {
       product: (
         <Link to={`/admin/order/${orderState[i]?._id}`}>Chi tiết đơn hàng</Link>
       ),
-      totalPrice: orderState[i]?.totalPrice,
+      totalPrice: "đ" + formatCash(orderState[i]?.totalPrice),
       date: date,
       action: (
         <>
           <select
-            name=""
-            id=""
             onChange={(e) =>
               updateOrderStatus(orderState[i]?._id, e.target.value)
             }

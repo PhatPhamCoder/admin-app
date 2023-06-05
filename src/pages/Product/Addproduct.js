@@ -43,12 +43,12 @@ const Addproduct = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const getProductSlug = location.pathname.split("/")[3];
-  const [startDate, setStartDate] = useState(new Date());
   useEffect(() => {
     dispatch(getProduct(getProductSlug));
     dispatch(getBrands());
     dispatch(getCategories());
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch]);
 
   const productState = useSelector(selectProduct);
   // console.log("Check data product", productState);
@@ -119,7 +119,6 @@ const Addproduct = () => {
       pageNumber: formik.values.pageNumber,
       kindOfPaper: formik.values.kindOfPaper,
       paperSize: formik.values.paperSize,
-      dateSale: startDate,
       images: img,
     };
     // console.log(data);
@@ -143,7 +142,6 @@ const Addproduct = () => {
       pageNumber: formik.values.pageNumber,
       kindOfPaper: formik.values.kindOfPaper,
       paperSize: formik.values.paperSize,
-      dateSale: startDate,
       images: img,
     };
     // console.log("Check data update", productData);
@@ -152,6 +150,7 @@ const Addproduct = () => {
 
   useEffect(() => {
     formik.values.images = img;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const img = [];

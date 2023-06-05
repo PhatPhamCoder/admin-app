@@ -14,7 +14,7 @@ const columns = [
     dataIndex: "name",
   },
   {
-    title: "Số lượng sản phẩm",
+    title: "Số lượng",
     dataIndex: "count",
   },
   {
@@ -41,19 +41,36 @@ const ViewOrder = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getSingleOrder(orderId));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const orderState = useSelector((state) => state?.auth?.singleOrder?.orders);
-  console.log(orderState);
+
+  // Format Currency VND
+  function formatCash(str) {
+    return str
+      .split("")
+      .reverse()
+      .reduce((prev, next, index) => {
+        return (index % 3 ? next : next + ",") + prev;
+      });
+  }
   const data = [];
   for (let i = 0; i < orderState?.orderItems?.length; i++) {
     data.push({
       key: i + 1,
       name: orderState?.orderItems[i]?.product?.title,
       count: orderState?.orderItems[i]?.quantity,
-      amount: orderState?.orderItems[i]?.price,
+      amount: orderState?.orderItems[i]?.price.toLocaleString("vi", {
+        style: "currency",
+        currency: "VND",
+      }),
       date: new Date(orderState?.createdAt).toLocaleString(),
-      Price:
-        orderState?.orderItems[i]?.quantity * orderState?.orderItems[i]?.price,
+      Price: (
+        orderState?.orderItems[i]?.quantity * orderState?.orderItems[i]?.price
+      ).toLocaleString("vi", {
+        style: "currency",
+        currency: "VND",
+      }),
       address:
         orderState?.shippingInfo?.address + orderState?.shippingInfo?.city,
     });

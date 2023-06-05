@@ -190,13 +190,13 @@ const MainLayout = () => {
               >
                 <h5 className="mb-0">
                   {/* {new Date().getHours()} */}
-                  {1 < new Date().getHours() && new Date().getHours() < 12
+                  {1 <= new Date().getHours() && new Date().getHours() <= 12
                     ? "Chào buổi sáng, Admin"
                     : ""}
-                  {13 < new Date().getHours() && new Date().getHours() < 17
+                  {17 >= new Date().getHours() && new Date().getHours() >= 13
                     ? "Chào buổi chiều, Admin"
                     : ""}
-                  {18 < new Date().getHours() && new Date().getHours() < 24
+                  {18 <= new Date().getHours() && new Date().getHours() <= 24
                     ? "Chào buổi tối, Admin"
                     : ""}
                 </h5>

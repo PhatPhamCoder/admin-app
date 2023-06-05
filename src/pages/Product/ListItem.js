@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { Row, Table } from "antd";
+import React, { useState } from "react";
+import { Table } from "antd";
 import { useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   deleteAProduct,
   getProducts,
