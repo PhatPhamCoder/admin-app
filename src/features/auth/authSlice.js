@@ -83,8 +83,22 @@ export const getOrders = createAsyncThunk(
 export const updateOrders = createAsyncThunk(
   "order/update-orders",
   async (data, thunkAPI) => {
+    const id = data?.id;
+    const status = data?.status;
     try {
-      return await authService.updateOrder(data);
+      const data = {
+        orderStatus: status,
+      };
+      const response = await authService.updateOrder(id, data);
+      if (response) {
+        const results = {
+          id: id,
+          orderStatus: status,
+          msg: response.msg,
+        };
+        toast.success(response.msg);
+        return results;
+      }
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -206,9 +220,9 @@ export const authSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.updatedOrder = action.payload;
-        if (state.isSuccess) {
-          toast.success("Cập nhật thành công");
-        }
+        // if (state.isSuccess) {
+        //   toast.success("Cập nhật thành công");
+        // }
       })
       .addCase(updateOrders.rejected, (state, action) => {
         state.isError = true;

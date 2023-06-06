@@ -68,9 +68,7 @@ const Orders = () => {
       action: (
         <>
           <select
-            onChange={(e) =>
-              updateOrderStatus(orderState[i]?._id, e.target.value)
-            }
+            onChange={(e) => updateOrderStatus(orderState[i]?._id, e)}
             defaultValue={orderState[i]?.orderStatus}
             className="form-control form-select"
           >
@@ -87,8 +85,9 @@ const Orders = () => {
     });
   }
 
-  const updateOrderStatus = (a, b) => {
-    dispatch(updateOrders({ id: a, status: b }));
+  const updateOrderStatus = (id, e) => {
+    const status = e.target.value;
+    dispatch(updateOrders({ id, status }));
   };
 
   return (

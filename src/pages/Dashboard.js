@@ -45,6 +45,16 @@ const Dashboard = () => {
   const [dataMonthlySales, setDataMonthlySales] = useState([]);
   const [orderData, setOrderData] = useState([]);
 
+  // Format Currency VND
+  function formatCash(str) {
+    return str
+      .split("")
+      .reverse()
+      .reduce((prev, next, index) => {
+        return (index % 3 ? next : next + ",") + prev;
+      });
+  }
+
   useEffect(() => {
     dispatch(getMonthlyData());
     dispatch(getYearlyData());
@@ -84,13 +94,84 @@ const Dashboard = () => {
     setDataMonthlySales(monthlyOrderCount);
     const data1 = [];
     for (let i = 0; i < orderState?.length; i++) {
+      console.log(orderState[i]?.orderStatus);
       data1.push({
         key: i,
-        name: orderState[i]?.user?.firstname + orderState[i]?.user?.lastname,
+        name:
+          orderState[i]?.shippingInfo?.firstName +
+          orderState[i]?.shippingInfo?.lastName,
         quantity: orderState[i]?.orderItems?.length,
-        totalprice: orderState[i]?.totalPrice,
+        totalprice: "đ " + formatCash(orderState[i]?.totalPrice),
         address: orderState[i]?.shippingInfo?.address,
-        status: orderState[i]?.orderStatus,
+        status: (
+          // <option value="Refund Stock">Trả hàng</option>
+          <div>
+            {orderState[i]?.orderStatus === "Đã đặt hàng" && (
+              <div
+                className="bg-success text-white rounded p-2 fw-bold"
+                style={{ width: "fit-content" }}
+              >
+                {orderState[i]?.orderStatus}
+              </div>
+            )}
+            {orderState[i]?.orderStatus === "Pending Confirm" && (
+              <div
+                className="bg-primary text-white rounded p-2 fw-bold"
+                style={{ width: "fit-content" }}
+              >
+                {orderState[i]?.orderStatus}
+              </div>
+            )}
+            {orderState[i]?.orderStatus === "Order Confirm" && (
+              <div
+                className="text-white rounded p-2 fw-bold"
+                style={{ width: "fit-content", backgroundColor: "#FF8C00" }}
+              >
+                {orderState[i]?.orderStatus}
+              </div>
+            )}
+            {orderState[i]?.orderStatus === "Waiting To Ship" && (
+              <div
+                className="bg-info text-white rounded p-2 fw-bold"
+                style={{ width: "fit-content" }}
+              >
+                {orderState[i]?.orderStatus}
+              </div>
+            )}
+            {orderState[i]?.orderStatus === "Out For Shipping" && (
+              <div
+                className="text-white rounded p-2 fw-bold"
+                style={{ width: "fit-content", backgroundColor: "#39b652" }}
+              >
+                {orderState[i]?.orderStatus}
+              </div>
+            )}
+            {orderState[i]?.orderStatus === "Shipped" && (
+              <div
+                className="bg-warning text-white rounded p-2 fw-bold"
+                style={{ width: "fit-content" }}
+              >
+                {orderState[i]?.orderStatus}
+              </div>
+            )}
+            {orderState[i]?.orderStatus === "Cancel" && (
+              <div
+                className="bg-danger text-white rounded p-2 fw-bold"
+                style={{ width: "fit-content" }}
+              >
+                {orderState[i]?.orderStatus}
+              </div>
+            )}
+            {orderState[i]?.orderStatus === "Refund Stock" && (
+              <div
+                className="text-white rounded p-2 fw-bold"
+                style={{ width: "fit-content", backgroundColor: "#ff69b4" }}
+              >
+                {orderState[i]?.orderStatus}
+              </div>
+            )}
+          </div>
+        ),
       });
     }
     setOrderData(data1);

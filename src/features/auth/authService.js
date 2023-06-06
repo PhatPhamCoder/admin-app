@@ -31,10 +31,10 @@ const getOrder = async (id) => {
   return response.data;
 };
 
-const updateOrder = async (data) => {
+const updateOrder = async (id, data) => {
   const response = await axiosClient.put(
-    `${base_url}user/updateorder/${data.id}`,
-    { status: data.status },
+    `${base_url}user/updateorder/${id}`,
+    data,
     config,
   );
   return response.data;
