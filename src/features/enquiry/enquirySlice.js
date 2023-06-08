@@ -9,7 +9,7 @@ export const getEnquiries = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
-  }
+  },
 );
 
 export const getEnquiry = createAsyncThunk(
@@ -20,7 +20,7 @@ export const getEnquiry = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
-  }
+  },
 );
 
 export const deleteAEnquiry = createAsyncThunk(
@@ -31,7 +31,7 @@ export const deleteAEnquiry = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
-  }
+  },
 );
 
 export const updateEnquiry = createAsyncThunk(
@@ -42,7 +42,7 @@ export const updateEnquiry = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
-  }
+  },
 );
 
 export const resetState = createAction("Reset_all");

@@ -41,6 +41,11 @@ const Orders = () => {
 
   const orderState = useSelector((state) => state?.auth?.orders?.orders);
 
+  const updateOrderStatus = async (id, e) => {
+    const status = e.target.value;
+    await dispatch(updateOrders({ id, status }));
+  };
+
   // Format Currency VND
   function formatCash(str) {
     return str
@@ -84,11 +89,6 @@ const Orders = () => {
       ),
     });
   }
-
-  const updateOrderStatus = (id, e) => {
-    const status = e.target.value;
-    dispatch(updateOrders({ id, status }));
-  };
 
   return (
     <div>

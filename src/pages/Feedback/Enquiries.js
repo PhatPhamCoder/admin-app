@@ -61,8 +61,9 @@ const Enquiries = () => {
   useEffect(() => {
     dispatch(resetState());
     dispatch(getEnquiries());
-  }, []);
-  const enquiryState = useSelector((state) => state.enquiry.enquiries);
+  }, [dispatch]);
+
+  const enquiryState = useSelector((state) => state?.enquiry?.enquiries);
 
   const data = [];
   for (let i = 0; i < enquiryState.length; i++) {

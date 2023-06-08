@@ -3,7 +3,6 @@ import { axiosClient, config } from "../../utils/axiosConfig";
 
 const getUsers = async () => {
   const response = await axiosClient.get(`${base_url}user/all-users`, config);
-
   return response.data;
 };
 

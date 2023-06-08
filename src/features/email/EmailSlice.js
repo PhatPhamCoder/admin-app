@@ -20,6 +20,7 @@ const initialState = {
   isLoading: false,
   isSuccess: false,
   message: "",
+  data: [],
 };
 
 export const emailSlice = createSlice({
@@ -35,7 +36,7 @@ export const emailSlice = createSlice({
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
-        state.getEmail = action.payload;
+        state.data = action.payload;
       })
       .addCase(getEmail.rejected, (state, action) => {
         state.isLoading = false;

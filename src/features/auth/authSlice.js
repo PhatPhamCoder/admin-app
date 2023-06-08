@@ -87,13 +87,13 @@ export const updateOrders = createAsyncThunk(
     const status = data?.status;
     try {
       const data = {
-        orderStatus: status,
+        status: status,
       };
       const response = await authService.updateOrder(id, data);
       if (response) {
         const results = {
           id: id,
-          orderStatus: status,
+          status: status,
           msg: response.msg,
         };
         toast.success(response.msg);

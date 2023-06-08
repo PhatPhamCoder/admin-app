@@ -94,7 +94,6 @@ const Dashboard = () => {
     setDataMonthlySales(monthlyOrderCount);
     const data1 = [];
     for (let i = 0; i < orderState?.length; i++) {
-      console.log(orderState[i]?.orderStatus);
       data1.push({
         key: i,
         name:
