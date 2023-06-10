@@ -12,6 +12,7 @@ import orderReducer from "../features/auth/authSlice";
 import uploadReducer from "../features/upload/uploadSlice";
 import couponReducer from "../features/coupon/couponSlice";
 import emailReducer from "../features/email/EmailSlice";
+import socialReducer from "../features/Social/socialSlice";
 
 export const store = configureStore({
   reducer: {
@@ -28,5 +29,6 @@ export const store = configureStore({
     upload: uploadReducer,
     coupon: couponReducer,
     email: emailReducer,
+    social: socialReducer,
   },
 });

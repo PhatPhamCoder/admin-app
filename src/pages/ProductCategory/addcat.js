@@ -77,7 +77,7 @@ const Addcat = () => {
   });
 
   return (
-    <div>
+    <>
       <div>
         <div
           className="d-flex align-items-center gap-1"
@@ -114,7 +114,7 @@ const Addcat = () => {
           </button>
         </form>
       </div>
-    </div>
+    </>
   );
 };
 

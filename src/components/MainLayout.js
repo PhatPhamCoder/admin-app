@@ -10,6 +10,7 @@ import {
   AiOutlineUser,
   AiOutlineLogout,
   AiOutlineOrderedList,
+  AiFillSetting,
 } from "react-icons/ai";
 import { IoFlashSharp } from "react-icons/io5";
 import { RiCouponLine } from "react-icons/ri";
@@ -130,6 +131,11 @@ const MainLayout = () => {
                   label: "Blog Category List",
                 },
               ],
+            },
+            {
+              key: "social",
+              icon: <AiFillSetting className="fs-4" />,
+              label: "Thiết lập",
             },
             {
               key: "enquiries",

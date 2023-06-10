@@ -6,6 +6,7 @@ import { getEmail } from "../../features/email/EmailSlice";
 import Search from "./Search";
 import { axiosClient } from "../../utils/axiosConfig";
 import { base_url } from "../../utils/base_url";
+import { configToken } from "../../utils/verifyToken";
 const columns = [
   {
     title: "Số thứ tự",
@@ -24,19 +25,7 @@ const columns = [
 const EmailMarketing = () => {
   const dispatch = useDispatch();
   const [dataSearch, setDataSearch] = useState({});
-  console.log(dataSearch);
-  const getTokenfromLocalStorage = localStorage.getItem("admin")
-    ? JSON.parse(localStorage.getItem("admin"))
-    : null;
 
-  const configCheckOut = {
-    headers: {
-      Authorization: `Bearer ${
-        getTokenfromLocalStorage !== null ? getTokenfromLocalStorage.token : ""
-      }`,
-      Accept: "application/json",
-    },
-  };
   const getData = () => {
     dispatch(getEmail());
   };
@@ -50,7 +39,7 @@ const EmailMarketing = () => {
   // Search
   const handleSearch = (keySearch) => {
     axiosClient
-      .get(`${base_url}email/search-email?keyword=${keySearch}`, configCheckOut)
+      .get(`${base_url}email/search-email?keyword=${keySearch}`, configToken)
       .then((res) => setDataSearch(res?.data?.search))
       .catch((err) => console.log(err));
     getData();

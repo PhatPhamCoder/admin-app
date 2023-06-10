@@ -20,6 +20,7 @@ import Addproduct from "./pages/Product/Addproduct";
 import Addcoupon from "./pages/Coupon/Addcoupon";
 import ViewEng from "./pages/Feedback/ViewEng";
 import ViewOrder from "./pages/Order/ViewOrder";
+import Social from "./pages/Setting/Social/Social";
 import { PrivateRoutes } from "./routing/PrivateRoutes";
 import { OpenRoutes } from "./routing/OpenRoutes";
 import EmailMarketing from "./pages/Email/EmailMarketing";
@@ -70,6 +71,7 @@ function App() {
           <Route path="product/:slug" element={<Addproduct />} />
           <Route path="flash-sale" element={<FlashSale />} />
           <Route path="email" element={<EmailMarketing />} />
+          <Route path="social" element={<Social />} />
         </Route>
       </Routes>
     </Router>

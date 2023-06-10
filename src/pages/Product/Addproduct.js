@@ -420,7 +420,7 @@ const Addproduct = () => {
             <div className="col-3 w-25 h-25 text-center">
               <div className="bg-white py-5 rounded">
                 <label
-                  htmlFor="upload"
+                  for="upload"
                   className="fs-4 fw-bold d-flex flex-column align-items-center"
                   style={{ cursor: "pointer" }}
                 >
