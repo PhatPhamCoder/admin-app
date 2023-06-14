@@ -79,6 +79,7 @@ const Addproduct = () => {
 
   useEffect(() => {
     setEditorLoaded(true);
+    formik.values.images = img;
   }, []);
 
   const formik = useFormik({
@@ -125,6 +126,19 @@ const Addproduct = () => {
     await dispatch(createProducts(data));
   };
 
+  useEffect(() => {
+    formik.values.images = imgUpload;
+  }, []);
+
+  const imgUpload = [];
+  imgState.forEach((i) => {
+    imgUpload.push({
+      public_id: i.public_id,
+      url: i.url,
+    });
+  });
+  console.log("Check image update::", imgUpload);
+
   // Update Product
   const handleUpdateData = async () => {
     let productData = {
@@ -142,16 +156,11 @@ const Addproduct = () => {
       pageNumber: formik.values.pageNumber,
       kindOfPaper: formik.values.kindOfPaper,
       paperSize: formik.values.paperSize,
-      images: img,
+      images: imgUpload,
     };
     // console.log("Check data update", productData);
     await dispatch(updateProduct(productData));
   };
-
-  useEffect(() => {
-    formik.values.images = img;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const img = [];
   imgState.forEach((i) => {
@@ -200,7 +209,7 @@ const Addproduct = () => {
   };
 
   return (
-    <div>
+    <>
       <div>
         <div
           className="d-flex align-items-center gap-1"
@@ -492,6 +501,26 @@ const Addproduct = () => {
                       </div>
                     );
                   })}
+
+              {imgUpload &&
+                imgUpload?.map((item, index) => {
+                  return (
+                    <div key={index} className="position-relative">
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteImg(item?.public_id)}
+                        className="btn-close position-absolute"
+                        style={{ top: "10px", right: "10px", color: "#fff" }}
+                      />
+                      <img
+                        src={item?.url}
+                        alt="Banner Product"
+                        className="rounded"
+                        width={250}
+                      />
+                    </div>
+                  );
+                })}
             </div>
           </div>
 
@@ -532,7 +561,7 @@ const Addproduct = () => {
           </div>
         </form>
       </div>
-    </div>
+    </>
   );
 };
 

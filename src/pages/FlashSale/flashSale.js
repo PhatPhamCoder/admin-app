@@ -49,39 +49,32 @@ export const FlashSale = () => {
             </thead>
             <tbody>
               {data &&
-                data?.length > 0 &&
-                data?.map((item, index) => {
-                  if (
-                    item?.status === "true" &&
-                    item?.tags === "Home Page" &&
-                    item?.flashSale === "true"
-                  ) {
-                    return (
-                      <tr key={index} className="fs-6">
-                        <td>{index}</td>
-                        <td>{item?.title}</td>
-                        <td>
-                          {format(
-                            new Date(item?.dateSale),
-                            "dd/MM/yyy hh:mm:ss",
-                          )}
-                        </td>
-                        <td>
-                          {item?.price.toLocaleString("en-US", {
-                            style: "currency",
-                            currency: "VND",
-                          })}
-                        </td>
-                        <td>
-                          {item?.discount.toLocaleString("en-US", {
-                            style: "currency",
-                            currency: "VND",
-                          })}
-                        </td>
-                      </tr>
-                    );
-                  }
-                })}
+                data
+                  .filter(
+                    (data) =>
+                      data?.status === "true" && data?.tags === "Flash Sale",
+                  )
+                  ?.map((item, index) => (
+                    <tr key={index} className="fs-6">
+                      <td>{index}</td>
+                      <td>{item?.title}</td>
+                      <td>
+                        {format(new Date(item?.dateSale), "dd/MM/yyy hh:mm:ss")}
+                      </td>
+                      <td>
+                        {item?.price.toLocaleString("en-US", {
+                          style: "currency",
+                          currency: "VND",
+                        })}
+                      </td>
+                      <td>
+                        {item?.discount.toLocaleString("en-US", {
+                          style: "currency",
+                          currency: "VND",
+                        })}
+                      </td>
+                    </tr>
+                  ))}
             </tbody>
           </table>
         </div>

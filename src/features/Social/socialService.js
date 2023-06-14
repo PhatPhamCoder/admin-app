@@ -15,6 +15,8 @@ const updateSocial = async (dataUpdate) => {
       instagram: dataUpdate?.instagram,
       phoneNumber: dataUpdate?.phoneNumber,
       address: dataUpdate?.address,
+      footer: dataUpdate?.footer,
+      map: dataUpdate?.map,
     },
     config,
   );

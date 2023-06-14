@@ -64,6 +64,7 @@ const updateProduct = async (productData) => {
       pageNumber: productData?.pageNumber,
       kindOfPaper: productData?.kindOfPaper,
       paperSize: productData?.paperSize,
+      images: productData?.images,
     },
     config,
   );

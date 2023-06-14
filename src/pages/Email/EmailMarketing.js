@@ -7,6 +7,7 @@ import Search from "./Search";
 import { axiosClient } from "../../utils/axiosConfig";
 import { base_url } from "../../utils/base_url";
 import { configToken } from "../../utils/verifyToken";
+
 const columns = [
   {
     title: "Số thứ tự",
@@ -35,7 +36,6 @@ const EmailMarketing = () => {
   }, []);
 
   const emailState = useSelector((state) => state?.email?.data?.getAllEmail);
-
   // Search
   const handleSearch = (keySearch) => {
     axiosClient
@@ -69,6 +69,7 @@ const EmailMarketing = () => {
     <div>
       <div className="d-flex align-items-center justify-content-between">
         <h3 className="mb-4 title">Email nhận tin khuyến mãi</h3>
+
         <div>
           <Search handleSearch={handleSearch} />
         </div>
