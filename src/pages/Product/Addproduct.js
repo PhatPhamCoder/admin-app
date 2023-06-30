@@ -34,7 +34,7 @@ let userSchema = object().shape({
   pageNumber: number().required("Dữ liệu bắt buộc"),
   kindOfPaper: string().required("Dữ liệu bắt buộc"),
   paperSize: string().required("Dữ liệu bắt buộc"),
-  dateSale: string,
+  dateSale: string(),
   images: array(),
 });
 
@@ -82,6 +82,10 @@ const Addproduct = () => {
     formik.values.images = img;
   }, []);
 
+  useEffect(() => {
+    formik.values.images = imgUpload;
+  }, []);
+
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -125,10 +129,6 @@ const Addproduct = () => {
     // console.log(data);
     await dispatch(createProducts(data));
   };
-
-  useEffect(() => {
-    formik.values.images = imgUpload;
-  }, []);
 
   const imgUpload = [];
   imgState.forEach((i) => {
@@ -429,7 +429,7 @@ const Addproduct = () => {
             <div className="col-3 w-25 h-25 text-center">
               <div className="bg-white py-5 rounded">
                 <label
-                  for="upload"
+                  htmlFor="upload"
                   className="fs-4 fw-bold d-flex flex-column align-items-center"
                   style={{ cursor: "pointer" }}
                 >
@@ -501,7 +501,6 @@ const Addproduct = () => {
                       </div>
                     );
                   })}
-
               {imgUpload &&
                 imgUpload?.map((item, index) => {
                   return (

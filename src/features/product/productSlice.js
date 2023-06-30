@@ -181,7 +181,7 @@ export const productSlice = createSlice({
         state.isSuccess = true;
         state.createdProduct = action.payload;
         if (state.isSuccess) {
-          toast.success(action.payload);
+          toast.success("Thêm thành công");
         }
       })
       .addCase(createProducts.rejected, (state, action) => {
@@ -212,24 +212,24 @@ export const productSlice = createSlice({
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
-        state.productId = action.payload._id;
-        state.productName = action.payload.title;
-        state.productDesc = action.payload.description;
-        state.productCategory = action.payload.category;
-        state.productPrice = action.payload.price;
-        state.productDiscount = action.payload.discount;
-        state.productQuantity = action.payload.quantity;
-        state.productCodeProduct = action.payload.codeProduct;
-        state.productBrand = action.payload.brand;
-        state.productTags = action.payload.tags;
-        state.productCode = action.payload.codeProduct;
-        state.productSlug = action.payload.slug;
-        state.productPage = action.payload.pageNumber;
-        state.productSize = action.payload.paperSize;
-        state.productKindOfPaper = action.payload.kindOfPaper;
-        state.dateSale = action.payload.dateSale;
-        state.status = action.payload.status;
-        state.images = action.payload.images;
+        state.productId = action.payload?._id;
+        state.productName = action.payload?.title;
+        state.productDesc = action.payload?.description;
+        state.productCategory = action.payload?.category;
+        state.productPrice = action.payload?.price;
+        state.productDiscount = action.payload?.discount;
+        state.productQuantity = action.payload?.quantity;
+        state.productCodeProduct = action.payload?.codeProduct;
+        state.productBrand = action.payload?.brand;
+        state.productTags = action.payload?.tags;
+        state.productCode = action.payload?.codeProduct;
+        state.productSlug = action.payload?.slug;
+        state.productPage = action.payload?.pageNumber;
+        state.productSize = action.payload?.paperSize;
+        state.productKindOfPaper = action.payload?.kindOfPaper;
+        state.dateSale = action.payload?.dateSale;
+        state.status = action.payload?.status;
+        state.images = action.payload?.images;
       })
       .addCase(getProduct.rejected, (state, action) => {
         state.isLoading = false;

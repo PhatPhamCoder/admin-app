@@ -9,6 +9,7 @@ import {
   updateFlashSale,
   updateStatus,
 } from "../../features/product/productSlice";
+
 import { BiEdit } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
 import CustomModal from "../../components/CustomModal";
@@ -96,7 +97,7 @@ export const ListItem = ({ productData = [] }) => {
     dataColumn.push({
       key: i + 1,
       slug: productData[i].slug,
-      title: productData[i].title,
+      title: productData[i].title.slice(0, 25),
       category: productData[i].category,
       price: productData[i].price.toLocaleString("en-US", {
         style: "currency",

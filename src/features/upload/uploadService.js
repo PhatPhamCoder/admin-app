@@ -1,17 +1,17 @@
-import { base_url } from "../../utils/base_url";
 import { config } from "../../utils/axiosConfig";
 import axios from "axios";
 
+const axiosClient = axios.create({
+  baseURL: process.env.REACT_APP_API_URL,
+});
+
 const uploadImg = async (data) => {
-  const response = await axios.post(`${base_url}upload/`, data, config);
+  const response = await axiosClient.post(`upload/`, data, config);
   return response.data;
 };
 
 const deleteImg = async (id) => {
-  const response = await axios.delete(
-    `${base_url}upload/delete-img/${id}`,
-    config,
-  );
+  const response = await axiosClient.delete(`upload/delete-img/${id}`, config);
   return response.data;
 };
 

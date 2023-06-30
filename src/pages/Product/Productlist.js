@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import {
+  getProduct,
   getProducts,
   resetState,
   selectProduct,
@@ -12,17 +13,33 @@ import { BsPlusCircle } from "react-icons/bs";
 import { ListItem } from "./ListItem";
 import { AiOutlineReload } from "react-icons/ai";
 
+import { Typeahead } from "react-bootstrap-typeahead";
+import "react-bootstrap-typeahead/css/Typeahead.css";
+import { useState } from "react";
+
 const Productlist = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [productOpt, setProductOpt] = useState(true);
+  const [paginate] = useState(true);
+
+  const productState = useSelector(selectProduct);
+  const { data } = productState;
+
+  useEffect(() => {
+    let data = [];
+    for (let index = 0; index < productState?.length; index++) {
+      const element = productState[index];
+      data.push({ id: index, prod: element?.slug, name: element?.title });
+    }
+    setProductOpt(data);
+  }, [productState]);
 
   useEffect(() => {
     dispatch(getProducts());
     dispatch(resetState());
   }, [dispatch]);
-
-  const productState = useSelector(selectProduct);
-  const { data } = productState;
 
   return (
     <div>
@@ -38,15 +55,32 @@ const Productlist = () => {
             }}
           />
         </div>
-        <div
-          className="p-1 rounded bg-primary fw-bold"
-          style={{ cursor: "pointer", border: "2px solid" }}
-        >
-          <AiOutlineReload
-            size={30}
-            onClick={() => window.location.reload()}
-            color="#fff"
-          />
+        <div className="d-flex align-items-centers justify-content-end gap-3">
+          <div>
+            <Typeahead
+              id="search"
+              onPaginate={() => console.log("Results paginated")}
+              onChange={(selected) => {
+                navigate(`/admin/product/${selected[0]?.prod}`);
+                dispatch(getProduct(selected[0]?.prod));
+              }}
+              options={productOpt}
+              paginate={paginate}
+              labelKey={"name"}
+              placeholder="Tìm kiếm sản phẩm ....."
+              minLength={2}
+            />
+          </div>
+          <div
+            className="p-1 rounded bg-primary fw-bold"
+            style={{ cursor: "pointer", border: "2px solid" }}
+          >
+            <AiOutlineReload
+              size={30}
+              onClick={() => window.location.reload()}
+              color="#fff"
+            />
+          </div>
         </div>
       </div>
       <ListItem productData={data} />
