@@ -12,7 +12,6 @@ const createProduct = async (data) => {
 
 const getProduct = async (slug) => {
   const response = await axiosClient.get(`${base_url}product/${slug}`);
-
   return response.data;
 };
 
@@ -22,7 +21,6 @@ const updateStatus = async (id, data) => {
     data,
     config,
   );
-
   return response.data;
 };
 
@@ -32,7 +30,6 @@ const updateFlashSale = async (id, data) => {
     data,
     config,
   );
-
   return response.data;
 };
 
@@ -42,7 +39,6 @@ const displayHome = async (id, data) => {
     data,
     config,
   );
-
   return response.data;
 };
 
@@ -68,7 +64,6 @@ const updateProduct = async (productData) => {
     },
     config,
   );
-
   return response.data;
 };
 
@@ -77,7 +72,6 @@ const deleteProduct = async (slug) => {
     `${base_url}product/${slug}`,
     config,
   );
-
   return response.data;
 };
 

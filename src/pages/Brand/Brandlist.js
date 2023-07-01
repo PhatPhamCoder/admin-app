@@ -46,7 +46,7 @@ const Brandlist = () => {
   useEffect(() => {
     dispatch(resetState());
     dispatch(getBrands());
-  }, []);
+  }, [dispatch]);
 
   const brandState = useSelector((state) => state.brand.brands);
 

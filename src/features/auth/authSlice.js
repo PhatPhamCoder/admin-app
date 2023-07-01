@@ -11,9 +11,8 @@ export const loginAdmin = createAsyncThunk(
   async (userData, thunkAPI) => {
     try {
       const response = await authService.login(userData);
-      // console.log(response);
       if (response.data) {
-        localStorage.setItem("admin", JSON.stringify(response.data)); // Lưu thông tin admin vô LocalStorge
+        localStorage.setItem("admin", JSON.stringify(response.data));
       }
       return response.data;
     } catch (error) {
@@ -220,9 +219,6 @@ export const authSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.updatedOrder = action.payload;
-        // if (state.isSuccess) {
-        //   toast.success("Cập nhật thành công");
-        // }
       })
       .addCase(updateOrders.rejected, (state, action) => {
         state.isError = true;

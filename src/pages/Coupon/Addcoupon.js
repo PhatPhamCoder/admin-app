@@ -32,7 +32,6 @@ const Addcoupon = () => {
     createdCoupon,
     couponName,
     couponDiscount,
-    couponExpiry,
     updatedCoupon,
   } = newCoupon;
 

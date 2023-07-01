@@ -31,7 +31,6 @@ const Addcat = () => {
     categoryName,
     updatedCategory,
   } = newCategory;
-  console.log(categoryName);
   useEffect(() => {
     if (isSuccess && createdCategory) {
       toast.success("Thêm danh mục thành công!");

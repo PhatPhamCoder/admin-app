@@ -10,7 +10,6 @@ import { BsFacebook, BsFillHddNetworkFill } from "react-icons/bs";
 import { AiFillInstagram } from "react-icons/ai";
 import { FaRegAddressCard, FaTiktok } from "react-icons/fa";
 import { GiSmartphone } from "react-icons/gi";
-import logo from "../../../images/avatar.png";
 import { useFormik } from "formik";
 import { object, string } from "yup";
 

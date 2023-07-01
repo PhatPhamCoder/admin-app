@@ -9,7 +9,7 @@ export const getCategories = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
-  }
+  },
 );
 
 export const getProductCategory = createAsyncThunk(
@@ -20,7 +20,7 @@ export const getProductCategory = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
-  }
+  },
 );
 
 export const createCategory = createAsyncThunk(
@@ -31,7 +31,7 @@ export const createCategory = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
-  }
+  },
 );
 
 export const updateAProductCategory = createAsyncThunk(
@@ -42,7 +42,7 @@ export const updateAProductCategory = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
-  }
+  },
 );
 
 export const deleteAProductCategory = createAsyncThunk(
@@ -53,7 +53,7 @@ export const deleteAProductCategory = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
-  }
+  },
 );
 
 export const resetState = createAction("Reset_all");

@@ -1,10 +1,8 @@
-import axios from "axios";
 import { base_url } from "../../utils/base_url";
 import { axiosClient, config } from "../../utils/axiosConfig";
 
 const getBlogCategories = async () => {
   const response = await axiosClient.get(`${base_url}blogcategory/`);
-
   return response.data;
 };
 
@@ -14,7 +12,6 @@ const createBlogCategory = async (bcategory) => {
     bcategory,
     config,
   );
-
   return response.data;
 };
 
@@ -24,7 +21,6 @@ const updateBlogCategory = async (blogCat) => {
     { title: blogCat.blogCatData.title },
     config,
   );
-
   return response.data;
 };
 
@@ -33,7 +29,6 @@ const getBlogCategory = async (id) => {
     `${base_url}blogcategory/${id}`,
     config,
   );
-
   return response.data;
 };
 
@@ -42,7 +37,6 @@ const deleteBlogCategory = async (id) => {
     `${base_url}blogcategory/${id}`,
     config,
   );
-
   return response.data;
 };
 

@@ -3,20 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import CustomInput from "../../components/CustomInput";
 import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
-// Upload Image
 import Dropzone from "react-dropzone";
-// import { InboxOutlined } from '@ant-design/icons';
-import {
-  deleteImage,
-  deleteImg,
-  uploadImg,
-} from "../../features/upload/uploadSlice";
+import { deleteImage, uploadImg } from "../../features/upload/uploadSlice";
 import {
   createBlog,
   getBlog,
   updateBlog,
 } from "../../features/blogs/blogSlice";
-// Upload import end
 import { useFormik } from "formik";
 import { object, string } from "yup";
 import {

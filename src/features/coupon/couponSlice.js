@@ -9,7 +9,7 @@ export const getCoupons = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
-  }
+  },
 );
 
 export const getCoupon = createAsyncThunk(
@@ -20,7 +20,7 @@ export const getCoupon = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
-  }
+  },
 );
 
 export const createCoupon = createAsyncThunk(
@@ -31,7 +31,7 @@ export const createCoupon = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
-  }
+  },
 );
 
 export const updateCoupon = createAsyncThunk(
@@ -42,7 +42,7 @@ export const updateCoupon = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
-  }
+  },
 );
 
 export const deleteACoupon = createAsyncThunk(
@@ -53,7 +53,7 @@ export const deleteACoupon = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
-  }
+  },
 );
 
 export const resetState = createAction("Reset_all");

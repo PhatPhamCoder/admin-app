@@ -37,16 +37,16 @@ const columns = [
 ];
 
 const ViewOrder = () => {
+  const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
   const orderId = location.pathname.split("/")[3];
-  const dispatch = useDispatch();
   const [totalAmount, setTotalAmount] = useState("");
+  const orderState = useSelector((state) => state?.auth?.singleOrder?.orders);
   useEffect(() => {
     dispatch(getSingleOrder(orderId));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const orderState = useSelector((state) => state?.auth?.singleOrder?.orders);
 
   useEffect(() => {
     let sum = 0;

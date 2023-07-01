@@ -51,7 +51,6 @@ const Addproduct = () => {
   }, [dispatch]);
 
   const productState = useSelector(selectProduct);
-  // console.log("Check data product", productState);
 
   const brandState = useSelector((state) => state?.brand?.brands);
   const pCategoryState = useSelector((state) => state?.pCategory?.pCategories);
@@ -126,7 +125,6 @@ const Addproduct = () => {
       paperSize: formik.values.paperSize,
       images: img,
     };
-    // console.log(data);
     await dispatch(createProducts(data));
   };
 
@@ -137,7 +135,6 @@ const Addproduct = () => {
       url: i.url,
     });
   });
-  console.log("Check image update::", imgUpload);
 
   // Update Product
   const handleUpdateData = async () => {
@@ -158,7 +155,6 @@ const Addproduct = () => {
       paperSize: formik.values.paperSize,
       images: imgUpload,
     };
-    // console.log("Check data update", productData);
     await dispatch(updateProduct(productData));
   };
 
@@ -256,7 +252,6 @@ const Addproduct = () => {
               onBlur={formik.handleBlur("category")}
               val={formik.values.category}
               className="form-control py-3 mt-2"
-              // multiple
             >
               <option value="">Lựa chọn danh mục</option>
               {pCategoryState &&

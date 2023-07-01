@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-
 import { useDispatch, useSelector } from "react-redux";
 import {
   getProduct,
@@ -72,7 +71,7 @@ const Productlist = () => {
             />
           </div>
           <div
-            className="p-1 rounded bg-primary fw-bold"
+            className="p-1 rounded bg-primary fw-bold border-0"
             style={{ cursor: "pointer", border: "2px solid" }}
           >
             <AiOutlineReload

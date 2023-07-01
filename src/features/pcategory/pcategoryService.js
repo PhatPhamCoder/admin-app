@@ -1,4 +1,3 @@
-import axios from "axios";
 import { base_url } from "../../utils/base_url";
 import { axiosClient, config } from "../../utils/axiosConfig";
 

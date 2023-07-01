@@ -63,6 +63,7 @@ const columns = [
     dataIndex: "action",
   },
 ];
+
 export const ListItem = ({ productData = [] }) => {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
@@ -114,7 +115,7 @@ export const ListItem = ({ productData = [] }) => {
             type="checkbox"
             defaultChecked={productData[i].status === "true"}
             className="text-center p-2 ms-3"
-            onChange={(e) => handleStatus(e, productData[i]._id)}
+            onChange={(e) => handleStatus(e, productData[i]?._id)}
           />
         </>
       ),
@@ -124,7 +125,7 @@ export const ListItem = ({ productData = [] }) => {
             type="checkbox"
             defaultChecked={productData[i].flashSale === "true"}
             className="text-center p-2 ms-4"
-            onChange={(e) => handleFlashSale(e, productData[i]._id)}
+            onChange={(e) => handleFlashSale(e, productData[i]?._id)}
           />
         </>
       ),
@@ -134,7 +135,7 @@ export const ListItem = ({ productData = [] }) => {
             type="checkbox"
             defaultChecked={productData[i].home === "true"}
             className="text-center p-2 ms-3"
-            onChange={(e) => handleDispalyHome(e, productData[i]._id)}
+            onChange={(e) => handleDispalyHome(e, productData[i]?._id)}
           />
         </>
       ),

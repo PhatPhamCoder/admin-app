@@ -6,7 +6,6 @@ export const createProducts = createAsyncThunk(
   "product/create",
   async (data, thunkAPI) => {
     try {
-      // console.log(data);
       return await productService.createProduct(data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -19,7 +18,6 @@ export const getProducts = createAsyncThunk(
   async (thunkAPI) => {
     try {
       const response = await productService.getProducts();
-      // console.log(response);
       if (response.data.result) {
         const data = response.data.product;
         const results = {
@@ -38,7 +36,6 @@ export const getProducts = createAsyncThunk(
 export const updateStatus = createAsyncThunk(
   "product/updateStatus",
   async (dataStatus, thunkAPI) => {
-    // console.log(dataStatus);
     const id = dataStatus?.id;
     const status = dataStatus?.active;
     try {
@@ -65,7 +62,6 @@ export const updateStatus = createAsyncThunk(
 export const updateFlashSale = createAsyncThunk(
   "product/updateFlashSale",
   async (dataFlashSale, thunkAPI) => {
-    // console.log(dataStatus);
     const id = dataFlashSale?.id;
     const flashSale = dataFlashSale?.active;
     try {
@@ -91,7 +87,6 @@ export const updateFlashSale = createAsyncThunk(
 export const updateDisplayHome = createAsyncThunk(
   "product/displayHome",
   async (dataDisplayHome, thunkAPI) => {
-    // console.log(dataStatus);
     const id = dataDisplayHome?.id;
     const home = dataDisplayHome?.active;
     try {
@@ -129,7 +124,6 @@ export const updateProduct = createAsyncThunk(
   "product/update",
   async (productData, thunkAPI) => {
     try {
-      // console.log("Check product update", productData);
       const response = await productService.updateProduct(productData);
       if (response) {
         const results = {

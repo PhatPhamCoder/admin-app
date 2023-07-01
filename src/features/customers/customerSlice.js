@@ -9,7 +9,7 @@ export const getUsers = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
-  }
+  },
 );
 
 const initialState = {

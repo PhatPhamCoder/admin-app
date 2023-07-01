@@ -53,7 +53,7 @@ const Bloglist = () => {
   useEffect(() => {
     dispatch(resetState());
     dispatch(getBlogs());
-  }, []);
+  }, [dispatch]);
   const blogState = useSelector((state) => state?.blog?.blogs);
 
   const data = [];
